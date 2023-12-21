@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var dialog_ui: DialogUI = %DialogUI
+
 @export var dialog_reveal_speed := 50 # in characters per second
 
 var dialog_lines: Array[String] = [
@@ -52,55 +54,40 @@ var dialog_lines: Array[String] = [
 	"Reina ruffles my hair before leaving. I used to protest and smack her hand away, but now I just take it and grumble like the bitchy queer-ass little bottom that I am.",
 ]
 
-var current_line_index := -1
+var tasks: Array[SceneTask] = []
+var current_task_index := -1
 
-var dialog_reveal_tween: Tween
-
-@onready var speaker_panel: PanelContainer = %Speaker
-@onready var speaker_label: Label = %SpeakerLabel
-@onready var dialog_label: Label = %DialogLabel
+var current_task: SceneTask:
+	get: return tasks[current_task_index]
 
 func _ready() -> void:
-	_next_line()
+	for line: String in dialog_lines:
+		var line_with_speaker_regex := RegEx.create_from_string(r"([A-Za-z ?]+):\s*(.+)")
+		var line_with_speaker_match := line_with_speaker_regex.search(line)
+		
+		if not line_with_speaker_match:
+			tasks.append(DialogSceneTask.new(line, dialog_ui))
+			continue
+		
+		var speaker := line_with_speaker_match.strings[1]
+		var text := line_with_speaker_match.strings[2]
+		var task := DialogSceneTask.new(text, dialog_ui)
+		task.speaker_name = speaker
+		tasks.append(task)
+	
+	_next_task()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("dialog_advance"):
-		if _line_is_finished():
-			_next_line()
-		else:
-			_complete_current_line()
+		_next_task()
 
-func _next_line() -> void:
-	if current_line_index >= dialog_lines.size() - 1: return
-	current_line_index += 1
+func _next_task() -> void:
+	if current_task != null and not current_task.is_finished():
+		current_task.interrupt()
+		return
 	
-	var line := dialog_lines[current_line_index]
-	
-	var speaker_regex := RegEx.create_from_string(r"([A-Za-z ?]+):\s*")
-	var speaker_match := speaker_regex.search(line)
-	
-	if speaker_match:
-		var speaker_name := speaker_match.strings[1]
-		speaker_panel.modulate.a = 1
-		speaker_label.text = speaker_name
-		dialog_label.text = line.substr(speaker_match.strings[0].length())
-	else:
-		speaker_panel.modulate.a = 0
-		dialog_label.text = line
-		
-	if dialog_reveal_tween: dialog_reveal_tween.stop()
-	
-	dialog_label.visible_ratio = 0
-	
-	dialog_reveal_tween = create_tween()
-	dialog_reveal_tween.tween_property(
-		dialog_label, "visible_ratio", 1,
-		float(dialog_label.text.length()) / float(dialog_reveal_speed),
-	)
-	
-func _line_is_finished() -> bool:
-	return dialog_label.visible_ratio >= 1.0
-	
-func _complete_current_line() -> void:
-	if dialog_reveal_tween: dialog_reveal_tween.stop()
-	dialog_label.visible_ratio = 1.0
+	if current_task_index >= tasks.size() - 1:
+		return
+
+	current_task_index += 1
+	current_task.start()
