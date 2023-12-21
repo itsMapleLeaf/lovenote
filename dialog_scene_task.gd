@@ -17,8 +17,9 @@ func start() -> void:
 	ui.set_line(line)
 	ui.animate()
 	
-func interrupt() -> void:
-	ui.complete()
-
-func is_finished() -> bool:
-	return ui.is_complete
+func request_advance() -> void:
+	if not ui.is_complete:
+		ui.complete()
+	else:
+		advance.emit()
+		queue_free()

@@ -1,5 +1,10 @@
+extends Node
 class_name SceneTask
 
-func start() -> void: pass
-func interrupt() -> void: pass
-func is_finished() -> bool: return true
+signal advance
+
+func start() -> void:
+	push_error("SceneTask start() not implemented")
+
+func request_advance() -> void:
+	pass

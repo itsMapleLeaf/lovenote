@@ -3,16 +3,37 @@ extends Node2D
 @onready var ryder: Sprite2D = %Ryder
 @onready var reina: Sprite2D = %Reina
 @onready var dialog_ui: DialogUI = %DialogUI
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 
 @onready var tasks := _parse_task_inputs([
-	SceneTask.new(),
-	EnterTask.new(ryder, Vector2(347, 335), Vector2.LEFT, 1, 0.5),
+	"Well, here I am.",
+	"This is it.",
+	"I'm not really nervous. When it comes to stuff like this, as long as there's a set time and place, I just go and deal with it.",
+	"…",
+	"I'm a liar. I'm really nervous.",
+	"I want to disintegrate into dust.",
+	"But my one true talent is hiding that. So I'll be fine.",
+	"Probably.",
+	AnimationPlayerTask.new(animation_player, "office_wide_fade_in"),
+	"Although the building is pretty big, it's not nearly as tall as those high rise office skyscrapers.",
+	"It's a smaller company, thankfully. I don't think I could survive the culture of a big businessy business.",
+	"Processes. Eugh.",
+	"Big bold letters on the side read “Hilight Studios.”",
+	"It's kind of a niche game company with a decently varied backlog.",
+	"RPGs, visual novels, rhythm games, and an action puzzle platformer that almost won indie game of the year a few years back at the Game Awards.",
+	"To be honest, I haven't played many of their games, but I heard good stuff about them, so I figured it wouldn't hurt to apply when I saw they were hiring.",
+	"They interviewed me over Zoom. I only met a few people from here, but they seemed like a fun crew who really cared about what they do, and we vibed a lot, apparently.",
+	"So, here I am.",
+	AnimationPlayerTask.new(animation_player, "office_front_fade_in"),
+	DelayTask.new(1),
+	AnimationPlayerTask.new(animation_player, "ryder_enter"),
 	"I slow down at the front door for a bit. There's a small bit of anxiety that I might be entering the wrong door, or that I'm too early, or a trillion other dumb things my brain could come up with.",
 	"I wait a bit to see if someone else goes in first. But not for too long, otherwise I'll look shifty.",
 	"I'll get out my phone, make it look like I'm waiting for an Uber or something.",
 	"...",
 	"I feel like such a dumbass.",
-	EnterTask.new(reina, Vector2(778, 317), Vector2.RIGHT, 0.5, 0),
+	AnimationPlayerTask.new(animation_player, "reina_enter"),
 	"???: Oh! Hey, Ryder!",
 	"My anxiety immediately melts away, and my spirits are lifted.",
 	"I am warm. I have transcended.",
@@ -66,7 +87,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("dialog_advance"):
-		_next_task()
+		_try_advance()
 	
 func _parse_task_inputs(task_inputs: Array[Variant]) -> Array[SceneTask]:
 	var tasks: Array[SceneTask] = []
@@ -93,41 +114,37 @@ func _create_dialog_task_from_string(line: String) -> DialogSceneTask:
 	return task
 
 func _next_task() -> void:
-	var current_task := tasks[current_task_index]
-	if not current_task.is_finished():
-		current_task.interrupt()
-		return
-
-	if current_task_index >= tasks.size() - 1: return
 	current_task_index += 1
-	current_task = tasks[current_task_index]
+	if current_task_index > tasks.size() - 1: return
+
+	var current_task := tasks[current_task_index]
+	current_task.advance.connect(_next_task, CONNECT_ONE_SHOT)
+	add_child(current_task)
 	current_task.start()
 	
-	if current_task.is_finished():
-		await get_tree().process_frame
-		_next_task()
-
-class EnterTask extends SceneTask:
-	var node: Node2D
-	var target_position: Vector2
-	var from_direction: Vector2
-	var delay: float
-	var duration: float
-	var tween: Tween
+func _try_advance() -> void:
+	if current_task_index < 0 or current_task_index > tasks.size() - 1: return
 	
-	func _init(node: Node2D, target_position: Vector2, from_direction: Vector2, duration: float, delay: float) -> void:
-		self.node = node
-		self.target_position = target_position
-		self.from_direction = from_direction
-		self.delay = delay
-		self.duration = duration
+	var current_task := tasks[current_task_index]
+	if is_instance_valid(current_task):
+		current_task.request_advance()
 
-	func start() -> void:
-		node.global_position = target_position + from_direction * 80
-		tween = node.create_tween().set_parallel(true)
-		tween.tween_property(node, "global_position", target_position, duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD).set_delay(delay)
-		tween.tween_property(node, "modulate", Color.WHITE, duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD).set_delay(delay)
+class DelayTask extends SceneTask:
+	var timer: Timer
+	
+	func _init(time: float) -> void:
+		timer = Timer.new()
+		timer.wait_time = time
+		timer.one_shot = true
+		add_child(timer)
 		
-	func interrupt() -> void:
-		if tween: tween.stop()
-		node.global_position = node.target_position
+	func start() -> void:
+		timer.start()
+		await timer.timeout
+		advance.emit()
+		queue_free()
+	
+	func request_advance() -> void:
+		timer.stop()
+		advance.emit()
+		queue_free()
