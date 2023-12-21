@@ -1,15 +1,18 @@
 extends Node2D
 
+@onready var ryder: Sprite2D = %Ryder
+@onready var reina: Sprite2D = %Reina
 @onready var dialog_ui: DialogUI = %DialogUI
 
-@export var dialog_reveal_speed := 50 # in characters per second
-
-var dialog_lines: Array[String] = [
+@onready var tasks := _parse_task_inputs([
+	SceneTask.new(),
+	EnterTask.new(ryder, Vector2(347, 335), Vector2.LEFT, 1, 0.5),
 	"I slow down at the front door for a bit. There's a small bit of anxiety that I might be entering the wrong door, or that I'm too early, or a trillion other dumb things my brain could come up with.",
 	"I wait a bit to see if someone else goes in first. But not for too long, otherwise I'll look shifty.",
 	"I'll get out my phone, make it look like I'm waiting for an Uber or something.",
 	"...",
 	"I feel like such a dumbass.",
+	EnterTask.new(reina, Vector2(778, 317), Vector2.RIGHT, 0.5, 0),
 	"???: Oh! Hey, Ryder!",
 	"My anxiety immediately melts away, and my spirits are lifted.",
 	"I am warm. I have transcended.",
@@ -52,42 +55,79 @@ var dialog_lines: Array[String] = [
 	"Maybe later I'll treat her to some cookies from her favorite bakery down the street.",
 	"The elevator slows. My stomach rises. It kept rising even after stopping.",
 	"Reina ruffles my hair before leaving. I used to protest and smack her hand away, but now I just take it and grumble like the bitchy queer-ass little bottom that I am.",
-]
-
-var tasks: Array[SceneTask] = []
+])
 var current_task_index := -1
 
-var current_task: SceneTask:
-	get: return tasks[current_task_index]
-
 func _ready() -> void:
-	for line: String in dialog_lines:
-		var line_with_speaker_regex := RegEx.create_from_string(r"([A-Za-z ?]+):\s*(.+)")
-		var line_with_speaker_match := line_with_speaker_regex.search(line)
-		
-		if not line_with_speaker_match:
-			tasks.append(DialogSceneTask.new(line, dialog_ui))
-			continue
-		
-		var speaker := line_with_speaker_match.strings[1]
-		var text := line_with_speaker_match.strings[2]
-		var task := DialogSceneTask.new(text, dialog_ui)
-		task.speaker_name = speaker
-		tasks.append(task)
+	ryder.modulate.a = 0
+	reina.modulate.a = 0
 	
 	_next_task()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("dialog_advance"):
 		_next_task()
+	
+func _parse_task_inputs(task_inputs: Array[Variant]) -> Array[SceneTask]:
+	var tasks: Array[SceneTask] = []
+	for item in task_inputs:
+		if item is SceneTask:
+			tasks.append(item)
+		elif item is String:
+			tasks.append(_create_dialog_task_from_string(item))
+		else:
+			push_error("Unexpected scene task input: %s" % str(item))
+	return tasks
+
+func _create_dialog_task_from_string(line: String) -> DialogSceneTask:
+	var line_with_speaker_regex := RegEx.create_from_string(r"([A-Za-z ?]+):\s*(.+)")
+	var line_with_speaker_match := line_with_speaker_regex.search(line)
+	
+	if not line_with_speaker_match:
+		return DialogSceneTask.new(line, dialog_ui)
+	
+	var speaker := line_with_speaker_match.strings[1]
+	var text := line_with_speaker_match.strings[2]
+	var task := DialogSceneTask.new(text, dialog_ui)
+	task.speaker_name = speaker
+	return task
 
 func _next_task() -> void:
-	if current_task != null and not current_task.is_finished():
+	var current_task := tasks[current_task_index]
+	if not current_task.is_finished():
 		current_task.interrupt()
 		return
-	
-	if current_task_index >= tasks.size() - 1:
-		return
 
+	if current_task_index >= tasks.size() - 1: return
 	current_task_index += 1
+	current_task = tasks[current_task_index]
 	current_task.start()
+	
+	if current_task.is_finished():
+		await get_tree().process_frame
+		_next_task()
+
+class EnterTask extends SceneTask:
+	var node: Node2D
+	var target_position: Vector2
+	var from_direction: Vector2
+	var delay: float
+	var duration: float
+	var tween: Tween
+	
+	func _init(node: Node2D, target_position: Vector2, from_direction: Vector2, duration: float, delay: float) -> void:
+		self.node = node
+		self.target_position = target_position
+		self.from_direction = from_direction
+		self.delay = delay
+		self.duration = duration
+
+	func start() -> void:
+		node.global_position = target_position + from_direction * 80
+		tween = node.create_tween().set_parallel(true)
+		tween.tween_property(node, "global_position", target_position, duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD).set_delay(delay)
+		tween.tween_property(node, "modulate", Color.WHITE, duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD).set_delay(delay)
+		
+	func interrupt() -> void:
+		if tween: tween.stop()
+		node.global_position = node.target_position
