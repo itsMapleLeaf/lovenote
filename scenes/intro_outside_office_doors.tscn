@@ -1,0 +1,96 @@
+[gd_scene load_steps=10 format=3 uid="uid://bi7vuqcj3dhjy"]
+
+[ext_resource type="Script" path="res://scenes/intro_outside_office_doors.gd" id="1_lri25"]
+[ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://resources/office_front_door.png" id="2_auqbr"]
+[ext_resource type="Texture2D" uid="uid://c4dnak4cv8mxt" path="res://resources/ryder.png" id="3_t6g63"]
+[ext_resource type="Texture2D" uid="uid://cqtlg0lyfmav7" path="res://resources/reina.png" id="4_fmpab"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rpvfw"]
+content_margin_left = 24.0
+content_margin_top = 3.0
+content_margin_right = 24.0
+content_margin_bottom = 9.0
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.92549)
+border_width_top = 2
+border_color = Color(0.199086, 0.199086, 0.199086, 1)
+
+[sub_resource type="SystemFont" id="SystemFont_eq6bv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_s36km"]
+line_spacing = 0.0
+font = SubResource("SystemFont_eq6bv")
+font_size = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0l21m"]
+content_margin_left = 24.0
+content_margin_top = 22.0
+content_margin_right = 39.0
+content_margin_bottom = 23.0
+bg_color = Color(0.105882, 0.105882, 0.105882, 0.811765)
+border_width_top = 2
+border_color = Color(0.199086, 0.199086, 0.199086, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_l4rdq"]
+font_size = 24
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_lri25")
+dialog_reveal_speed = 65
+
+[node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.886275, 0.886275, 0.886275, 1)
+position = Vector2(-68, -65)
+scale = Vector2(0.894608, 0.894608)
+texture = ExtResource("2_auqbr")
+centered = false
+
+[node name="Ryder" type="Sprite2D" parent="."]
+position = Vector2(347, 335)
+scale = Vector2(0.616626, 0.616626)
+texture = ExtResource("3_t6g63")
+
+[node name="Reina" type="Sprite2D" parent="."]
+position = Vector2(778, 316.965)
+scale = Vector2(0.563733, 0.563733)
+texture = ExtResource("4_fmpab")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -219.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="Speaker" type="PanelContainer" parent="CanvasLayer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_rpvfw")
+
+[node name="SpeakerLabel" type="Label" parent="CanvasLayer/VBoxContainer/Speaker"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "Reina"
+label_settings = SubResource("LabelSettings_s36km")
+vertical_alignment = 1
+
+[node name="Dialog" type="PanelContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_0l21m")
+
+[node name="DialogLabel" type="Label" parent="CanvasLayer/VBoxContainer/Dialog"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 0
+text = "Have you ever had a dream that that you um you had you'd you would you could you'd do you wi you wants you you could do so you you'd do you could you you want you want him to do you so much you could do anything?"
+label_settings = SubResource("LabelSettings_l4rdq")
+autowrap_mode = 2
