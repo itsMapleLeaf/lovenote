@@ -262,7 +262,7 @@ unique_name_in_owner = true
 animation_player = NodePath("../AnimationPlayer")
 dialog_ui = NodePath("../CanvasLayer/DialogUI")
 timeline_file = "res://scenes/ryder.md"
-preview_position = 52
+preview_position = 17
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

@@ -18,7 +18,9 @@ class_name TimelinePlayer
 @export_range(0, 999999) var preview_position: int:
 	set(value):
 		preview_position = value
-		if Engine.is_editor_hint(): _seek_to(value)
+		if not Engine.is_editor_hint(): return
+		if not is_node_ready(): await ready
+		_seek_to(value)
 
 var current_position := 0
 
@@ -79,8 +81,9 @@ func _seek_to(position: int) -> void:
 				animation_player.pause()
 
 	# when seeking backward, set interim animations to their start state
+	# but also reset the current animations
 	if current_position < previous_position:
-		for interim_position in range(current_position + 1, previous_position + 1):
+		for interim_position in range(current_position, previous_position + 1):
 			var line := timeline.line_at(interim_position)
 			for animation_name in line.animations:
 				animation_player.current_animation = animation_name
