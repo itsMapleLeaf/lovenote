@@ -5,9 +5,6 @@ class_name TimelinePlayer
 ## An animation player containing all of the animations for the timeline
 @export var animation_player: AnimationPlayer
 
-## The UI through which to play dialog
-@export var dialog_ui: DialogUI
-
 ## The path to the timeline file
 @export_file("*.md") var timeline_file: String:
 	set(value):
@@ -27,6 +24,8 @@ var current_position := 0
 var timeline: Timeline
 var queued_parts: Array[Timeline.DialogPart] = []
 var delay_time := 0.0
+
+@onready var dialog_ui: DialogUI = %DialogUI
 
 func _ready() -> void:
 	# some of the children aren't ready when this is called for some reason
@@ -75,10 +74,7 @@ func _seek_to(position: int) -> void:
 		for interim_position in range(previous_position, current_position):
 			var line := timeline.line_at(interim_position)
 			for animation_name in line.animations:
-				animation_player.current_animation = animation_name
-				animation_player.play()
-				animation_player.seek(animation_player.current_animation_length, true, true)
-				animation_player.pause()
+				Helpers.seek_animation(animation_player, animation_name, animation_player.current_animation_length)
 
 	# when seeking backward, set interim animations to their start state
 	# but also reset the current animations
@@ -86,10 +82,7 @@ func _seek_to(position: int) -> void:
 		for interim_position in range(current_position, previous_position + 1):
 			var line := timeline.line_at(interim_position)
 			for animation_name in line.animations:
-				animation_player.current_animation = animation_name
-				animation_player.play()
-				animation_player.seek(0, true, true)
-				animation_player.pause()
+				Helpers.seek_animation(animation_player, animation_name, 0)
 
 	var line := timeline.line_at(current_position)
 	queued_parts = line.parts.duplicate()
@@ -103,7 +96,9 @@ func _ready_to_advance() -> bool:
 	return queued_parts.is_empty() and not dialog_ui.is_playing() and delay_time <= 0
 
 func _complete_line() -> void:
-	animation_player.advance(animation_player.current_animation_length)
+	if animation_player.current_animation:
+		animation_player.advance(animation_player.current_animation_length)
+
 	for part in queued_parts:
 		if part.animation_name:
 			animation_player.current_animation = part.animation_name

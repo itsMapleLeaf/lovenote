@@ -1,11 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://bi7vuqcj3dhjy"]
+[gd_scene load_steps=14 format=3 uid="uid://bi7vuqcj3dhjy"]
 
 [ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://resources/office_front_door.png" id="2_auqbr"]
-[ext_resource type="PackedScene" uid="uid://hybev04sfhbl" path="res://timeline_player.tscn" id="2_st1wv"]
+[ext_resource type="PackedScene" uid="uid://hybev04sfhbl" path="res://timeline/timeline_player.tscn" id="2_st1wv"]
 [ext_resource type="Texture2D" uid="uid://c4dnak4cv8mxt" path="res://resources/ryder.png" id="3_t6g63"]
 [ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://resources/office_outdoors.png" id="3_xxi6r"]
 [ext_resource type="Texture2D" uid="uid://cqtlg0lyfmav7" path="res://resources/reina.png" id="4_fmpab"]
-[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://dialog_ui.tscn" id="6_wilop"]
 
 [sub_resource type="Animation" id="Animation_67c4h"]
 length = 0.001
@@ -255,12 +254,11 @@ _data = {
 "ryder_enter": SubResource("Animation_bdgn7")
 }
 
-[node name="Node2D" type="Node"]
+[node name="Root" type="Node"]
 
-[node name="TimelinePlayer" parent="." node_paths=PackedStringArray("animation_player", "dialog_ui") instance=ExtResource("2_st1wv")]
+[node name="TimelinePlayer" parent="." node_paths=PackedStringArray("animation_player") instance=ExtResource("2_st1wv")]
 unique_name_in_owner = true
 animation_player = NodePath("../AnimationPlayer")
-dialog_ui = NodePath("../CanvasLayer/DialogUI")
 timeline_file = "res://scenes/ryder.md"
 preview_position = 17
 
@@ -294,10 +292,3 @@ modulate = Color(1, 1, 1, 0)
 position = Vector2(347, 335)
 scale = Vector2(0.616626, 0.616626)
 texture = ExtResource("3_t6g63")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="DialogUI" parent="CanvasLayer" instance=ExtResource("6_wilop")]
-offset_top = -210.0
-dialog_reveal_speed = 70
-metadata/_edit_lock_ = true

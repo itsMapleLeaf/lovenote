@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://hybev04sfhbl"]
+
+[ext_resource type="Script" path="res://timeline/timeline_player.gd" id="1_iw2rs"]
+[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://ui/dialog_ui.tscn" id="2_66ax7"]
+
+[node name="TimelinePlayer" type="Node"]
+script = ExtResource("1_iw2rs")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DialogUI" parent="CanvasLayer" instance=ExtResource("2_66ax7")]
+unique_name_in_owner = true
+offset_top = -210.0
+dialog_reveal_speed = 70
+metadata/_edit_lock_ = true

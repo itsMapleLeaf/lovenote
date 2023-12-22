@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://hybev04sfhbl"]
-
-[ext_resource type="Script" path="res://timeline_player.gd" id="1_iw2rs"]
-
-[node name="TimelinePlayer" type="Node"]
-script = ExtResource("1_iw2rs")
