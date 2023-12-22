@@ -48,6 +48,13 @@ class DialogLine:
 			elif directive_value:
 				speaker = directive_value
 
+	var full_text: String:
+		get:
+			var text_parts := PackedStringArray()
+			for part in parts:
+				if part.text: text_parts.append(part.text)
+			return "".join(text_parts)
+
 class DialogPart:
 	var text: String
 	var animation_name: StringName

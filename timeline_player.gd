@@ -54,6 +54,15 @@ func _process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("dialog_advance"):
+		if _ready_to_advance():
+			current_position += 1
+		else:
+			_complete_line()
+
+	if event.is_action_pressed("dialog_prev"):
+		current_position -= 1
+
+	if event.is_action_pressed("dialog_next"):
 		current_position += 1
 
 func _play(position: int) -> void:
@@ -65,3 +74,17 @@ func _play(position: int) -> void:
 	dialog_ui.reset()
 	if line.speaker:
 		dialog_ui.set_speaker(line.speaker)
+
+func _ready_to_advance() -> bool:
+	return queued_parts.is_empty() and not dialog_ui.is_playing() and delay_time <= 0
+
+func _complete_line() -> void:
+	animation_player.advance(animation_player.current_animation_length)
+	for part in queued_parts:
+		if part.animation_name:
+			animation_player.play(part.animation_name)
+			animation_player.advance(animation_player.current_animation_length)
+
+	dialog_ui.complete(timeline.line_at(current_position).full_text)
+	delay_time = 0
+	queued_parts = []

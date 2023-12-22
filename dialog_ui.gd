@@ -34,3 +34,8 @@ func play_text(text: String) -> void:
 
 func is_playing() -> bool:
 	return tween and tween.is_running()
+
+func complete(full_text: String) -> void:
+	if tween: tween.kill()
+	dialog_label.text = full_text
+	dialog_label.visible_characters = -1
