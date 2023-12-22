@@ -1,110 +1,89 @@
-[gd_scene load_steps=14 format=3 uid="uid://bi7vuqcj3dhjy"]
+[gd_scene load_steps=21 format=3 uid="uid://bi7vuqcj3dhjy"]
 
-[ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://resources/office_front_door.png" id="2_auqbr"]
+[ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://backgrounds/office_front_door.png" id="2_auqbr"]
 [ext_resource type="PackedScene" uid="uid://hybev04sfhbl" path="res://timeline/timeline_player.tscn" id="2_st1wv"]
-[ext_resource type="Texture2D" uid="uid://c4dnak4cv8mxt" path="res://resources/ryder.png" id="3_t6g63"]
-[ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://resources/office_outdoors.png" id="3_xxi6r"]
-[ext_resource type="Texture2D" uid="uid://cqtlg0lyfmav7" path="res://resources/reina.png" id="4_fmpab"]
+[ext_resource type="PackedScene" uid="uid://cp0l7l33y2jf8" path="res://characters/reina.tscn" id="3_32ct2"]
+[ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://backgrounds/office_outdoors.png" id="3_xxi6r"]
+[ext_resource type="PackedScene" uid="uid://bs2tt3frh87ms" path="res://characters/ryder.tscn" id="4_hd6rp"]
 
-[sub_resource type="Animation" id="Animation_67c4h"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_bus63"]
+atlas = ExtResource("2_auqbr")
+region = Rect2(0, 40, 1456, 776)
+
+[sub_resource type="Animation" id="Animation_7f0vy"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Ryder:position")
+tracks/0/path = NodePath("RyderBasePosition/Ryder:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(0.5),
 "update": 0,
-"values": [Vector2(119, 335)]
+"values": [Vector2(-188, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Ryder:modulate")
+tracks/1/path = NodePath("RyderBasePosition/Ryder:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(0.5),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Reina:position")
+tracks/2/path = NodePath("ReinaBasePosition/Reina:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(0.5),
 "update": 0,
-"values": [Vector2(1018, 316.965)]
+"values": [Vector2(-240, 0)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Reina:modulate")
+tracks/3/path = NodePath("ReinaBasePosition/Reina:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(0.5),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("OfficeWideViewBackground:modulate")
+tracks/4/path = NodePath("OfficeFrontBackground:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(0.5),
 "update": 0,
-"values": [Color(0.898039, 0.898039, 0.898039, 0)]
+"values": [Color(0.886275, 0.886275, 0.886275, 0)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("OfficeFrontBackground:modulate")
+tracks/5/path = NodePath("OfficeWideViewBackground:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(0.5),
 "update": 0,
-"values": [Color(0.886275, 0.886275, 0.886275, 0)]
+"values": [Color(0.898039, 0.898039, 0.898039, 0)]
 }
-tracks/6/type = "bezier"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Ryder:position:x")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(347, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/7/type = "bezier"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("Ryder:position:y")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(335, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-
-[sub_resource type="Animation" id="Animation_wmd2d"]
-resource_name = "cover_fade_out"
 
 [sub_resource type="Animation" id="Animation_m25dq"]
 resource_name = "office_front_fade_in"
@@ -136,24 +115,39 @@ tracks/0/keys = {
 "values": [Color(0.898039, 0.898039, 0.898039, 0), Color(0.894922, 0.894922, 0.894922, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_ynt0y"]
+resource_name = "only_reina_reels_back"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ReinaBasePosition/Reina:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(0.329877, 1),
+"update": 0,
+"values": [Vector2(-162, 0), Vector2(0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_nqfbw"]
 resource_name = "reina_enter"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Reina:position")
+tracks/0/path = NodePath("ReinaBasePosition/Reina:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
-"values": [Vector2(1018, 316.965), Vector2(778, 316.965)]
+"values": [Vector2(240, 0), Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Reina:modulate")
+tracks/1/path = NodePath("ReinaBasePosition/Reina:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -163,6 +157,21 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_rq4ll"]
+resource_name = "reina_leans_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ReinaBasePosition/Reina:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(0.329877, 0.420449),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-162, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_qx13f"]
 resource_name = "reina_pats_and_leaves"
 length = 3.0
@@ -170,19 +179,19 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Reina:position")
+tracks/0/path = NodePath("ReinaBasePosition/Reina:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.95, 1.35),
 "transitions": PackedFloat32Array(0.5, 0.5, -2, -2, -2, -2, -2, -2, 1),
 "update": 0,
-"values": [Vector2(778, 316.965), Vector2(504, 316.965), Vector2(504, 316.965), Vector2(470, 316.965), Vector2(504, 316.965), Vector2(470, 316.965), Vector2(504, 316.965), Vector2(504, 316.965), Vector2(944, 316.965)]
+"values": [Vector2(0, 0), Vector2(-274, 0), Vector2(-274, 0), Vector2(-308, 0), Vector2(-274, 0), Vector2(-308, 0), Vector2(-274, 0), Vector2(-274, 0), Vector2(216, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Reina:modulate")
+tracks/1/path = NodePath("ReinaBasePosition/Reina:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -194,19 +203,19 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Ryder:position")
+tracks/2/path = NodePath("RyderBasePosition/Ryder:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.75, 1.7, 2.05),
 "transitions": PackedFloat32Array(1, 0.5, 1, -2, 1, -2, -2),
 "update": 0,
-"values": [Vector2(381, 335), Vector2(381, 335), Vector2(323, 335), Vector2(323, 335), Vector2(323, 387), Vector2(323, 387), Vector2(323, 335)]
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(-50, 0), Vector2(-50, 0), Vector2(-50, 50), Vector2(-50, 50), Vector2(-50, 0)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Ryder:modulate")
+tracks/3/path = NodePath("RyderBasePosition/Ryder:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -216,24 +225,83 @@ tracks/3/keys = {
 "values": [Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_7knbg"]
+resource_name = "reina_reels_back"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ReinaBasePosition/Reina:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.329877, 1),
+"update": 0,
+"values": [Vector2(-162, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RyderBasePosition/Ryder:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.8),
+"transitions": PackedFloat32Array(-2, 1),
+"update": 0,
+"values": [Vector2(-42.0003, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hapdo"]
+resource_name = "reina_sighs"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ReinaBasePosition/Reina:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.8, 1.1),
+"transitions": PackedFloat32Array(0.5, 1, -2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 14), Vector2(0, 14), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_gd66j"]
+resource_name = "ryder_backs_away"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RyderBasePosition/Ryder:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.287175, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-42.0003, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_bdgn7"]
 resource_name = "ryder_enter"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Ryder:position")
+tracks/0/path = NodePath("RyderBasePosition/Ryder:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(0.5, 0.5),
 "update": 0,
-"values": [Vector2(193, 334), Vector2(381, 335)]
+"values": [Vector2(-188, 0), Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Ryder:modulate")
+tracks/1/path = NodePath("RyderBasePosition/Ryder:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -243,52 +311,122 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_gtv40"]
-_data = {
-"RESET": SubResource("Animation_67c4h"),
-"cover_fade_out": SubResource("Animation_wmd2d"),
-"office_front_fade_in": SubResource("Animation_m25dq"),
-"office_wide_fade_in": SubResource("Animation_o4wd2"),
-"reina_enter": SubResource("Animation_nqfbw"),
-"reina_pats_and_leaves": SubResource("Animation_qx13f"),
-"ryder_enter": SubResource("Animation_bdgn7")
+[sub_resource type="Animation" id="Animation_qkpph"]
+resource_name = "ryder_shrug"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RyderBasePosition/Ryder:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.225, 0.45),
+"transitions": PackedFloat32Array(1, -2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -12), Vector2(0, 0)]
 }
 
-[node name="Root" type="Node"]
+[sub_resource type="Animation" id="Animation_j0rou"]
+resource_name = "ryder_sighs"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RyderBasePosition/Ryder:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.8, 1.1),
+"transitions": PackedFloat32Array(0.5, 1, -2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 14), Vector2(0, 14), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gtv40"]
+_data = {
+"RESET": SubResource("Animation_7f0vy"),
+"office_front_fade_in": SubResource("Animation_m25dq"),
+"office_wide_fade_in": SubResource("Animation_o4wd2"),
+"only_reina_reels_back": SubResource("Animation_ynt0y"),
+"reina_enter": SubResource("Animation_nqfbw"),
+"reina_leans_in": SubResource("Animation_rq4ll"),
+"reina_pats_and_leaves": SubResource("Animation_qx13f"),
+"reina_reels_back": SubResource("Animation_7knbg"),
+"reina_sighs": SubResource("Animation_hapdo"),
+"ryder_backs_away": SubResource("Animation_gd66j"),
+"ryder_enter": SubResource("Animation_bdgn7"),
+"ryder_shrug": SubResource("Animation_qkpph"),
+"ryder_sighs": SubResource("Animation_j0rou")
+}
+
+[node name="Scene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OfficeWideViewBackground" type="TextureRect" parent="."]
+modulate = Color(0.898039, 0.898039, 0.898039, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_xxi6r")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="OfficeFrontBackground" type="TextureRect" parent="."]
+modulate = Color(0.886275, 0.886275, 0.886275, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_bus63")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ReinaBasePosition" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 0.711806
+anchor_top = 0.487654
+anchor_right = 0.711806
+anchor_bottom = 0.487654
+metadata/_edit_use_anchors_ = true
+
+[node name="Reina" parent="ReinaBasePosition" instance=ExtResource("3_32ct2")]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+offset_left = -240.0
+offset_top = 0.0
+offset_right = -240.0
+offset_bottom = 0.0
+
+[node name="RyderBasePosition" type="Control" parent="."]
+anchors_preset = 0
+anchor_left = 0.30816
+anchor_top = 0.518519
+anchor_right = 0.30816
+anchor_bottom = 0.518519
+metadata/_edit_use_anchors_ = true
+
+[node name="Ryder" parent="RyderBasePosition" instance=ExtResource("4_hd6rp")]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+offset_left = -188.0
+offset_right = -188.0
 
 [node name="TimelinePlayer" parent="." node_paths=PackedStringArray("animation_player") instance=ExtResource("2_st1wv")]
-unique_name_in_owner = true
 animation_player = NodePath("../AnimationPlayer")
 timeline_file = "res://scenes/ryder.md"
-preview_position = 17
+preview_position = 64
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_gtv40")
 }
-
-[node name="OfficeWideViewBackground" type="Sprite2D" parent="."]
-modulate = Color(0.898039, 0.898039, 0.898039, 0)
-position = Vector2(0, 2.38419e-07)
-scale = Vector2(0.397059, 0.397059)
-texture = ExtResource("3_xxi6r")
-centered = false
-
-[node name="OfficeFrontBackground" type="Sprite2D" parent="."]
-modulate = Color(0.886275, 0.886275, 0.886275, 0)
-position = Vector2(-68, -65)
-scale = Vector2(0.894608, 0.894608)
-texture = ExtResource("2_auqbr")
-centered = false
-
-[node name="Reina" type="Sprite2D" parent="."]
-modulate = Color(1, 1, 1, 0)
-position = Vector2(1018, 316.965)
-scale = Vector2(0.563733, 0.563733)
-texture = ExtResource("4_fmpab")
-
-[node name="Ryder" type="Sprite2D" parent="."]
-modulate = Color(1, 1, 1, 0)
-position = Vector2(347, 335)
-scale = Vector2(0.616626, 0.616626)
-texture = ExtResource("3_t6g63")

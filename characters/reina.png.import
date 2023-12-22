@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cqtlg0lyfmav7"
-path="res://.godot/imported/reina.png-4a061053d0b8ed568869738777a2d9b3.ctex"
+path="res://.godot/imported/reina.png-25debb44df44adea8375638b9d177ff5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/reina.png"
-dest_files=["res://.godot/imported/reina.png-4a061053d0b8ed568869738777a2d9b3.ctex"]
+source_file="res://characters/reina.png"
+dest_files=["res://.godot/imported/reina.png-25debb44df44adea8375638b9d177ff5.ctex"]
 
 [params]
 

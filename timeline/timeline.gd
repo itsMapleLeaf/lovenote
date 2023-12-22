@@ -55,7 +55,7 @@ class DialogLine:
 				if part.text: texts.append(part.text)
 			return "".join(texts)
 
-	var animations:
+	var animations: Array[StringName]:
 		get:
 			var result: Array[StringName] = []
 			for part in parts:

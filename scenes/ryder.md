@@ -80,53 +80,57 @@ I take a sip from my can of iced vanilla coffee. Simultaneously, she sips from h
 
 [Reina] So, nervous for your first day?
 
-I shrug.
+[animation:ryder_shrug] I shrug.
 
 [Ryder] Not really. Kinda just going along with the flow.
 
-[Reina] As a coping mechanism?
+[Reina] [animation:reina_leans_in] As a coping mechanism?
 
-She leans in with the deadliest, most annoying smirk. I look away, trying not to frown too hard. Failing.
+[animation:ryder_backs_away] She leans in with the deadliest, most annoying smirk. I look away, trying not to frown too hard. Failing.
 
 [Ryder] S-so what? Don't act like you aren't nervous too.
 
-Reina softens her advance and reels back.
+[animation:reina_reels_back] Reina softens her advance and reels back.
 
 [Reina] And I'm willing to admit it. Because, as a responsible adult, I'm able to acknowledge my feelings instead of stoically hiding them and pretending everything's always fine all the time.
 
 I'm going to punch her.
 
-[Reina] You wouldn't have even come in here if I hadn't met up with you, would you?
+[Reina] [animation:reina_leans_in] You wouldn't have even come in here if I hadn't met up with you, would you?
 
 I'm going to fucking punch her.
 
-[Reina] But that's fine.
+[Reina] [animation:only_reina_reels_back] But that's fine.
 
-She sighs, the smugness in her expression fading, as well as my childish disgruntledness.
+[animation:reina_sighs] She sighs, the smugness in her expression fading, and my pouting.
 
-[Reina] Growing old doesn't mean we grow out of dumb human feelings, right? With new opportunities, new frontiers, new environments, being anxious and nervous is only natural. And it goes away pretty quickly.
+[Reina] Growing old doesn't mean we grow out of dumb human feelings, right? [delay:0.5] With new opportunities, [delay:0.3] new frontiers, [delay:0.3] and new environments, [delay:0.3] being anxious and nervous is only natural. [delay:0.5] And it goes away pretty quickly.
 
 Reina confidently sticks her nose up, with one eye opened looking at me.
 
-[Reina] If you can't ease the anxiety, just push through knowing it'll all become another boring routine to you in the end. That's when you can find the small little things that make it special.
+[Reina] If you can't ease the anxiety, just push through knowing it'll all become another boring routine to you in the end. [delay:0.8] That's when you can find the small little things that make it special.
 
-...I hate her.
+.[delay:0.3].[delay:0.3].[delay:0.8]I hate her.
 
 I hate her so goddamn fucking much.
 
 How she teases me into a corner, then comes up with an actually motivating motivational speech.
 
-[Ryder] ...Yeah. I guess.
+[Ryder] Yeah.[delay:0.3].[delay:0.3]. [delay:0.8] I guess.
 
-I smile like a goddamn fucking idiot. She mirrors it, as if taking yet another victory between us.
+I smile like a goddamn fucking idiot. [delay:0.5] She mirrors it, as if taking yet another victory between us.
 
-And somehow, I don't mind.
+But I don't mind, somehow.
 
 Maybe later I'll treat her to some cookies from her favorite bakery down the street.
 
-The elevator slows. My stomach rises. It kept rising even after stopping.
+The elevator slows. [delay:0.5] My stomach rises. [delay:0.5] It kept rising even after stopping.
 
-[animation:reina_pats_and_leaves] Reina ruffles my hair before leaving. I used to protest and smack her hand away, but now I just take it and grumble like the bitchy queer-ass little bottom that I am.
+[animation:reina_pats_and_leaves] Reina ruffles my hair before leaving. I used to protest and smack her hand away, but now I just take it and grumble like the bottom I am.
+
+_Sigh._
+
+# [animation_wait:scene_exit]
 
 ## New Friends
 

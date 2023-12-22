@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tpbcxn8hs64o"
-path="res://.godot/imported/office_front_door.png-297d39b6df475d83bb66bd555b8b6f79.ctex"
+uid="uid://c4dnak4cv8mxt"
+path="res://.godot/imported/ryder.png-83bd80bd2788eeae1ff04ae1eaa997c8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/office_front_door.png"
-dest_files=["res://.godot/imported/office_front_door.png-297d39b6df475d83bb66bd555b8b6f79.ctex"]
+source_file="res://characters/ryder.png"
+dest_files=["res://.godot/imported/ryder.png-83bd80bd2788eeae1ff04ae1eaa997c8.ctex"]
 
 [params]
 

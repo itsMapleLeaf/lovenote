@@ -69,22 +69,24 @@ func _seek_to(position: int) -> void:
 	var previous_position := current_position
 	current_position = position
 
+	var line: Timeline.DialogLine
+
 	# when seeking forward, set interim animations to their end state
 	if current_position > previous_position:
 		for interim_position in range(previous_position, current_position):
-			var line := timeline.line_at(interim_position)
+			line = timeline.line_at(interim_position)
 			for animation_name in line.animations:
-				Helpers.seek_animation(animation_player, animation_name, animation_player.current_animation_length)
+				_apply_animation_values(animation_name, animation_player.current_animation_length)
 
 	# when seeking backward, set interim animations to their start state
 	# but also reset the current animations
 	if current_position < previous_position:
 		for interim_position in range(current_position, previous_position + 1):
-			var line := timeline.line_at(interim_position)
+			line = timeline.line_at(interim_position)
 			for animation_name in line.animations:
-				Helpers.seek_animation(animation_player, animation_name, 0)
+				_apply_animation_values(animation_name, 0)
 
-	var line := timeline.line_at(current_position)
+	line = timeline.line_at(current_position)
 	queued_parts = line.parts.duplicate()
 	delay_time = 0
 	dialog_ui.reset()
@@ -101,9 +103,25 @@ func _complete_line() -> void:
 
 	for part in queued_parts:
 		if part.animation_name:
-			animation_player.current_animation = part.animation_name
-			animation_player.seek(animation_player.current_animation_length, true, true)
+			_apply_animation_values(part.animation_name, animation_player.current_animation_length)
 
 	dialog_ui.complete(timeline.line_at(current_position).full_text)
 	delay_time = 0
 	queued_parts = []
+
+func _apply_animation_values(animation_name: StringName, time: float) -> void:
+	animation_player.current_animation = animation_name
+	animation_player.play()
+	animation_player.seek(time, true, true)
+	animation_player.pause()
+
+func _get_configuration_warnings():
+	var warnings: Array[String] = []
+
+	if not timeline_file:
+		warnings.append("Timeline file not set")
+
+	if not animation_player:
+		warnings.append("Animation player not set")
+
+	return warnings
