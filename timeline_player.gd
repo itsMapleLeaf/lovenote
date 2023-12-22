@@ -72,7 +72,6 @@ func _seek_to(position: int) -> void:
 	if current_position > previous_position:
 		for interim_position in range(previous_position, current_position):
 			var line := timeline.line_at(interim_position)
-			print(line.animations)
 			for animation_name in line.animations:
 				animation_player.current_animation = animation_name
 				animation_player.play()
