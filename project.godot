@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="A Love Note"
-run/main_scene="res://scenes/intro_outside_office_doors.tscn"
+run/main_scene="res://scenes/ryder.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 

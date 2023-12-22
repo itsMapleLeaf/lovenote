@@ -1,0 +1,291 @@
+[gd_scene load_steps=15 format=3 uid="uid://bi7vuqcj3dhjy"]
+
+[ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://resources/office_front_door.png" id="2_auqbr"]
+[ext_resource type="PackedScene" uid="uid://hybev04sfhbl" path="res://timeline_player.tscn" id="2_st1wv"]
+[ext_resource type="Texture2D" uid="uid://c4dnak4cv8mxt" path="res://resources/ryder.png" id="3_t6g63"]
+[ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://resources/office_outdoors.png" id="3_xxi6r"]
+[ext_resource type="Texture2D" uid="uid://cqtlg0lyfmav7" path="res://resources/reina.png" id="4_fmpab"]
+[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://dialog_ui.tscn" id="6_wilop"]
+
+[sub_resource type="Animation" id="Animation_67c4h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Ryder:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(119, 335)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Ryder:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Reina:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1018, 316.965)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Reina:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("OfficeWideViewBackground:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.898039, 0.898039, 0.898039, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("OfficeFrontBackground:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.886275, 0.886275, 0.886275, 0)]
+}
+tracks/6/type = "bezier"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Ryder:position:x")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(347, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/7/type = "bezier"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Ryder:position:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(335, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_wmd2d"]
+resource_name = "cover_fade_out"
+
+[sub_resource type="Animation" id="Animation_m25dq"]
+resource_name = "office_front_fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OfficeFrontBackground:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Color(0.886275, 0.886275, 0.886275, 0), Color(0.886275, 0.886275, 0.886275, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_o4wd2"]
+resource_name = "office_wide_fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OfficeWideViewBackground:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Color(0.898039, 0.898039, 0.898039, 0), Color(0.894922, 0.894922, 0.894922, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nqfbw"]
+resource_name = "reina_enter"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Reina:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(1018, 316.965), Vector2(778, 316.965)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Reina:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qx13f"]
+resource_name = "reina_pats_and_leaves"
+length = 3.0
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Reina:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.95, 1.35),
+"transitions": PackedFloat32Array(0.5, 0.5, -2, -2, -2, -2, -2, -2, 1),
+"update": 0,
+"values": [Vector2(778, 316.965), Vector2(504, 316.965), Vector2(504, 316.965), Vector2(470, 316.965), Vector2(504, 316.965), Vector2(470, 316.965), Vector2(504, 316.965), Vector2(504, 316.965), Vector2(944, 316.965)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Reina:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.95, 1.35),
+"transitions": PackedFloat32Array(1, -2, 2),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Ryder:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.75, 1.7, 2.05),
+"transitions": PackedFloat32Array(1, 0.5, 1, -2, 1, -2, -2),
+"update": 0,
+"values": [Vector2(381, 335), Vector2(381, 335), Vector2(323, 335), Vector2(323, 335), Vector2(323, 387), Vector2(323, 387), Vector2(323, 335)]
+}
+
+[sub_resource type="Animation" id="Animation_bdgn7"]
+resource_name = "ryder_enter"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Ryder:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 0.5),
+"update": 0,
+"values": [Vector2(193, 334), Vector2(381, 335)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Ryder:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 0.5),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gtv40"]
+_data = {
+"RESET": SubResource("Animation_67c4h"),
+"cover_fade_out": SubResource("Animation_wmd2d"),
+"office_front_fade_in": SubResource("Animation_m25dq"),
+"office_wide_fade_in": SubResource("Animation_o4wd2"),
+"reina_enter": SubResource("Animation_nqfbw"),
+"reina_pats_and_leaves": SubResource("Animation_qx13f"),
+"ryder_enter": SubResource("Animation_bdgn7")
+}
+
+[node name="Node2D" type="Node"]
+
+[node name="TimelinePlayer" parent="." node_paths=PackedStringArray("animation_player", "dialog_ui") instance=ExtResource("2_st1wv")]
+unique_name_in_owner = true
+animation_player = NodePath("../AnimationPlayer")
+dialog_ui = NodePath("../CanvasLayer/DialogUI")
+timeline_file = "res://scenes/ryder.md"
+current_position = 17
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_gtv40")
+}
+
+[node name="OfficeWideViewBackground" type="Sprite2D" parent="."]
+modulate = Color(0.898039, 0.898039, 0.898039, 0)
+position = Vector2(0, 2.38419e-07)
+scale = Vector2(0.397059, 0.397059)
+texture = ExtResource("3_xxi6r")
+centered = false
+
+[node name="OfficeFrontBackground" type="Sprite2D" parent="."]
+modulate = Color(0.886275, 0.886275, 0.886275, 0)
+position = Vector2(-68, -65)
+scale = Vector2(0.894608, 0.894608)
+texture = ExtResource("2_auqbr")
+centered = false
+
+[node name="Reina" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(1018, 316.965)
+scale = Vector2(0.563733, 0.563733)
+texture = ExtResource("4_fmpab")
+
+[node name="Ryder" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(347, 335)
+scale = Vector2(0.616626, 0.616626)
+texture = ExtResource("3_t6g63")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DialogUI" parent="CanvasLayer" instance=ExtResource("6_wilop")]
+offset_top = -210.0
+dialog_reveal_speed = 70
+metadata/_edit_lock_ = true
