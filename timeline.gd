@@ -50,10 +50,17 @@ class DialogLine:
 
 	var full_text: String:
 		get:
-			var text_parts := PackedStringArray()
+			var texts := PackedStringArray()
 			for part in parts:
-				if part.text: text_parts.append(part.text)
-			return "".join(text_parts)
+				if part.text: texts.append(part.text)
+			return "".join(texts)
+
+	var animations:
+		get:
+			var result: Array[StringName] = []
+			for part in parts:
+				if part.animation_name: result.append(part.animation_name)
+			return result
 
 class DialogPart:
 	var text: String
