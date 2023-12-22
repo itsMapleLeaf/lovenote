@@ -1,5 +1,5 @@
 @tool
-extends VBoxContainer
+extends Control
 class_name DialogUI
 
 ## The speed which the text is revealed, in characters per second
@@ -8,8 +8,15 @@ class_name DialogUI
 @onready var speaker_panel: PanelContainer = %SpeakerPanel
 @onready var speaker_label: Label = %SpeakerLabel
 @onready var dialog_label: Label = %DialogLabel
+@onready var advance_indicator: Control = %AdvanceIndicator
 
 var tween: Tween
+
+@onready var advance_indicator_visible: bool:
+	set(value):
+		advance_indicator.visible = value
+	get:
+		return advance_indicator.visible
 
 func reset() -> void:
 	dialog_label.text = ""

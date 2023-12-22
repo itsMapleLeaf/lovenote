@@ -31,6 +31,8 @@ func _ready() -> void:
 	_seek_to.call_deferred(0)
 
 func _process(delta: float) -> void:
+	dialog_ui.advance_indicator_visible = _ready_to_advance()
+
 	if dialog_ui.is_playing():
 		return
 
