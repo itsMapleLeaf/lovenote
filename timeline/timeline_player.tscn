@@ -15,8 +15,6 @@ script = ExtResource("1_iw2rs")
 [node name="DialogUI" parent="." instance=ExtResource("2_66ax7")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_top = -210.0
 dialog_reveal_speed = 70
-metadata/_edit_lock_ = true
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
