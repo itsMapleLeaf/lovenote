@@ -1,7 +1,12 @@
 extends Node
 
 const scenes: Array[PackedScene] = [
-	preload("res://scenes/ryder.tscn"),
+	preload("res://scenes/ryder/the_first_day.tscn"),
+	# preload("res://scenes/ryder/new_friends.tscn"),
+	# preload("res://scenes/ryder/the_first_meeting.tscn"),
+	# preload("res://scenes/ryder/not_a_crush.tscn"),
+	# preload("res://scenes/ryder/friction.tscn"),
+	# preload("res://scenes/ryder/understanding.tscn"),
 ]
 
 var scene_index := 0

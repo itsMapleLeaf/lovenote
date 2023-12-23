@@ -1,13 +1,13 @@
 [gd_scene load_steps=21 format=3 uid="uid://bi7vuqcj3dhjy"]
 
-[ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://backgrounds/office_front_door.png" id="2_auqbr"]
-[ext_resource type="PackedScene" uid="uid://hybev04sfhbl" path="res://timeline/timeline_player.tscn" id="2_st1wv"]
-[ext_resource type="PackedScene" uid="uid://cp0l7l33y2jf8" path="res://characters/reina.tscn" id="3_32ct2"]
-[ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://backgrounds/office_outdoors.png" id="3_xxi6r"]
-[ext_resource type="PackedScene" uid="uid://bs2tt3frh87ms" path="res://characters/ryder.tscn" id="4_hd6rp"]
+[ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://backgrounds/office_outdoors.png" id="1_yddws"]
+[ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://backgrounds/office_front_door.png" id="2_tpdfb"]
+[ext_resource type="PackedScene" uid="uid://cp0l7l33y2jf8" path="res://characters/reina.tscn" id="3_conxa"]
+[ext_resource type="PackedScene" uid="uid://bs2tt3frh87ms" path="res://characters/ryder.tscn" id="4_ewx8a"]
+[ext_resource type="PackedScene" uid="uid://hybev04sfhbl" path="res://timeline/timeline_player.tscn" id="5_be0yv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bus63"]
-atlas = ExtResource("2_auqbr")
+atlas = ExtResource("2_tpdfb")
 region = Rect2(0, 40, 1456, 776)
 
 [sub_resource type="Animation" id="Animation_7f0vy"]
@@ -375,7 +375,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_xxi6r")
+texture = ExtResource("1_yddws")
 expand_mode = 1
 stretch_mode = 6
 
@@ -399,7 +399,7 @@ anchor_right = 0.711806
 anchor_bottom = 0.487654
 metadata/_edit_use_anchors_ = true
 
-[node name="Reina" parent="ReinaBasePosition" instance=ExtResource("3_32ct2")]
+[node name="Reina" parent="ReinaBasePosition" instance=ExtResource("3_conxa")]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 offset_left = -240.0
@@ -415,15 +415,16 @@ anchor_right = 0.30816
 anchor_bottom = 0.518519
 metadata/_edit_use_anchors_ = true
 
-[node name="Ryder" parent="RyderBasePosition" instance=ExtResource("4_hd6rp")]
+[node name="Ryder" parent="RyderBasePosition" instance=ExtResource("4_ewx8a")]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 offset_left = -188.0
 offset_right = -188.0
 
-[node name="TimelinePlayer" parent="." node_paths=PackedStringArray("animation_player") instance=ExtResource("2_st1wv")]
+[node name="TimelinePlayer" parent="." node_paths=PackedStringArray("animation_player") instance=ExtResource("5_be0yv")]
+layout_mode = 1
 animation_player = NodePath("../AnimationPlayer")
-timeline_file = "res://scenes/ryder.md"
+timeline_file = "res://scenes/ryder/the_first_day.md"
 preview_position = 64
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
