@@ -18,7 +18,11 @@ static func from_file(file_path: String) -> Timeline:
 		if line.is_empty() or line.begins_with("#"): continue
 		lines.append(DialogLine.new(line))
 
-	print("Loaded timeline with %d lines in %d ms" % [lines.size(), (Time.get_ticks_msec() - start_time)])
+	print_rich("[color=gray]Loaded timeline from [color=white]%s[/color] with [color=white]%d lines[/color] in [color=white]%d ms[/color][/color]" % [
+		file_path,
+		lines.size(),
+		(Time.get_ticks_msec() - start_time)
+	])
 
 	return Timeline.new(lines)
 
