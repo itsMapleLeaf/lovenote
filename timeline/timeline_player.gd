@@ -53,11 +53,14 @@ func _process(delta: float) -> void:
 			break
 
 func _unhandled_input(event: InputEvent) -> void:
+	_handle_input(event)
+
+func _on_gui_input(event: InputEvent) -> void:
+	_handle_input(event)
+
+func _handle_input(event: InputEvent) -> void:
 	if event.is_action_pressed("dialog_advance"):
-		if _ready_to_advance():
-			_seek_to(current_position + 1)
-		else:
-			_complete_line()
+		_seek_to(current_position + 1) if _ready_to_advance() else _complete_line()
 
 	if event.is_action_pressed("dialog_prev"):
 		_seek_to(current_position - 1)
@@ -89,10 +92,9 @@ func _seek_to(position: int) -> void:
 	line = timeline.line_at(current_position)
 	queued_parts = line.parts.duplicate()
 	delay_time = 0
-	dialog_ui.reset()
 
-	if line.speaker:
-		dialog_ui.set_speaker(line.speaker)
+	dialog_ui.reset()
+	if line.speaker: dialog_ui.set_speaker(line.speaker)
 
 func _ready_to_advance() -> bool:
 	return queued_parts.is_empty() and not dialog_ui.is_playing() and delay_time <= 0
