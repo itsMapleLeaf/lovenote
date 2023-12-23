@@ -12,10 +12,7 @@ static func from_file(file_path: String) -> Timeline:
 	var start_time := Time.get_ticks_msec()
 
 	var lines: Array[DialogLine] = []
-	var line_number := 0
 	var content := FileAccess.open(file_path, FileAccess.READ).get_as_text()
-	var current_delay := 0.0
-	var current_animations: Array[StringName] = []
 
 	for line in content.split("\n"):
 		if line.is_empty() or line.begins_with("#"): continue

@@ -23,8 +23,8 @@ func reset() -> void:
 	speaker_panel.modulate.a = 0
 	if tween: tween.kill()
 
-func set_speaker(name: String) -> void:
-	speaker_label.text = name
+func set_speaker(speaker_name: String) -> void:
+	speaker_label.text = speaker_name
 	speaker_panel.modulate.a = 1
 
 func play_text(text: String) -> void:
