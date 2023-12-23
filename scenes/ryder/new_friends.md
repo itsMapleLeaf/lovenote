@@ -52,7 +52,7 @@ I can only assume this obtusely hyperactive girl is referring to me.
 
 That inspires confidence.
 
-[Tabby] You must be Ryder! It's great t’meetcha! I'm Tabby!
+[Chris] You must be Ryder! It's great t’meetcha! I'm Christina, but I go by Chris!
 
 Her handshake throws me so hard for a loop that I can barely take in her features.
 
@@ -60,9 +60,9 @@ Navy blue shoulder straps showing through the collar of a loose over-the-shoulde
 
 The worry that I was too casually dressed immediately faded away.
 
-More accurately, Tabby shook it out of me.
+More accurately, Chris shook it out of me.
 
-Past Tabby, I see another presumed Team Tiger member letting out a big yawn as she approaches, arms stretched high.
+Past Chris, I see another presumed Team Tiger member letting out a big yawn as she approaches, arms stretched high.
 
 She’s wearing a white shirt with shoulder frills, a black skirt with white stockings under, and a black choker.
 
@@ -72,23 +72,23 @@ That _would've_ been my first impression, but the girl immediately slumps into h
 
 The mountain is still standing...
 
-[Tabby] Awwh, Runa! Y’can’t just go and take a nap right in front of the newbie, it'll make us look bad!
+[Chris] Awwh, Runa! Y’can’t just go and take a nap right in front of the newbie, it'll make us look bad!
 
 [Runa] Mmnh. Just a few more minutes...
 
-And she was out, no matter how much Tabby shook her.
+And she was out, no matter how much Chris shook her.
 
 I _wish_ I could fall asleep that fast. Damn.
 
-[Tabby] Weeelllll that's _prooobably_ not the best first impression, but trust me when I say that Runa’s the real veteran here! Whatever obscure questions y’might have, high chance she's got an answer!
+[Chris] Weeelllll that's _prooobably_ not the best first impression, but trust me when I say that Runa’s the real veteran here! Whatever obscure questions y’might have, high chance she's got an answer!
 
 [Ryder] Uh... r-right. I-
 
-[Tabby] Oh, looks like Note’s just got here too!
+[Chris] Oh, looks like Note’s just got here too!
 
 Huh? A note got here?
 
-I turned my head to look where Tabby’s looking.
+I turned my head to look where Chris’s looking.
 
 [Ryder] HUAH?!
 
@@ -102,7 +102,7 @@ There's no way I couldn't have seen them.
 
 What the fuck.
 
-[Tabby] C’mon Notey-Note, put down yer work for two seconds to greet our new family member, why dontcha?
+[Chris] C’mon Notey-Note, put down yer work for two seconds to greet our new family member, why dontcha?
 
 Oh, wait... ‘Note’ is his name?
 
@@ -126,25 +126,25 @@ A small silver heart hung from his necklace. It sparkles in the light of the roo
 
 The band of his necklace rested against a subdued collarbone, only further extenuating his androgynous figure, from his rounded-off shoulders to his hips.
 
-[Tabby] Heya uh... You good there, Ryder?
+[Chris] Heya uh... You good there, Ryder?
 
-I flutter my eyelids, looking back and forth between Tabby and Note.
+I flutter my eyelids, looking back and forth between Chris and Note.
 
 [Ryder] Oh, uh- ...y-yeah. Sorry, just lost in thought for a bit.
 
 I'm such an awful liar. Thankfully, one person is oblivious, another is sleeping, and the third doesn't seem to show any emotion.
 
-Tabby's worried look immediately disappears in place of that bright grin, and she aggressively smacks me on the back.
+Chris's worried look immediately disappears in place of that bright grin, and she aggressively smacks me on the back.
 
-[Tabby] Well don't space out too much now, y’hear? We've got a meetin’ coming up here soon!
+[Chris] Well don't space out too much now, y’hear? We've got a meetin’ coming up here soon!
 
 I glance out towards the open halls past our desks, to where people are starting to gather into a larger meeting room.
 
-[Tabby] You can grab a snack or somethin’ if ya want. Meetings suck on an empty stomach, heh.
+[Chris] You can grab a snack or somethin’ if ya want. Meetings suck on an empty stomach, heh.
 
 As if on cue, my stomach unceremoniously growls. I couldn't hide the heat on my cheeks if I tried.
 
-Tabby manages a smirk that somehow rivals my sister's. I'd be impressed if I weren't dematerializing from embarrassment.
+Chris manages a smirk that somehow rivals my sister's. I'd be impressed if I weren't dematerializing from embarrassment.
 
 I feel a feather-light tap on my shoulder.
 
@@ -168,7 +168,7 @@ I feel a gentle elbow at my side. Not enough to hurt, but more than enough to ma
 
 Not too loudly. Otherwise I might've _actually_ fucking died.
 
-[Tabby] Looks like you've already made a friend! Lil’ ol’ Notey don't share his snacks with just anyone. Took a month for me to get one, can ya believe it?
+[Chris] Looks like you've already made a friend! Lil’ ol’ Notey don't share his snacks with just anyone. Took a month for me to get one, can ya believe it?
 
 She laughs as if it's some grand phenomenon, but I bet she just begged him and he eventually caved.
 
@@ -184,11 +184,11 @@ The tower that...
 
 No, fuck you. I don't fucking care. That pile of plush should be _toppling_. **Crumbling**. I \*absolutely fucking **refuse\*** to believe any human on this _damned_ gay Earth has the necessary finesse to-
 
-[Tabby] Well, that's what we call haggling back where I'm from! I gave ‘im something back the next day, ‘member?
+[Chris] Well, that's what we call haggling back where I'm from! I gave ‘im something back the next day, ‘member?
 
 [Runa] A head ruffle isn't equivalent exchange for food.
 
-[Tabby] Well it darn sure looked like he appreciated it!
+[Chris] Well it darn sure looked like he appreciated it!
 
 ...
 

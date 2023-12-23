@@ -1,8 +1,8 @@
 The day ends. Everyone takes a big stretch and gets up from their desks.
 
-Tabby and Runa engage in a bit more banter, Runa expressing how much she wants to take a nap, Tabby trying to tug her along for coffee.
+Chris and Runa engage in a bit more banter, Runa expressing how much she wants to take a nap, Chris trying to tug her along for coffee.
 
-That’s not a winnable battle, Tabby. Don’t fight sleepy people for their naps. They’ll fuck you up. Or maybe that’s just me.
+That’s not a winnable battle, Chris. Don’t fight sleepy people for their naps. They’ll fuck you up. [delay:0.8] Or maybe that’s just me.
 
 Either way, they make their way out, waving to me as I’m cleaning up my work, getting to a good clean slate for tomorrow.
 

@@ -4,7 +4,7 @@ Most of the swivel chairs surrounding the table were already occupied by the oth
 
 I take my seat close to the rest of my team.
 
-Tabby was busy with Runa talking about her weekend. In vivid detail, with exaggerated gestures and everything.
+Chris was busy with Runa talking about her weekend. In vivid detail, with exaggerated gestures and everything.
 
 I’ll never understand people who actually _do stuff_ on weekends, other than like... play games or laze around.
 
@@ -40,13 +40,13 @@ I feel like I’ve already had my fair share of meeting people, but I guess I do
 
 Even if I am. Reina probably knows that.
 
-[Tabby] Oh, d’you know her?
+[Chris] Oh, d’you know her?
 
-Tabby caught me waving at Reina. Note raised his head as well.
+Chris caught me waving at Reina. Note raised his head as well.
 
 [Ryder] Ah, yeah. She’s my twin sister.
 
-[Tabby] Oooh, we got a set of cute twins at the same time? Ain’t we lucky!
+[Chris] Oooh, we got a set of cute twins at the same time? Ain’t we lucky!
 
 She grins bright, throwing finger guns at me, and Runa chuckles.
 
@@ -84,13 +84,13 @@ Fuck. Haven’t people figured out that it’s the _attention_ that’s the prob
 
 Reina’s already up though, giving a wave with a sparkly smirk as if she’s an idol onstage. A few others from different teams stand up as well.
 
-I gasp from Tabby smacking my back, smiling big as the sun, as usual.
+I gasp from Chris smacking my back, smiling big as the sun, as usual.
 
 I begrudgingly stand up, averting eye contact as much as possible. But it felt a little nice knowing I wasn’t the only shy-looking one.
 
 [Nathan] Welcome, and congrats! I hope you all enjoy your time here. Everyone, treat them real nice, okay? Don’t tease ‘em too much, now.
 
-I can already see the devilish glean in Tabby’s eyes, with Runa chuckling beside her.
+I can already see the devilish glean in Chris’s eyes, with Runa chuckling beside her.
 
 Whichever deity is real and listening, please give me your protection and wisdom. Please.
 
