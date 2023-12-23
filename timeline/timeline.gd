@@ -6,7 +6,7 @@ func _init(lines: Array[DialogLine]) -> void:
 	self.lines = lines
 
 func line_at(position: int) -> DialogLine:
-	return lines[position]
+	return lines[position % lines.size()]
 
 static func from_file(file_path: String) -> Timeline:
 	var start_time := Time.get_ticks_msec()
