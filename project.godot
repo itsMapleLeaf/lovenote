@@ -31,9 +31,9 @@ window/stretch/mode="canvas_items"
 folder_colors={
 "res://content/backgrounds/": "red",
 "res://content/characters/": "orange",
+"res://engine/dialog/": "orange",
 "res://engine/scene/": "yellow",
-"res://engine/timeline/": "green",
-"res://engine/ui/": "teal"
+"res://engine/timeline/": "green"
 }
 
 [input]
