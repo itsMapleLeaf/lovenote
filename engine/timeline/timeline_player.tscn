@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://hybev04sfhbl"]
 
-[ext_resource type="Script" path="res://engine/timeline/timeline_player.gd" id="1_iw2rs"]
-[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://engine/ui/dialog_ui.tscn" id="2_66ax7"]
+[ext_resource type="Script" path="res://engine/timeline/timeline_player.gd" id="1_rm3vi"]
+[ext_resource type="PackedScene" uid="uid://b3lb1j2t1opl" path="res://engine/scene/background.tscn" id="2_mmyrq"]
 
 [node name="TimelinePlayer" type="Control"]
 layout_mode = 3
@@ -10,11 +10,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_iw2rs")
+script = ExtResource("1_rm3vi")
 
-[node name="DialogUI" parent="." instance=ExtResource("2_66ax7")]
+[node name="Background" parent="." instance=ExtResource("2_mmyrq")]
 unique_name_in_owner = true
 layout_mode = 1
-dialog_reveal_speed = 70
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]

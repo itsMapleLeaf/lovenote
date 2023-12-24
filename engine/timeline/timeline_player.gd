@@ -1,129 +1,77 @@
 @tool
-extends Node
 class_name TimelinePlayer
+extends Node
 
-## An animation player containing all of the animations for the timeline
-@export var animation_player: AnimationPlayer
-
-## The path to the timeline file
-@export_file("*.md") var timeline_file: String:
+@export_file("*.md") var timeline_path: String:
 	set(value):
-		timeline_file = value
-		timeline = Timeline.from_file(value)
+		timeline_path = value
 
-## The current position in the timeline for previewing in the editor
-@export_range(0, 999999) var preview_position: int:
-	set(value):
-		preview_position = value
-		if not Engine.is_editor_hint(): return
-		if not is_node_ready(): await ready
-		_seek_to(value)
+		if not timeline_path:
+			return
 
-var current_position := 0
+		if not FileAccess.file_exists(timeline_path):
+			push_error("Timeline file %s does not exist" % timeline_path)
+			return
+
+		timeline = Timeline.new(FileAccess.get_file_as_string(timeline_path))
+
+@export_range(0, 999999) var preview_timeline_position: int = 0:
+	set(target_position):
+		if not timeline:
+			push_warning("No timeline loaded")
+			preview_timeline_position = maxi(target_position, 0)
+			return
+
+		preview_timeline_position = clampi(target_position, 0, timeline.lines.size() - 1)
+
+		if not Engine.is_editor_hint():
+			return
+
+		if current_line_index == preview_timeline_position:
+			return
+
+		current_line_index = preview_timeline_position
+		current_line_part_index = 0
+		_process_current_part()
 
 var timeline: Timeline
-var queued_parts: Array[Timeline.DialogPart] = []
-var delay_time := 0.0
+var current_line_index := 0
+var current_line_part_index := 0
 
-@onready var dialog_ui: DialogUI = %DialogUI
+@onready var background := %Background as Background
+
 
 func _ready() -> void:
-	# some of the children aren't ready when this is called for some reason
-	_seek_to.call_deferred(0)
+	if not timeline:
+		return
+	_process_current_part()
 
-func _process(delta: float) -> void:
-	dialog_ui.advance_indicator_visible = _ready_to_advance()
 
-	if dialog_ui.is_playing():
+# func _unhandled_input(event: InputEvent) -> void:
+# 	if event.is_action_pressed("dialog_advance"):
+# 		_process_current_part()
+
+
+func _process_current_part() -> void:
+	if current_line_index >= timeline.lines.size():
 		return
 
-	if delay_time > 0:
-		delay_time -= delta
+	var line: DialogLine = timeline.lines[current_line_index]
+
+	if current_line_part_index >= line.parts.size():
 		return
 
-	while queued_parts.size() > 0:
-		var part := queued_parts.pop_front() as Timeline.DialogPart
-		if part.animation_name:
-			animation_player.play(part.animation_name)
-		if part.text:
-			dialog_ui.play_text(part.text)
-			break
-		if part.delay_duration:
-			delay_time += part.delay_duration
-			break
+	var part: DialogLine.DialogLinePart = line.parts[current_line_part_index]
 
-func _unhandled_input(event: InputEvent) -> void:
-	_handle_input(event)
+	if part is DialogLine.TextPart:
+		pass
 
-func _on_gui_input(event: InputEvent) -> void:
-	_handle_input(event)
+	if part is DialogLine.DirectivePart:
+		if part.name == "set_background":
+			background.transition_to_background(load("res://content/backgrounds/" + part.value))
+			return _process_next_part()
 
-func _handle_input(event: InputEvent) -> void:
-	if event.is_action_pressed("dialog_advance"):
-		_seek_to(current_position + 1) if _ready_to_advance() else _complete_line()
 
-	if event.is_action_pressed("dialog_prev"):
-		_seek_to(current_position - 1)
-
-	if event.is_action_pressed("dialog_next"):
-		_seek_to(current_position + 1)
-
-func _seek_to(position: int) -> void:
-	var previous_position := current_position
-	current_position = position
-
-	var line: Timeline.DialogLine
-
-	# when seeking forward, set interim animations to their end state
-	if current_position > previous_position:
-		for interim_position in range(previous_position, current_position):
-			line = timeline.line_at(interim_position)
-			for animation_name in line.animations:
-				_apply_animation_values(animation_name, animation_player.current_animation_length)
-
-	# when seeking backward, set interim animations to their start state
-	# but also reset the current animations
-	if current_position < previous_position:
-		for interim_position in range(current_position, previous_position + 1):
-			line = timeline.line_at(interim_position)
-			for animation_name in line.animations:
-				_apply_animation_values(animation_name, 0)
-
-	line = timeline.line_at(current_position)
-	queued_parts = line.parts.duplicate()
-	delay_time = 0
-
-	dialog_ui.reset()
-	if line.speaker: dialog_ui.set_speaker(line.speaker)
-
-func _ready_to_advance() -> bool:
-	return queued_parts.is_empty() and not dialog_ui.is_playing() and delay_time <= 0
-
-func _complete_line() -> void:
-	if animation_player.current_animation:
-		animation_player.advance(animation_player.current_animation_length)
-
-	for part in queued_parts:
-		if part.animation_name:
-			_apply_animation_values(part.animation_name, animation_player.current_animation_length)
-
-	dialog_ui.complete(timeline.line_at(current_position).full_text)
-	delay_time = 0
-	queued_parts = []
-
-func _apply_animation_values(animation_name: StringName, time: float) -> void:
-	animation_player.current_animation = animation_name
-	animation_player.play()
-	animation_player.seek(time, true, true)
-	animation_player.pause()
-
-func _get_configuration_warnings():
-	var warnings: Array[String] = []
-
-	if not timeline_file:
-		warnings.append("Timeline file not set")
-
-	if not animation_player:
-		warnings.append("Animation player not set")
-
-	return warnings
+func _process_next_part() -> void:
+	current_line_part_index += 1
+	_process_current_part()
