@@ -13,65 +13,78 @@ extends Node
 			push_error("Timeline file %s does not exist" % timeline_path)
 			return
 
-		timeline = Timeline.new(FileAccess.get_file_as_string(timeline_path))
+		_timeline = Timeline.new(FileAccess.get_file_as_string(timeline_path))
 
 @export_range(0, 999999) var preview_timeline_position: int = 0:
 	set(target_position):
-		if not timeline:
-			push_warning("No timeline loaded")
+		if not _timeline:
+			push_warning("No _timeline loaded")
 			preview_timeline_position = maxi(target_position, 0)
 			return
 
-		preview_timeline_position = clampi(target_position, 0, timeline.lines.size() - 1)
+		preview_timeline_position = clampi(target_position, 0, _timeline.lines.size() - 1)
 
 		if not Engine.is_editor_hint():
 			return
 
-		if current_line_index == preview_timeline_position:
+		if _current_line_index == preview_timeline_position:
 			return
 
-		current_line_index = preview_timeline_position
-		current_line_part_index = 0
-		_process_current_part()
+		_current_line_index = preview_timeline_position
+		_current_line_part_index = 0
+		_play_current_line()
 
-var timeline: Timeline
-var current_line_index := 0
-var current_line_part_index := 0
+var _timeline: Timeline
+var _current_line_index := 0
+var _current_line_part_index := 0
 
-@onready var background := %Background as Background
+@onready var _background := %Background as Background
 
 
 func _ready() -> void:
-	if not timeline:
+	if not _timeline:
 		return
-	_process_current_part()
+
+	_play_current_line()
+
+
+func _play_current_line() -> void:
+	var state := _get_current_part_state()
+	if state.background:
+		_background.transition_to_background(load("res://content/backgrounds/" + state.background))
 
 
 # func _unhandled_input(event: InputEvent) -> void:
 # 	if event.is_action_pressed("dialog_advance"):
-# 		_process_current_part()
+# 		_get_current_part_state()
 
 
-func _process_current_part() -> void:
-	if current_line_index >= timeline.lines.size():
-		return
+func _get_current_part_state(state := TimelineSceneState.new()) -> TimelineSceneState:
+	if _current_line_index >= _timeline.lines.size():
+		return state
 
-	var line: DialogLine = timeline.lines[current_line_index]
+	var line: DialogLine = _timeline.lines[_current_line_index]
 
-	if current_line_part_index >= line.parts.size():
-		return
+	if _current_line_part_index >= line.parts.size():
+		return state
 
-	var part: DialogLine.DialogLinePart = line.parts[current_line_part_index]
+	var part: DialogLine.DialogLinePart = line.parts[_current_line_part_index]
 
 	if part is DialogLine.TextPart:
 		pass
 
 	if part is DialogLine.DirectivePart:
 		if part.name == "set_background":
-			background.transition_to_background(load("res://content/backgrounds/" + part.value))
-			return _process_next_part()
+			state.background = part.value
+			return _get_next_part_state(state)
+
+	return state
 
 
-func _process_next_part() -> void:
-	current_line_part_index += 1
-	_process_current_part()
+func _get_next_part_state(state: TimelineSceneState) -> TimelineSceneState:
+	_current_line_part_index += 1
+	return _get_current_part_state(state)
+
+
+class TimelineSceneState:
+	var background: String
