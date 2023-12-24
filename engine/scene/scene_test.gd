@@ -4,12 +4,12 @@ extends Control
 
 
 func _on_office_wide_view_button_pressed() -> void:
-	scene.transition_to_background(preload("res://backgrounds/office_outdoors.png"))
+	scene.transition_to_background(preload("res://content/backgrounds/office_outdoors.png"))
 
 
 func _on_office_interior_button_pressed() -> void:
-	scene.transition_to_background(preload("res://backgrounds/office_interior.png"))
+	scene.transition_to_background(preload("res://content/backgrounds/office_interior.png"))
 
 
 func _on_office_front_door_button_pressed() -> void:
-	scene.transition_to_background(preload("res://backgrounds/office_front_door.tres"))
+	scene.transition_to_background(preload("res://content/backgrounds/office_front_door.tres"))
