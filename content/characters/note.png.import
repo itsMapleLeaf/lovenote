@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4dnak4cv8mxt"
-path="res://.godot/imported/ryder.png-83bd80bd2788eeae1ff04ae1eaa997c8.ctex"
+uid="uid://bdolgawbtxs2v"
+path="res://.godot/imported/note.png-a43aad53151c1d84a8f06472eda32405.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/ryder.png"
-dest_files=["res://.godot/imported/ryder.png-83bd80bd2788eeae1ff04ae1eaa997c8.ctex"]
+source_file="res://content/characters/note.png"
+dest_files=["res://.godot/imported/note.png-a43aad53151c1d84a8f06472eda32405.ctex"]
 
 [params]
 

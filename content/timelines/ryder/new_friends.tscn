@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://bdxgapnsbo8eb"]
 
-[ext_resource type="Texture2D" uid="uid://bh6f1yadl6fli" path="res://backgrounds/office_interior.png" id="1_3dchs"]
-[ext_resource type="PackedScene" uid="uid://bs2tt3frh87ms" path="res://characters/ryder.tscn" id="1_tn433"]
-[ext_resource type="PackedScene" uid="uid://dy3nk0ku05omr" path="res://characters/chris.tscn" id="2_81pgs"]
-[ext_resource type="PackedScene" uid="uid://4kndhnt1fp4w" path="res://characters/note.tscn" id="2_tdvrb"]
-[ext_resource type="PackedScene" uid="uid://n0d2eqrf2l6l" path="res://characters/runa.tscn" id="3_a23mj"]
+[ext_resource type="Texture2D" uid="uid://bh6f1yadl6fli" path="res://content/backgrounds/office_interior.png" id="1_3dchs"]
+[ext_resource type="PackedScene" uid="uid://bs2tt3frh87ms" path="res://content/characters/ryder.tscn" id="1_tn433"]
+[ext_resource type="PackedScene" uid="uid://dy3nk0ku05omr" path="res://content/characters/chris.tscn" id="2_81pgs"]
+[ext_resource type="PackedScene" uid="uid://4kndhnt1fp4w" path="res://content/characters/note.tscn" id="2_tdvrb"]
+[ext_resource type="PackedScene" uid="uid://n0d2eqrf2l6l" path="res://content/characters/runa.tscn" id="3_a23mj"]
 
 [node name="Scene" type="Control"]
 layout_mode = 3

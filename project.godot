@@ -26,11 +26,11 @@ window/stretch/mode="canvas_items"
 [file_customization]
 
 folder_colors={
-"res://backgrounds/": "red",
-"res://characters/": "orange",
-"res://scenes/": "yellow",
-"res://timeline/": "green",
-"res://ui/": "teal"
+"res://content/backgrounds/": "red",
+"res://content/characters/": "orange",
+"res://engine/scene/": "yellow",
+"res://engine/timeline/": "green",
+"res://engine/ui/": "teal"
 }
 
 [input]

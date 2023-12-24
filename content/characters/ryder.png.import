@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgdwx6ogvftk"
-path="res://.godot/imported/office_outdoors.png-dbd35f75508e435370a38c0882adba0f.ctex"
+uid="uid://c4dnak4cv8mxt"
+path="res://.godot/imported/ryder.png-8b16ebc839b8f68a56407a1350700e24.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://backgrounds/office_outdoors.png"
-dest_files=["res://.godot/imported/office_outdoors.png-dbd35f75508e435370a38c0882adba0f.ctex"]
+source_file="res://content/characters/ryder.png"
+dest_files=["res://.godot/imported/ryder.png-8b16ebc839b8f68a56407a1350700e24.ctex"]
 
 [params]
 

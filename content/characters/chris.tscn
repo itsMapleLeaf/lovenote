@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dy3nk0ku05omr"]
 
-[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://characters/character.tscn" id="1_0irwd"]
-[ext_resource type="Texture2D" uid="uid://crl35cqqusr8e" path="res://characters/chris.png" id="2_hty1x"]
+[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://content/characters/character.tscn" id="1_0irwd"]
+[ext_resource type="Texture2D" uid="uid://crl35cqqusr8e" path="res://content/characters/chris.png" id="2_hty1x"]
 
 [node name="Chris" type="Control"]
 layout_mode = 3

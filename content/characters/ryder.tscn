@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bs2tt3frh87ms"]
 
-[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://characters/character.tscn" id="1_xqr0v"]
+[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://content/characters/character.tscn" id="1_xqr0v"]
 
 [node name="Ryder" type="Control"]
 layout_mode = 3

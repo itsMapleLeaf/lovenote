@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://4kndhnt1fp4w"]
 
-[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://characters/character.tscn" id="1_qoxvh"]
-[ext_resource type="Texture2D" uid="uid://bdolgawbtxs2v" path="res://characters/note.png" id="2_3i60x"]
+[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://content/characters/character.tscn" id="1_qoxvh"]
+[ext_resource type="Texture2D" uid="uid://bdolgawbtxs2v" path="res://content/characters/note.png" id="2_3i60x"]
 
 [node name="Note" type="Control"]
 layout_mode = 3

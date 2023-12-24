@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bh6f1yadl6fli"
-path="res://.godot/imported/office_interior.png-52f7d8b2abce516bca7299bbcbca4d15.ctex"
+uid="uid://crl35cqqusr8e"
+path="res://.godot/imported/chris.png-46648affc2f76d72198138ff7abf6909.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://backgrounds/office_interior.png"
-dest_files=["res://.godot/imported/office_interior.png-52f7d8b2abce516bca7299bbcbca4d15.ctex"]
+source_file="res://content/characters/chris.png"
+dest_files=["res://.godot/imported/chris.png-46648affc2f76d72198138ff7abf6909.ctex"]
 
 [params]
 

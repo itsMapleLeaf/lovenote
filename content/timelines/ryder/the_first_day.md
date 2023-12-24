@@ -4,7 +4,7 @@ This is it.
 
 I'm not really nervous. When it comes to stuff like this, as long as there's a set time and place, I just go and deal with it.
 
-.[delay:0.5].[delay:0.5].[delay:0.5]
+[speed:0.2x]...
 
 I'm a liar. I'm really nervous.
 
@@ -14,7 +14,9 @@ But my one true talent is hiding that. So I'll be fine.
 
 Probably.
 
-[animation:office_wide_fade_in] Although the building is pretty big, it's not nearly as tall as those high rise office skyscrapers.
+[background:office_outdoors.png]
+
+Although the building is pretty big, it's not nearly as tall as those high rise office skyscrapers.
 
 It's a smaller company, thankfully. I don't think I could survive the culture of a big businessy business.
 
@@ -32,7 +34,9 @@ They interviewed me over Zoom. I only met a few people from here, but they seeme
 
 So, here I am.
 
-[animation:office_front_fade_in] [delay:1] [animation:ryder_enter] I slow down at the front door for a bit. There's a small bit of anxiety that I might be entering the wrong door, or that I'm too early, or a trillion other dumb things my brain could come up with.
+[background:office_front_door.png] [delay:1] [animate_character:ryder,enter,from=0.2,to=0.3,duration=1]
+
+I slow down at the front door for a bit. There's a small bit of anxiety that I might be entering the wrong door, or that I'm too early, or a trillion other dumb things my brain could come up with.
 
 I wait a bit to see if someone else goes in first. But not for too long, otherwise I'll look shifty.
 
@@ -42,7 +46,9 @@ I'll get out my phone, make it look like I'm waiting for an Uber or something.
 
 I feel like such a dumbass.
 
-[???] [animation:reina_enter] Oh! Hey, Ryder!
+[animate_character:reina,enter,from=0.7,to=0.6,duration=0.5]
+
+[???] Oh! Hey, Ryder!
 
 My anxiety immediately melts away, and my spirits are lifted.
 

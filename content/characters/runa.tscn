@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://n0d2eqrf2l6l"]
 
-[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://characters/character.tscn" id="1_s5vu7"]
-[ext_resource type="Texture2D" uid="uid://b0a4kf5k75dvu" path="res://characters/runa.png" id="2_d8yew"]
+[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://content/characters/character.tscn" id="1_s5vu7"]
+[ext_resource type="Texture2D" uid="uid://b0a4kf5k75dvu" path="res://content/characters/runa.png" id="2_d8yew"]
 
 [node name="Runa" type="Control"]
 layout_mode = 3

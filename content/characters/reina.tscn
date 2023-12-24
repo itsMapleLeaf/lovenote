@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cp0l7l33y2jf8"]
 
-[ext_resource type="Texture2D" uid="uid://cqtlg0lyfmav7" path="res://characters/reina.png" id="1_hg2nm"]
-[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://characters/character.tscn" id="1_p1vtr"]
+[ext_resource type="Texture2D" uid="uid://cqtlg0lyfmav7" path="res://content/characters/reina.png" id="1_hg2nm"]
+[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://content/characters/character.tscn" id="1_p1vtr"]
 
 [node name="Reina" type="Control"]
 layout_mode = 3

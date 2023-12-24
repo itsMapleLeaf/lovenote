@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0a4kf5k75dvu"
-path="res://.godot/imported/runa.png-51a765fa32d6017243058b504b0fadce.ctex"
+uid="uid://bgdwx6ogvftk"
+path="res://.godot/imported/office_outdoors.png-5500c1079ce8d894a0f6d978192e0c77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/runa.png"
-dest_files=["res://.godot/imported/runa.png-51a765fa32d6017243058b504b0fadce.ctex"]
+source_file="res://content/backgrounds/office_outdoors.png"
+dest_files=["res://.godot/imported/office_outdoors.png-5500c1079ce8d894a0f6d978192e0c77.ctex"]
 
 [params]
 

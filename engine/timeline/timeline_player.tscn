@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://hybev04sfhbl"]
 
-[ext_resource type="Script" path="res://timeline/timeline_player.gd" id="1_iw2rs"]
-[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://ui/dialog_ui.tscn" id="2_66ax7"]
+[ext_resource type="Script" path="res://engine/timeline/timeline_player.gd" id="1_iw2rs"]
+[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://engine/ui/dialog_ui.tscn" id="2_66ax7"]
 
 [node name="TimelinePlayer" type="Control"]
 layout_mode = 3

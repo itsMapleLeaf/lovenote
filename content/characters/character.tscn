@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://com2s4ayreinn"]
 
-[ext_resource type="Texture2D" uid="uid://c4dnak4cv8mxt" path="res://characters/ryder.png" id="1_2f432"]
+[ext_resource type="Texture2D" uid="uid://c4dnak4cv8mxt" path="res://content/characters/ryder.png" id="1_2f432"]
 
 [node name="TextureRect" type="TextureRect"]
 anchors_preset = 13

@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsuirxuicd6hb"]
+
+[ext_resource type="Script" path="res://engine/scene/scene_test.gd" id="1_qr603"]
+[ext_resource type="PackedScene" uid="uid://b3lb1j2t1opl" path="res://engine/scene/scene.tscn" id="2_vfl4v"]
+
+[node name="SceneTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qr603")
+
+[node name="Scene" parent="." instance=ExtResource("2_vfl4v")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+offset_right = 233.0
+offset_bottom = 40.0
+size_flags_horizontal = 0
+
+[node name="OfficeWideViewButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Background: office wide view"
+
+[node name="OfficeFrontDoorButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Background: office front door"
+
+[node name="OfficeInteriorButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Background: office interior"
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/OfficeWideViewButton" to="." method="_on_office_wide_view_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/OfficeFrontDoorButton" to="." method="_on_office_front_door_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/OfficeInteriorButton" to="." method="_on_office_interior_button_pressed"]

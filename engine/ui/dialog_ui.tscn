@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://hod5ouvqdw5u"]
 
-[ext_resource type="Script" path="res://ui/dialog_ui.gd" id="1_on6jx"]
+[ext_resource type="Script" path="res://engine/ui/dialog_ui.gd" id="1_on6jx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rpvfw"]
 content_margin_left = 24.0

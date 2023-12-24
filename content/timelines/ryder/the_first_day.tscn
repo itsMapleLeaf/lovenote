@@ -1,10 +1,10 @@
 [gd_scene load_steps=21 format=3 uid="uid://bi7vuqcj3dhjy"]
 
-[ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://backgrounds/office_outdoors.png" id="1_yddws"]
-[ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://backgrounds/office_front_door.png" id="2_tpdfb"]
-[ext_resource type="PackedScene" uid="uid://cp0l7l33y2jf8" path="res://characters/reina.tscn" id="3_conxa"]
-[ext_resource type="PackedScene" uid="uid://bs2tt3frh87ms" path="res://characters/ryder.tscn" id="4_ewx8a"]
-[ext_resource type="PackedScene" uid="uid://hybev04sfhbl" path="res://timeline/timeline_player.tscn" id="5_be0yv"]
+[ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://content/backgrounds/office_outdoors.png" id="1_yddws"]
+[ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://content/backgrounds/office_front_door.png" id="2_tpdfb"]
+[ext_resource type="PackedScene" uid="uid://cp0l7l33y2jf8" path="res://content/characters/reina.tscn" id="3_conxa"]
+[ext_resource type="PackedScene" uid="uid://bs2tt3frh87ms" path="res://content/characters/ryder.tscn" id="4_ewx8a"]
+[ext_resource type="PackedScene" uid="uid://hybev04sfhbl" path="res://engine/timeline/timeline_player.tscn" id="5_be0yv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bus63"]
 atlas = ExtResource("2_tpdfb")
