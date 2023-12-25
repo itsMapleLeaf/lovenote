@@ -11,9 +11,27 @@ extends Node
 @export var position: int = -1:
 	set(value):
 		position = clampi(value, -1, timeline.sequence.size() - 1)
-		var snapshot := timeline.sequence[position].snapshot if position > -1 else StageState.new()
-		stage.apply_snapshot(snapshot)
+		if not timeline:
+			return
+		await _ensure_ready()
+		_apply_current_snapshot()
 
-var timeline: Timeline
+var timeline: Timeline:
+	set(value):
+		timeline = value
+		if not timeline:
+			return
+		await _ensure_ready()
+		_apply_current_snapshot()
 
 @onready var stage := %Stage as Stage
+
+
+func _apply_current_snapshot() -> void:
+	var snapshot := timeline.sequence[position].snapshot if position > -1 else StageSnapshot.new()
+	stage.apply(snapshot)
+
+
+func _ensure_ready() -> void:
+	if not is_node_ready():
+		await ready

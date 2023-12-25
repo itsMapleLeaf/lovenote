@@ -13,3 +13,4 @@ source = "Hello world.
 [speaker:Note] [enter:note,to=0.65,from=0.2,duration=1] Say what? [wait:1.0] That's kinda rad.
 [speaker:Note] [leave:note,by=0.2,duration=1] aight bye
 [speaker:Ryder] :("
+position = 2
