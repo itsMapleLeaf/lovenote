@@ -4,8 +4,7 @@ var stage_sequence: Array[StageLine] = _create_stage_sequence(
 	"""
 	Hello world.
 	[speaker:Ryder] [enter:ryder,to=0.35,from=-0.2,duration=1] This is some text. \
-	[wait:1.0] [background:office_interior.png] \
-	This is some more text.
+	[wait:1.0] [background:office_interior.png] This is some more text.
 	[speaker:Note] [enter:note,to=0.65,from=0.2,duration=1] Say what? [wait:1.0] That's kinda rad.
 	[speaker:Note] [leave:note,by=0.2,duration=1] aight bye
 	[speaker:Ryder] :(
@@ -87,18 +86,8 @@ func _create_stage_sequence(timeline_source: String) -> Array[StageLine]:
 
 			var directive_name := match.get_string("directive_name")
 			var directive_value := match.get_string("directive_value")
-			if directive_name == "speaker":
-				state.speaker = directive_value
-			elif directive_name == "background":
-				parts.append(BackgroundPart.new(directive_value))
-			elif directive_name == "wait":
-				parts.append(WaitPart.new(float(directive_value)))
-			elif directive_name == "enter":
-				var params := DirectiveParams.from_string(directive_name, directive_value)
-				parts.append(EnterPart.from_directive_params(params))
-			elif directive_name == "leave":
-				var params := DirectiveParams.from_string(directive_name, directive_value)
-				parts.append(LeavePart.from_directive_params(params))
+			if directive_name and directive_value:
+				parts.append(DirectivePart.new(directive_name, directive_value))
 
 		state.apply_parts(parts)
 		sequence.append(StageLine.new(parts, state))
@@ -112,36 +101,6 @@ func _create_stage_sequence(timeline_source: String) -> Array[StageLine]:
 	)
 
 	return sequence
-
-
-class DirectiveParams:
-	var directive_name: String
-	var directive_value: String
-	var values: Dictionary = {}
-
-	func _init(directive_name: String, directive_value: String) -> void:
-		self.directive_name = directive_name
-		self.directive_value = directive_value
-
-	static func from_string(directive_name: String, directive_value: String) -> DirectiveParams:
-		var params := DirectiveParams.new(directive_name, directive_value)
-		var positional_value_index := 0
-		for positional_value in directive_value.split(",", false):
-			var parts := positional_value.split("=", false)
-			if parts.size() == 2:
-				params.values[parts[0].strip_edges()] = parts[1].strip_edges()
-			else:
-				params.values[positional_value_index] = positional_value.strip_edges()
-				positional_value_index += 1
-		return params
-
-	func get_required(key: Variant) -> String:
-		var value := values[key] as String
-		if not value:
-			push_error(
-				"invalid directive [%s:%s]: %s is required" % [directive_name, directive_value, key]
-			)
-		return value
 
 
 class StageState:
@@ -163,24 +122,34 @@ class StageState:
 
 	func apply_parts(parts: Array[StageLinePart]) -> void:
 		var text_parts := PackedStringArray()
+
 		for part in parts:
 			if part is TextPart:
 				text_parts.append(part.text)
-			elif part is BackgroundPart:
-				background = part.background
-			elif part is EnterPart:
-				characters.append(CharacterState.new(part.character_name, part.to_position))
-			elif part is LeavePart:
-				for index in range(characters.size() - 1, -1, -1):
-					var character := characters[index]
-					if character.name == part.character_name:
-						characters.remove_at(index)
-						break
+			elif part is DirectivePart:
+				_apply_directive_part(part)
 
 		text = " ".join(text_parts)
 
 		var extra_white_space := RegEx.create_from_string(r"\s+")
 		text = extra_white_space.sub(text, " ", true)
+
+	func _apply_directive_part(part: DirectivePart) -> void:
+		match part.name:
+			"speaker":
+				speaker = part.value
+			"background":
+				background = part.value
+			"enter":
+				var name := part.get_required_arg(0)
+				var position := part.get_required_arg("to").to_float()
+				characters.append(CharacterState.new(name, position))
+			"leave":
+				for index in characters.size():
+					var character := characters[index]
+					if character.name == part.args[0]:
+						characters.remove_at(index)
+						break
 
 
 class CharacterState:
@@ -231,72 +200,39 @@ class TextPart:
 		return "TextPart(%s)" % text
 
 
-class BackgroundPart:
-	extends StageLinePart
-	var background: String
-
-	func _init(background: String) -> void:
-		self.background = background
-
-	func _to_string() -> String:
-		return "BackgroundPart(%s)" % background
-
-
-class WaitPart:
-	extends StageLinePart
-	var wait_duration: float
-
-	func _init(wait_duration: float) -> void:
-		self.wait_duration = wait_duration
-
-	func _to_string() -> String:
-		return "WaitPart(%s)" % wait_duration
-
-
-class EnterPart:
+class DirectivePart:
 	extends StageLinePart
 
-	var character_name: String = ""
-	var from_position: float = 0
-	var to_position: float = 0
-	var duration: float = 0
+	var name: String
+	var value: String
+	var args: Dictionary = {}
 
-	func _to_string() -> String:
-		var data := {
-			"character_name": character_name,
-			"from_position": from_position,
-			"to_position": to_position,
-			"duration": duration,
-		}
-		return "EnterPart(%s)" % data
+	func _init(name: String, value: String) -> void:
+		self.name = name
+		self.value = value
 
-	static func from_directive_params(params: DirectiveParams) -> EnterPart:
-		var part := EnterPart.new()
-		part.character_name = params.get_required(0)
-		part.from_position = params.get_required("from").to_float()
-		part.to_position = params.get_required("to").to_float()
-		part.duration = params.get_required("duration").to_float()
-		return part
+		var positional_arg_index := 0
+		for value_part in value.split(",", false):
+			var named_arg_parts := value_part.split("=", false)
+			if named_arg_parts.size() == 2:
+				var arg_name := named_arg_parts[0].strip_edges()
+				var arg_value := named_arg_parts[1].strip_edges()
+				args[arg_name] = arg_value
+			else:
+				args[positional_arg_index] = value_part.strip_edges()
+				positional_arg_index += 1
 
-
-class LeavePart:
-	extends StageLinePart
-
-	var character_name: String = ""
-	var by_position: float = 0
-	var duration: float = 0
+	func get_required_arg(key: Variant) -> String:
+		if not args.has(key):
+			var message := (
+				"Missing required argument '%s' for directive [%s:%s]" % [key, name, value]
+			)
+			push_error(message)
+		return args[key]
 
 	func _to_string() -> String:
 		var data := {
-			"character_name": character_name,
-			"by_position": by_position,
-			"duration": duration,
+			"name": name,
+			"args": args,
 		}
-		return "EnterPart(%s)" % data
-
-	static func from_directive_params(params: DirectiveParams) -> LeavePart:
-		var part := LeavePart.new()
-		part.character_name = params.get_required(0)
-		part.by_position = params.get_required("by").to_float()
-		part.duration = params.get_required("duration").to_float()
-		return part
+		return "DirectivePart(%s)" % data
