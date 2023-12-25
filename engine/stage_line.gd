@@ -11,6 +11,7 @@ func _init(commands: Array[StageCommand], base_snapshot: StageState) -> void:
 	snapshot.speaker = ""
 
 	var new_text := PackedStringArray()
+	var characters := snapshot.characters.duplicate() as Array[StageState.CharacterState]
 
 	for command in commands:
 		match command.name:
@@ -23,15 +24,16 @@ func _init(commands: Array[StageCommand], base_snapshot: StageState) -> void:
 			"enter":
 				var name := command.get_required_arg(0)
 				var position := command.get_required_arg("to").to_float()
-				snapshot.characters.append(StageState.CharacterState.new(name, position))
+				characters.append(StageState.CharacterState.new(name, position))
 			"leave":
-				for index in snapshot.characters.size():
-					var character := snapshot.characters[index]
+				for index in characters.size():
+					var character := characters[index]
 					if character.name == command.args[0]:
-						snapshot.characters.remove_at(index)
+						characters.remove_at(index)
 						break
 
 	snapshot.text = " ".join(new_text)
+	snapshot.characters = characters
 
 
 func _to_string() -> String:
