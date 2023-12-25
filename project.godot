@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="A Love Note"
-run/main_scene="res://game.tscn"
+run/main_scene="res://engine/game.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -32,9 +32,8 @@ window/stretch/mode="canvas_items"
 folder_colors={
 "res://content/backgrounds/": "red",
 "res://content/characters/": "orange",
-"res://engine/dialog/": "orange",
-"res://engine/scene/": "yellow",
-"res://engine/timeline/": "green"
+"res://content/timelines/": "yellow",
+"res://engine/": "gray"
 }
 
 [input]
