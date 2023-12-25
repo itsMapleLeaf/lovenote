@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://dnt1wgo2wmd1d"]
+
+[ext_resource type="Script" path="res://stage.gd" id="1_qudqc"]
+[ext_resource type="Texture2D" uid="uid://bh6f1yadl6fli" path="res://content/backgrounds/office_interior.png" id="2_223kb"]
+[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://engine/dialog_ui.tscn" id="3_6o74l"]
+
+[node name="Stage" type="Node"]
+script = ExtResource("1_qudqc")
+
+[node name="Background" type="TextureRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_223kb")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Characters" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="DialogUI" parent="." instance=ExtResource("3_6o74l")]
+unique_name_in_owner = true
+speaker = ""
+advance_indicator_visible = false
+metadata/_edit_lock_ = true

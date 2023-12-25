@@ -58,14 +58,15 @@ _data = {
 
 [node name="DialogUI" type="Control"]
 layout_mode = 3
-anchors_preset = 15
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 mouse_filter = 1
 script = ExtResource("1_on6jx")
-dialog_text = "Have you ever had a dream that that you um you had you'd you would you could you'd do you wi you wants you you could do so you you'd do you could you you want you want him to do you so much you could do anything? "
+text = "Have you ever had a dream that that you um you had you'd you would you could you'd do you wi you wants you you could do so you you'd do you could you you want you want him to do you so much you could do anything? "
 speaker = "Ryder"
 advance_indicator_visible = true
 

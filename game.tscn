@@ -1,27 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://8vkbx2qocw2x"]
+[gd_scene load_steps=3 format=3 uid="uid://8vkbx2qocw2x"]
 
-[ext_resource type="Texture2D" uid="uid://bh6f1yadl6fli" path="res://content/backgrounds/office_interior.png" id="1_f74bo"]
 [ext_resource type="Script" path="res://game.gd" id="1_mgb3y"]
-[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://engine/dialog_ui.tscn" id="4_p1eaw"]
+[ext_resource type="PackedScene" uid="uid://dnt1wgo2wmd1d" path="res://stage.tscn" id="2_n8pyd"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_mgb3y")
+timeline_position = 1
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Stage" parent="." instance=ExtResource("2_n8pyd")]
 unique_name_in_owner = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_f74bo")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Characters" type="Node" parent="."]
-unique_name_in_owner = true
-
-[node name="DialogUI" parent="." instance=ExtResource("4_p1eaw")]
-unique_name_in_owner = true
-text = "Have you ever had a dream that that you um you had you'd you would you could you'd do you wi you wants you you could do so you you'd do you could you you want you want him to do you so much you could do anything? "
-metadata/_edit_lock_ = true
