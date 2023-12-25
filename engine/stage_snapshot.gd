@@ -1,9 +1,9 @@
-class_name StageState
+class_name StageSnapshot
 extends Resource
 
 @export var background: String = ""
 @export var speaker: String = ""
-@export var characters: Array[CharacterState] = []
+@export var characters: Array[CharacterSnapshot] = []
 
 @export var text: String = "":
 	set(input):
@@ -19,10 +19,10 @@ func _to_string() -> String:
 		"background": background,
 		"characters": characters,
 	}
-	return "StageState(%s)" % data
+	return "StageSnapshot(%s)" % data
 
 
-class CharacterState:
+class CharacterSnapshot:
 	extends Resource
 
 	@export var name: String = ""
@@ -37,4 +37,4 @@ class CharacterState:
 			"name": name,
 			"stage_position": stage_position,
 		}
-		return "CharacterState(%s)" % data
+		return "CharacterSnapshot(%s)" % data

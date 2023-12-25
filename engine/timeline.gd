@@ -10,7 +10,7 @@ var text_and_directive_regex := RegEx.create_from_string(
 func _init(timeline_source: String) -> void:
 	sequence.clear()
 
-	var snapshot := StageState.new()
+	var snapshot := StageSnapshot.new()
 
 	for line_source in timeline_source.split("\n", false):
 		line_source = line_source.strip_edges()

@@ -1,17 +1,17 @@
 class_name StageLine
 
 var commands: Array[StageCommand]
-var snapshot: StageState
+var snapshot: StageSnapshot
 
 
-func _init(commands: Array[StageCommand], base_snapshot: StageState) -> void:
+func _init(commands: Array[StageCommand], base_snapshot: StageSnapshot) -> void:
 	self.commands = commands
 
-	snapshot = base_snapshot.duplicate(true) as StageState
+	snapshot = base_snapshot.duplicate(true) as StageSnapshot
 	snapshot.speaker = ""
 
 	var new_text := PackedStringArray()
-	var characters := snapshot.characters.duplicate() as Array[StageState.CharacterState]
+	var characters := snapshot.characters.duplicate() as Array[StageSnapshot.CharacterSnapshot]
 
 	for command in commands:
 		match command.name:
@@ -24,7 +24,7 @@ func _init(commands: Array[StageCommand], base_snapshot: StageState) -> void:
 			"enter":
 				var name := command.get_required_arg(0)
 				var position := command.get_required_arg("to").to_float()
-				characters.append(StageState.CharacterState.new(name, position))
+				characters.append(StageSnapshot.CharacterSnapshot.new(name, position))
 			"leave":
 				for index in characters.size():
 					var character := characters[index]

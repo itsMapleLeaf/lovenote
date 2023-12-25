@@ -7,7 +7,7 @@ extends Node
 @onready var dialog_ui := %DialogUI as DialogUI
 
 
-func apply_snapshot(snapshot: StageState) -> void:
+func apply_snapshot(snapshot: StageSnapshot) -> void:
 	if snapshot.background.is_empty():
 		background.modulate.a = 0
 	else:
