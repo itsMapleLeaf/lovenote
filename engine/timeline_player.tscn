@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://8f7oa06xh2bu"]
+
+[ext_resource type="PackedScene" uid="uid://dnt1wgo2wmd1d" path="res://engine/stage.tscn" id="1_1vvlk"]
+[ext_resource type="Script" path="res://engine/timeline_player.gd" id="1_6ells"]
+
+[node name="TimelinePlayer" type="Node"]
+script = ExtResource("1_6ells")
+
+[node name="Stage" parent="." instance=ExtResource("1_1vvlk")]
+unique_name_in_owner = true
