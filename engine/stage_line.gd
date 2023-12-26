@@ -7,9 +7,9 @@ var snapshot: StageSnapshot
 func _init(commands: Array[StageCommand], base_snapshot: StageSnapshot) -> void:
 	self.commands = commands
 
-	snapshot = base_snapshot.duplicate(true) as StageSnapshot
-	StageSnapshot.reset_dialog(snapshot)
-	StageSnapshot.apply_commands(snapshot, commands)
+	snapshot = base_snapshot.copy()
+	snapshot.reset_dialog()
+	snapshot.apply_commands(commands)
 
 
 func _to_string() -> String:

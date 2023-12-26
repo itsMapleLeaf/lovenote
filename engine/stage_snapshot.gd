@@ -1,11 +1,10 @@
 class_name StageSnapshot
-extends Resource
 
-@export var background: String = ""
-@export var speaker: String = ""
-@export var characters: Array[CharacterSnapshot] = []
+var background: String = ""
+var speaker: String = ""
+var characters: Array[CharacterSnapshot] = []
 
-@export var text: String = "":
+var text: String = "":
 	set(input):
 		text = extra_white_space.sub(input.strip_edges(), " ", true)
 
@@ -22,22 +21,33 @@ func _to_string() -> String:
 	return "StageSnapshot(%s)" % data
 
 
-static func reset_dialog(snapshot: StageSnapshot) -> void:
-	snapshot.speaker = ""
-	snapshot.text = ""
+func copy() -> StageSnapshot:
+	var snapshot := StageSnapshot.new()
+	snapshot.background = background
+	snapshot.speaker = speaker
+	snapshot.text = text
+	snapshot.characters = []
+
+	for character in characters:
+		snapshot.characters.append(character.copy())
+
+	return snapshot
 
 
-static func apply_commands(snapshot: StageSnapshot, commands: Array[StageCommand]) -> void:
-	var characters := snapshot.characters.duplicate() as Array[CharacterSnapshot]
+func reset_dialog() -> void:
+	speaker = ""
+	text = ""
 
+
+func apply_commands(commands: Array[StageCommand]) -> void:
 	for command in commands:
 		match command.name:
 			"dialog":
-				snapshot.text += " " + command.value
+				text += " " + command.value
 			"speaker":
-				snapshot.speaker = command.value
+				speaker = command.value
 			"background":
-				snapshot.background = command.value
+				background = command.value
 			"enter":
 				var name := command.get_required_arg(0)
 				var position := command.get_required_arg("to").to_float()
@@ -49,14 +59,10 @@ static func apply_commands(snapshot: StageSnapshot, commands: Array[StageCommand
 						characters.remove_at(index)
 						break
 
-	snapshot.characters = characters
-
 
 class CharacterSnapshot:
-	extends Resource
-
-	@export var name: String = ""
-	@export var stage_position: float = 0
+	var name: String = ""
+	var stage_position: float = 0
 
 	func _init(name := "", stage_position := 0.0) -> void:
 		self.name = name
@@ -68,3 +74,6 @@ class CharacterSnapshot:
 			"stage_position": stage_position,
 		}
 		return "CharacterSnapshot(%s)" % data
+
+	func copy() -> CharacterSnapshot:
+		return CharacterSnapshot.new(name, stage_position)
