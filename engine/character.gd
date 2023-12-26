@@ -23,8 +23,6 @@ var tween: Tween
 func enter_tweened(to_position: float, duration: float) -> void:
 	pause_tween()
 
-	modulate.a = 0
-
 	tween = create_tween().set_parallel(true)
 	tween.tween_property(self, "stage_position", to_position, duration)
 	tween.tween_property(self, "modulate", Color(modulate, 1), duration)
@@ -32,8 +30,6 @@ func enter_tweened(to_position: float, duration: float) -> void:
 
 func leave_tweened(to_position: float, duration: float) -> void:
 	pause_tween()
-
-	modulate.a = 1
 
 	tween = create_tween().set_parallel(true)
 	tween.tween_property(self, "stage_position", to_position, duration)
