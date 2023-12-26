@@ -5,5 +5,7 @@
 [node name="Ryder" instance=ExtResource("1_xqr0v")]
 
 [node name="BaseTransform" parent="." index="0"]
-offset_top = -301.0
-offset_bottom = 391.0
+offset_left = -245.0
+offset_top = -634.0
+offset_right = 208.0
+offset_bottom = 58.0
