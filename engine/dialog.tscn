@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://hod5ouvqdw5u"]
 
-[ext_resource type="Script" path="res://engine/dialog_ui.gd" id="1_on6jx"]
+[ext_resource type="Script" path="res://engine/dialog.gd" id="1_on6jx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rpvfw"]
 content_margin_left = 24.0
@@ -56,7 +56,7 @@ _data = {
 "advance_indicator": SubResource("Animation_q8bme")
 }
 
-[node name="DialogUI" type="Control"]
+[node name="Dialog" type="Control"]
 layout_mode = 3
 anchors_preset = 12
 anchor_top = 1.0
@@ -66,9 +66,10 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 1
 script = ExtResource("1_on6jx")
-text = "Have you ever had a dream that that you um you had you'd you would you could you'd do you wi you wants you you could do so you you'd do you could you you want you want him to do you so much you could do anything? "
 speaker = "Ryder"
-advance_indicator_visible = true
+text = "Have you ever had a dream that, that, um, that you had, uh, that you had to, you could, you do, you wit, you wa, you could do so, you do you could, you want, you wanted him to do you so much you could do anything?
+"
+reveal_speed = 50
 
 [node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -111,10 +112,12 @@ custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_vertical = 0
 mouse_filter = 1
-text = "Have you ever had a dream that that you um you had you'd you would you could you'd do you wi you wants you you could do so you you'd do you could you you want you want him to do you so much you could do anything? "
+text = "Have you ever had a dream that, that, um, that you had, uh, that you had to, you could, you do, you wit, you wa, you could do so, you do you could, you want, you wanted him to do you so much you could do anything?"
 label_settings = SubResource("LabelSettings_l4rdq")
 autowrap_mode = 3
+visible_characters = 214
 visible_characters_behavior = 1
+visible_ratio = 1.00469
 
 [node name="AdvanceIndicator" type="Control" parent="."]
 unique_name_in_owner = true

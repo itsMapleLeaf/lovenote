@@ -1,61 +1,41 @@
-@tool
 class_name Stage
 extends Node
 
-@onready var background := %Background as TextureRect
-@onready var characters := %Characters as Node
-@onready var dialog_ui := %DialogUI as DialogUI
+@export var background_fade_duration := 1.0
 
+var background: Background
 
-func run_command(command: StageCommand) -> void:
-	if command is StageCommand.SpeakerCommand:
-		dialog_ui.speaker = command.speaker
+@onready var background_layer: Node = %BackgroundLayer
+@onready var character_layer: Node = %CharacterLayer
+@onready var dialog: Dialog = %Dialog
 
-	if command is StageCommand.DialogCommand:
-		dialog_ui.play_text(command.text)
+func set_background(texture: Texture2D) -> void:
+	if background:
+		background.leave(background_fade_duration)
 
-	if command is StageCommand.BackgroundCommand:
-		if command.background.is_empty():
-			background.modulate.a = 0
-		else:
-			background.texture = load("res://content/backgrounds/" + command.background)
-			background.modulate.a = 1
+	background = preload("res://engine/background.tscn").instantiate()
+	background_layer.add_child(background)
+	background.enter(texture, background_fade_duration)
 
-	if command is StageCommand.EnterCommand:
-		var scene_path: String = "res://content/characters/%s.tscn" % command.character_name
-		var scene := load(scene_path) as PackedScene
-		var character := scene.instantiate() as Character
-		characters.add_child(character)
-		character.character_name = command.character_name
-		character.stage_position = command.from_position
-		character.enter_tweened(command.to_position, command.duration)
+func enter_character(character_name: String, from_position: float, to_position: float, duration: float) -> void:
+	var scene := load("res://content/characters/" + character_name + ".tscn") as PackedScene
+	var character := scene.instantiate() as Character
+	if not character:
+		push_error("Character %s is not a Character" % character_name)
+		return
 
-	if command is StageCommand.LeaveCommand:
-		for character: Character in characters.get_children():
-			if character.character_name == command.character_name:
-				character.leave_tweened(command.by_position, command.duration)
+	character_layer.add_child(character)
+	character.character_name = character_name
+	character.enter_tweened(from_position, to_position, duration)
 
+func leave_character(character_name: String, by_position: float, duration: float) -> void:
+	var character: Character
+	for child in character_layer.get_children():
+		if child.name == character_name:
+			character = child
+			break
 
-func is_running_command() -> bool:
-	return dialog_ui.is_playing()
+	if not character:
+		return
 
-
-func apply(snapshot: StageSnapshot) -> void:
-	if snapshot.background.is_empty():
-		background.modulate.a = 0
-	else:
-		background.texture = load("res://content/backgrounds/" + snapshot.background)
-		background.modulate.a = 1
-
-	dialog_ui.set_speaker(snapshot.speaker)
-	dialog_ui.set_text(snapshot.text)
-
-	for character in characters.get_children():
-		character.queue_free()
-
-	for character_state in snapshot.characters:
-		var scene_path := "res://content/characters/%s.tscn" % character_state.name
-		var scene := load(scene_path) as PackedScene
-		var character := scene.instantiate() as Character
-		character.stage_position = character_state.stage_position
-		characters.add_child(character)
+	character.leave_tweened(by_position, duration)

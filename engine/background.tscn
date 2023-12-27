@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://dcmd51ljd1lig"]
+
+[ext_resource type="Script" path="res://engine/background.gd" id="1_4wnct"]
+[ext_resource type="Texture2D" uid="uid://du7bdn6qp7enf" path="res://content/backgrounds/office_front_door.tres" id="1_10u4p"]
+
+[node name="TextureRect" type="TextureRect"]
+modulate = Color(0.694118, 0.694118, 0.694118, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_10u4p")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("1_4wnct")

@@ -20,11 +20,14 @@ var tween: Tween
 
 @onready var sprite := %Sprite as Control
 
+func _ready() -> void:
+	modulate.a = 0
 
-func enter_tweened(to_position: float, duration: float) -> void:
+func enter_tweened(from_position: float, to_position: float, duration: float) -> void:
 	pause_tween()
 
-	tween = create_tween().set_parallel(true)
+	stage_position = to_position + from_position # from_position is relative
+	tween = create_tween().set_parallel(true).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(self, "stage_position", to_position, duration)
 	tween.tween_property(self, "modulate", Color(modulate, 1), duration)
 
@@ -32,7 +35,7 @@ func enter_tweened(to_position: float, duration: float) -> void:
 func leave_tweened(by_position: float, duration: float) -> void:
 	pause_tween()
 
-	tween = create_tween().set_parallel(true)
+	tween = create_tween().set_parallel(true).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(self, "stage_position", stage_position + by_position, duration)
 	tween.tween_property(self, "modulate", Color(modulate, 0), duration)
 
@@ -42,4 +45,4 @@ func leave_tweened(by_position: float, duration: float) -> void:
 
 
 func pause_tween() -> void:
-	tween.pause()
+	if tween: tween.pause()
