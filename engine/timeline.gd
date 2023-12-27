@@ -1,6 +1,8 @@
 class_name Timeline
 
 var lines: Array[StageLine] = []
+var current_line_index := 0
+
 
 func _init(source: String) -> void:
 	var state := StageState.new()
@@ -57,8 +59,24 @@ func _init(source: String) -> void:
 					_:
 						push_error("Unknown directive: [%s:%s]" % [directive_name, directive_value])
 
-		line.snapshot = state.create_snapshot()
+		line.end_state = state.create_snapshot()
 		lines.append(line)
+
+
+func process(stage: Stage, delta: float) -> void:
+	lines[current_line_index].process(stage, delta)
+
+
+func advance(stage: Stage) -> void:
+	if lines[current_line_index].is_playing(stage):
+		lines[current_line_index].skip(stage)
+	elif current_line_index < lines.size() - 1:
+		current_line_index += 1
+		lines[current_line_index].reset(stage)
+
+
+func is_ready_to_advance(stage: Stage) -> bool:
+	return not lines[current_line_index].is_playing(stage)
 
 
 class DirectiveArgs:
@@ -125,22 +143,71 @@ class CharacterState:
 
 
 class StageLine:
-	var speaker: String = ""
+	var end_state: StageState
 	var directives: Array[StageDirective] = []
-	var snapshot: StageState
+	var current_directive_index := 0
+
+	func reset(stage: Stage) -> void:
+		current_directive_index = 0
+		for directive in directives:
+			directive.reset()
+		stage.dialog.reset()
+
+	func process(stage: Stage, delta: float) -> void:
+		while current_directive_index < directives.size():
+			var directive := directives[current_directive_index]
+			directive.process(stage, delta)
+			if directive.is_playing(stage):
+				break
+			else:
+				current_directive_index += 1
+
+	func is_playing(_stage: Stage) -> bool:
+		return current_directive_index < directives.size()
+
+	func skip(stage: Stage) -> void:
+		while current_directive_index < directives.size():
+			directives[current_directive_index].skip(stage)
+			current_directive_index += 1
 
 
 class StageDirective:
-	pass
+	func reset() -> void:
+		pass
+
+	func process(_stage: Stage, _delta: float) -> void:
+		pass
+
+	func is_playing(_stage: Stage) -> bool:
+		return false
+
+	func skip(_stage: Stage) -> void:
+		pass
 
 
 class DialogDirective:
 	extends StageDirective
 
-	var dialog_text: String
+	var text: String
+	var started := false
 
-	func _init(dialog_text: String) -> void:
-		self.dialog_text = dialog_text
+	func _init(text: String) -> void:
+		self.text = text
+
+	func reset() -> void:
+		started = false
+
+	func process(stage: Stage, _delta: float) -> void:
+		if not started:
+			stage.dialog.text += " " + text
+			started = true
+
+	func is_playing(stage: Stage) -> bool:
+		return stage.dialog.is_playing()
+
+	func skip(stage: Stage) -> void:
+		process(stage, 0)
+		stage.dialog.skip()
 
 
 class SpeakerDirective:
@@ -150,6 +217,9 @@ class SpeakerDirective:
 
 	func _init(speaker_name: String) -> void:
 		self.speaker_name = speaker_name
+
+	func process(stage: Stage, _delta: float) -> void:
+		stage.dialog.speaker = speaker_name
 
 
 class BackgroundDirective:
@@ -162,14 +232,34 @@ class BackgroundDirective:
 		if not background:
 			push_error("Background not found: " + file)
 
+	func process(stage: Stage, _delta: float) -> void:
+		stage.set_background(background)
+
+	func skip(stage: Stage) -> void:
+		process(stage, 0)
+
 
 class WaitDirective:
 	extends StageDirective
 
 	var duration: float
+	var remaining: float
 
 	func _init(duration: float) -> void:
 		self.duration = duration
+		self.remaining = duration
+
+	func reset() -> void:
+		remaining = duration
+
+	func process(_stage: Stage, delta: float) -> void:
+		remaining -= delta
+
+	func skip(_stage: Stage) -> void:
+		remaining = 0
+
+	func is_playing(_stage: Stage) -> bool:
+		return remaining > 0
 
 
 class EnterDirective:
@@ -188,6 +278,12 @@ class EnterDirective:
 		self.from_position = from_position
 		self.duration = duration
 
+	func process(stage: Stage, _delta: float) -> void:
+		stage.enter_character(character_name, from_position, to_position, duration)
+
+	func skip(stage: Stage) -> void:
+		stage.enter_character(character_name, from_position, to_position, 0)
+
 
 class LeaveDirective:
 	extends StageDirective
@@ -200,3 +296,9 @@ class LeaveDirective:
 		self.character_name = character_name
 		self.by_position = by_position
 		self.duration = duration
+
+	func process(stage: Stage, _delta: float) -> void:
+		stage.leave_character(character_name, by_position, duration)
+
+	func skip(stage: Stage) -> void:
+		stage.leave_character(character_name, by_position, 0)

@@ -1,9 +1,14 @@
 class_name Dialog
 extends Control
 
+@export var speaker := ""
+@export var text := ""
+@export var advance_indicator_visible := false
+
 ## Speed that characters are revealed in characters per second
 @export var reveal_speed: int
 
+var visible_characters := 0.0
 var extra_spaces := RegEx.create_from_string(r"\s{2,}")
 
 @onready var speaker_panel: PanelContainer = %SpeakerPanel
@@ -11,29 +16,38 @@ var extra_spaces := RegEx.create_from_string(r"\s{2,}")
 @onready var dialog_label: Label = %DialogLabel
 @onready var advance_indicator: Control = %AdvanceIndicator
 
-func clear() -> void:
-	visible = false
-	speaker_label.text = ""
-	dialog_label.text = ""
 
-func set_speaker(speaker_name: String) -> void:
-	if speaker_name == "":
-		speaker_label.visible = false
+func reset() -> void:
+	speaker = ""
+	text = ""
+	visible_characters = 0
+
+
+func skip() -> void:
+	visible_characters = text.length()
+
+
+func is_playing() -> bool:
+	return visible_characters < text.length()
+
+
+func _process(delta: float) -> void:
+	if speaker == "":
+		speaker_panel.visible = false
 	else:
-		speaker_label.visible = true
-		speaker_label.text = speaker_name
+		speaker_panel.visible = true
+		speaker_label.text = speaker
 
-func play_text(text: String, skip_controller: AbortController) -> void:
-	var visible_characters := float(dialog_label.text.length())
-	var target_visible_characters := visible_characters + text.length()
+	if text == "":
+		visible = false
+	else:
+		visible = true
+		dialog_label.text = extra_spaces.sub(text.strip_edges(), " ", true)
 
-	dialog_label.text = extra_spaces.sub((dialog_label.text + " " + text).strip_edges(), " ", true)
-	visible = true
+	if visible_characters < text.length():
+		visible_characters = move_toward(visible_characters, text.length(), reveal_speed * delta)
+	else:
+		visible_characters = text.length()
+	dialog_label.visible_characters = ceili(visible_characters)
 
-	while visible_characters < target_visible_characters and not skip_controller.is_aborted:
-		visible_characters += reveal_speed * get_process_delta_time()
-		dialog_label.visible_characters = ceili(visible_characters)
-
-		await get_tree().process_frame
-
-	dialog_label.visible_ratio = 1
+	advance_indicator.visible = advance_indicator_visible

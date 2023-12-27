@@ -9,6 +9,7 @@ var background: Background
 @onready var character_layer: Node = %CharacterLayer
 @onready var dialog: Dialog = %Dialog
 
+
 func set_background(texture: Texture2D) -> void:
 	if background:
 		background.leave(background_fade_duration)
@@ -17,7 +18,10 @@ func set_background(texture: Texture2D) -> void:
 	background_layer.add_child(background)
 	background.enter(texture, background_fade_duration)
 
-func enter_character(character_name: String, from_position: float, to_position: float, duration: float) -> void:
+
+func enter_character(
+	character_name: String, from_position: float, to_position: float, duration: float
+) -> void:
 	var scene := load("res://content/characters/" + character_name + ".tscn") as PackedScene
 	var character := scene.instantiate() as Character
 	if not character:
@@ -28,14 +32,9 @@ func enter_character(character_name: String, from_position: float, to_position: 
 	character.character_name = character_name
 	character.enter_tweened(from_position, to_position, duration)
 
+
 func leave_character(character_name: String, by_position: float, duration: float) -> void:
-	var character: Character
-	for child in character_layer.get_children():
-		if child.name == character_name:
-			character = child
+	for character: Character in character_layer.get_children():
+		if character.character_name == character_name:
+			character.leave_tweened(by_position, duration)
 			break
-
-	if not character:
-		return
-
-	character.leave_tweened(by_position, duration)
