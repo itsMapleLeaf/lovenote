@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://hod5ouvqdw5u"]
+[gd_scene load_steps=11 format=3 uid="uid://hod5ouvqdw5u"]
 
 [ext_resource type="Script" path="res://engine/dialog.gd" id="1_on6jx"]
 
@@ -23,13 +23,17 @@ font_size = 32
 content_margin_left = 24.0
 content_margin_top = 22.0
 content_margin_right = 50.0
-content_margin_bottom = 23.0
+content_margin_bottom = 20.0
 bg_color = Color(0.105882, 0.105882, 0.105882, 0.811765)
 border_width_top = 2
 border_color = Color(0.199086, 0.199086, 0.199086, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_l4rdq"]
-font_size = 24
+[sub_resource type="SystemFont" id="SystemFont_vhdp6"]
+font_italic = true
+
+[sub_resource type="Theme" id="Theme_ijert"]
+default_font = SubResource("SystemFont_vhdp6")
+default_font_size = 24
 
 [sub_resource type="Animation" id="Animation_2o7em"]
 length = 0.001
@@ -106,18 +110,18 @@ size_flags_vertical = 0
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_0l21m")
 
-[node name="DialogLabel" type="Label" parent="VBox/DialogPanel"]
+[node name="DialogLabel" type="RichTextLabel" parent="VBox/DialogPanel"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_vertical = 0
-mouse_filter = 1
+theme = SubResource("Theme_ijert")
+theme_override_constants/line_separation = 3
+bbcode_enabled = true
 text = "Have you ever had a dream that, that, um, that you had, uh, that you had to, you could, you do, you wit, you wa, you could do so, you do you could, you want, you wanted him to do you so much you could do anything?"
-label_settings = SubResource("LabelSettings_l4rdq")
-autowrap_mode = 3
-visible_characters = 214
+fit_content = true
+scroll_active = false
 visible_characters_behavior = 1
-visible_ratio = 1.00469
 
 [node name="AdvanceIndicator" type="Control" parent="."]
 unique_name_in_owner = true

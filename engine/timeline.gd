@@ -190,7 +190,19 @@ class DialogDirective:
 	var started := false
 
 	func _init(text: String) -> void:
-		self.text = text
+		self.text = _simple_markdown_to_bbcode(text)
+
+	func _simple_markdown_to_bbcode(text: String) -> String:
+		# translates markdown bold and italics to bbcode
+		var bold_italics_regex := RegEx.create_from_string(r"(\*\*\*|___)([^\1]*)\1")
+		var bold_regex := RegEx.create_from_string(r"(\*\*|__)([^\1]*)\1")
+		var italics_regex := RegEx.create_from_string(r"([*_])([^\1]*)\1")
+
+		text = bold_italics_regex.sub(text, "[b][i]$1$2[/i][/b]", true)
+		text = bold_regex.sub(text, "[b]$1$2[/b]", true)
+		text = italics_regex.sub(text, "[i]$2[/i]", true)
+
+		return text
 
 	func reset() -> void:
 		started = false

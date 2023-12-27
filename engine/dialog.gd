@@ -13,7 +13,7 @@ var extra_spaces := RegEx.create_from_string(r"\s{2,}")
 
 @onready var speaker_panel: PanelContainer = %SpeakerPanel
 @onready var speaker_label: Label = %SpeakerLabel
-@onready var dialog_label: Label = %DialogLabel
+@onready var dialog_label: RichTextLabel = %DialogLabel
 @onready var advance_indicator: Control = %AdvanceIndicator
 
 
