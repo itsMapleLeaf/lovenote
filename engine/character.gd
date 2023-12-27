@@ -15,6 +15,7 @@ extends Control
 			await ready
 		sprite.position = value
 
+var character_name: String = ""
 var tween: Tween
 
 @onready var sprite := %Sprite as Control
@@ -28,12 +29,16 @@ func enter_tweened(to_position: float, duration: float) -> void:
 	tween.tween_property(self, "modulate", Color(modulate, 1), duration)
 
 
-func leave_tweened(to_position: float, duration: float) -> void:
+func leave_tweened(by_position: float, duration: float) -> void:
 	pause_tween()
 
 	tween = create_tween().set_parallel(true)
-	tween.tween_property(self, "stage_position", to_position, duration)
+	tween.tween_property(self, "stage_position", stage_position + by_position, duration)
 	tween.tween_property(self, "modulate", Color(modulate, 0), duration)
+
+	await tween.finished
+
+	queue_free()
 
 
 func pause_tween() -> void:

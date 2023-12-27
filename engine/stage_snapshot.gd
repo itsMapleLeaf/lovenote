@@ -39,25 +39,24 @@ func reset_dialog() -> void:
 	text = ""
 
 
-func apply_commands(commands: Array[StageCommand]) -> void:
-	for command in commands:
-		match command.name:
-			"dialog":
-				text += " " + command.value
-			"speaker":
-				speaker = command.value
-			"background":
-				background = command.value
-			"enter":
-				var name := command.get_required_arg(0)
-				var position := command.get_required_arg("to").to_float()
-				characters.append(StageSnapshot.CharacterSnapshot.new(name, position))
-			"leave":
-				for index in characters.size():
-					var character := characters[index]
-					if character.name == command.args[0]:
-						characters.remove_at(index)
-						break
+func apply_directives(directives: Array[StageDirective]) -> void:
+	for directive in directives:
+		if directive is StageDirective.DialogDirective:
+			text += " " + directive.text
+		elif directive is StageDirective.SpeakerDirective:
+			speaker = directive.speaker
+		elif directive is StageDirective.BackgroundDirective:
+			background = directive.background_name
+		elif directive is StageDirective.EnterDirective:
+			characters.append(
+				CharacterSnapshot.new(directive.character_name, directive.to_position)
+			)
+		elif directive is StageDirective.LeaveDirective:
+			for index in characters.size():
+				var character := characters[index]
+				if character.name == directive.character_name:
+					characters.remove_at(index)
+					break
 
 
 class CharacterSnapshot:

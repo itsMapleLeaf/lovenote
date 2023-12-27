@@ -5,32 +5,6 @@ extends Control
 ## The speed which the text is revealed, in characters per second
 @export var dialog_reveal_speed: int
 
-@export var text: String = "":
-	set(value):
-		text = value
-		await _await_ready()
-		dialog_label.text = value
-		modulate.a = 1 if not value.is_empty() else 0
-	get:
-		return dialog_label.text
-
-@export var speaker: String = "":
-	set(value):
-		speaker = value
-		await _await_ready()
-		speaker_label.text = value
-		speaker_panel.visible = value != ""
-	get:
-		return speaker_label.text
-
-@export var advance_indicator_visible: bool = false:
-	set(value):
-		advance_indicator_visible = value
-		await _await_ready()
-		advance_indicator.visible = value
-	get:
-		return advance_indicator.visible
-
 var tween: Tween
 
 @onready var speaker_panel: PanelContainer = %SpeakerPanel
@@ -39,12 +13,42 @@ var tween: Tween
 @onready var advance_indicator: Control = %AdvanceIndicator
 
 
+func _ready() -> void:
+	clear()
+
+
 func clear() -> void:
-	text = ""
-	speaker = ""
-	advance_indicator_visible = false
+	speaker_label.text = ""
+	dialog_label.text = ""
+	dialog_label.visible_characters = 0
 
 
-func _await_ready() -> void:
-	if not is_node_ready():
-		await ready
+func set_speaker(speaker: String) -> void:
+	speaker_label.text = speaker
+
+
+func set_text(text: String) -> void:
+	dialog_label.text = text
+
+
+func play_text(text: String) -> void:
+	if tween:
+		tween.custom_step(INF)
+
+	dialog_label.text += " " + text
+
+	tween = create_tween()
+	tween.tween_property(
+		dialog_label,
+		"visible_characters",
+		dialog_label.text.length(),
+		float(dialog_label.text.length() - dialog_label.visible_characters) / dialog_reveal_speed
+	)
+
+
+func is_playing() -> bool:
+	return tween and tween.is_running()
+
+
+func set_advance_indicator_visible(invicator_visible: bool) -> void:
+	advance_indicator.visible = invicator_visible

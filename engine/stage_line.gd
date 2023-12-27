@@ -1,20 +1,20 @@
 class_name StageLine
 
-var commands: Array[StageCommand]
+var directives: Array[StageDirective]
 var snapshot: StageSnapshot
 
 
-func _init(commands: Array[StageCommand], base_snapshot: StageSnapshot) -> void:
-	self.commands = commands
+func _init(directives: Array[StageDirective], base_snapshot: StageSnapshot) -> void:
+	self.directives = directives
 
 	snapshot = base_snapshot.copy()
 	snapshot.reset_dialog()
-	snapshot.apply_commands(commands)
+	snapshot.apply_directives(directives)
 
 
 func _to_string() -> String:
 	var data := {
-		"commands": commands,
+		"directives": directives,
 		"snapshot": snapshot,
 	}
 	return "StageLine(%s)" % data
