@@ -5,11 +5,6 @@
 
 [node name="TimelinePlayer" type="Node"]
 script = ExtResource("1_beur0")
-timeline_source = "Hello world.
-[speaker:Ryder] [enter:ryder,to=0.35,from=-0.2,duration=1] This is some text. [wait:1.0] [background:office_interior.png] This is some more text.
-[speaker:Note] [enter:note,to=0.65,from=0.2,duration=1] Say what? [wait:1.0] That's kinda rad.
-[speaker:Note] [leave:note,by=0.2,duration=1] aight bye
-[speaker:Ryder] :("
 
 [node name="Stage" parent="." instance=ExtResource("2_ncjin")]
 unique_name_in_owner = true

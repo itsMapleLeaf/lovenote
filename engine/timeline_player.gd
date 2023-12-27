@@ -1,9 +1,9 @@
 class_name TimelinePlayer
 extends Node
 
-@export_multiline var timeline_source := ""
+@export_file("*.md") var timeline_file: String
 
-@onready var timeline := Timeline.new(timeline_source)
+@onready var timeline := Timeline.new(FileAccess.get_file_as_string(timeline_file))
 @onready var stage: Stage = %Stage
 
 
