@@ -16,3 +16,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		timeline.advance(stage)
 
 
+func _on_input_cover_gui_input(event: InputEvent) -> void:
+	if event.is_action_pressed("dialog_advance"):
+		timeline.advance(stage)

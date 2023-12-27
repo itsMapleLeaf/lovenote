@@ -14,3 +14,13 @@ timeline_source = "Hello world.
 [node name="Stage" parent="." instance=ExtResource("2_ncjin")]
 unique_name_in_owner = true
 background_fade_duration = 1.0
+
+[node name="InputCover" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="gui_input" from="InputCover" to="." method="_on_input_cover_gui_input"]
