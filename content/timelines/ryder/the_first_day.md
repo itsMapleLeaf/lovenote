@@ -20,7 +20,7 @@ Although the building is pretty big, it's not nearly as tall as those high rise 
 
 It's a smaller company, thankfully. I don't think I could survive the culture of a big businessy business.
 
-Processes. [delay:0.5] Eugh.
+Processes. [wait:0.5] Eugh.
 
 Big bold letters on the side read: "Hilight Studios."
 
@@ -34,9 +34,7 @@ They interviewed me over Zoom. I only met a few people from here, but they seeme
 
 So, here I am.
 
-[background:office_front_door.png] [delay:1] [animate_character:ryder,enter,from=0.2,to=0.3,duration=1]
-
-I slow down at the front door for a bit. There's a small bit of anxiety that I might be entering the wrong door, or that I'm too early, or a trillion other dumb things my brain could come up with.
+[background:office_front_door.png] [wait:1] [enter:ryder,to=0.3,from=-0.2,duration=1] I slow down at the front door for a bit. There's a small bit of anxiety that I might be entering the wrong door, or that I'm too early, or a trillion other dumb things my brain could come up with.
 
 I wait a bit to see if someone else goes in first. But not for too long, otherwise I'll look shifty.
 
@@ -46,15 +44,13 @@ I'll get out my phone, make it look like I'm waiting for an Uber or something.
 
 I feel like such a dumbass.
 
-[animate_character:reina,enter,from=0.7,to=0.6,duration=0.5]
-
-[???] Oh! Hey, Ryder!
+[enter:reina,to=0.6,from=0.1,duration=0.5] [speaker:???] Oh! Hey, Ryder!
 
 My anxiety immediately melts away, and my spirits are lifted.
 
 I am warm. I have transcended.
 
-[Ryder] Oh, hey Reina.
+[speaker:Ryder] Oh, hey Reina.
 
 I couldn't be happier to hear a familiar face and voice.
 
@@ -82,56 +78,54 @@ We lean back against the elevator wall. My stomach falls as it rises.
 
 I take a sip from my can of iced vanilla coffee. Simultaneously, she sips from her can of macha green tea.
 
-[Reina] So, nervous for your first day?
+[speaker:Reina] So, nervous for your first day?
 
-[animation:ryder_shrug] I shrug.
+[emote:ryder,shrug] I shrug.
 
-[Ryder] Not really. Kinda just going along with the flow.
+[speaker:Ryder] Not really. Kinda just going along with the flow.
 
-[Reina] [animation:reina_leans_in] As a coping mechanism?
+[speaker:Reina] [move:reina,by=-0.2] As a coping mechanism?
 
-[animation:ryder_backs_away] She leans in with the deadliest, most annoying smirk. I look away, trying not to frown too hard. Failing.
+[move:ryder,by=-0.1] She leans in with the deadliest, most annoying smirk. I look away, trying not to frown too hard. Failing.
 
-[Ryder] S-so what? Don't act like you aren't nervous too.
+[speaker:Ryder] S-so what? Don't act like you aren't nervous too.
 
-[animation:reina_reels_back] Reina softens her advance and reels back.
+[move:reina,by=0.2] [move:ryder,by=0.1,delay=0.15] Reina softens her advance and reels back.
 
-[Reina] And I'm willing to admit it. Because, as a responsible adult, I'm able to acknowledge my feelings instead of stoically hiding them and pretending everything's always fine all the time.
+[speaker:Reina] And I'm willing to admit it. Because, as a responsible adult, I'm able to acknowledge my feelings instead of stoically hiding them and pretending everything's always fine all the time.
 
 I'm going to punch her.
 
-[Reina] [animation:reina_leans_in] You wouldn't have even come in here if I hadn't met up with you, would you?
+[speaker:Reina] [move:reina,by=-0.2] You wouldn't have even come in here if I hadn't met up with you, would you?
 
 I'm going to fucking punch her.
 
-[Reina] [animation:only_reina_reels_back] But that's fine.
+[speaker:Reina] [move:reina,by=0.2] But that's fine.
 
-[animation:reina_sighs] She sighs, the smugness in her expression fading, and my pouting.
+[emote:reina,sigh] She sighs, the smugness in her expression fading, and my pouting.
 
-[Reina] Growing old doesn't mean we grow out of dumb human feelings, right? [delay:0.5] With new opportunities, [delay:0.3] new frontiers, [delay:0.3] and new environments, [delay:0.3] being anxious and nervous is only natural. [delay:0.5] And it goes away pretty quickly.
+[speaker:Reina] Growing old doesn't mean we grow out of dumb human feelings, right? [wait:0.5] With new opportunities, [wait:0.3] new frontiers, [wait:0.3] and new environments, [wait:0.3] being anxious and nervous is only natural. [wait:0.5] And it goes away pretty quickly.
 
 Reina confidently sticks her nose up, with one eye opened looking at me.
 
-[Reina] If you can't ease the anxiety, just push through knowing it'll all become another boring routine to you in the end. [delay:0.8] That's when you can find the small little things that make it special.
+[speaker:Reina] If you can't ease the anxiety, try your best to push through knowing it'll all become another boring routine to you in the end. [wait:0.8] That's when you can find the small little things that make it special.
 
-.[delay:0.3].[delay:0.3].[delay:0.8]I hate her.
+.[wait:0.3].[wait:0.3].[wait:0.8]I hate her.
 
-I hate her so goddamn fucking much.
+I hate her so much.
 
 How she teases me into a corner, then comes up with an actually motivating motivational speech.
 
-[Ryder] Yeah.[delay:0.3].[delay:0.3]. [delay:0.8] I guess.
+[speaker:Ryder] Yeah.[wait:0.3].[wait:0.3]. [wait:0.8] I guess.
 
-I smile like a goddamn fucking idiot. [delay:0.5] She mirrors it, as if taking yet another victory between us.
+I smile like a goddamn idiot. [wait:0.5] She mirrors it, as if taking yet another victory between us.
 
 But I don't mind, somehow.
 
 Maybe later I'll treat her to some cookies from her favorite bakery down the street.
 
-The elevator slows. [delay:0.5] My stomach rises. [delay:0.5] It kept rising even after stopping.
+The elevator slows. [wait:0.5] My stomach rises. [wait:0.5] It kept rising even after stopping.
 
-[animation:reina_pats_and_leaves] Reina ruffles my hair before leaving. I used to protest and smack her hand away, but now I just take it and grumble like the bottom I am.
+[move:reina,by=-0.2,duration=0.3] [emote:reina,shake,delay=0.35,duration=0.3] [leave:reina,by=0.3,delay=0.7,duration=0.5] Reina ruffles my hair before leaving. I used to protest and smack her hand away, but now I just take it and grumble like the bottom I am.
 
 _Sigh._
-
-### [animation_wait:scene_exit]
