@@ -123,11 +123,9 @@ class StageState:
 		return snapshot
 
 	func remove_character(name: String) -> void:
-		var new_characters: Array[CharacterState] = []
-		for character in characters:
-			if character.name != name:
-				new_characters.append(character)
-		characters = new_characters
+		characters = characters.filter(
+			func(character: CharacterState) -> bool: return character.name != name
+		)
 
 
 class CharacterState:
