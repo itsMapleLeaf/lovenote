@@ -14,9 +14,7 @@ But my one true talent is hiding that. So I'll be fine.
 
 Probably.
 
-[background:office_outdoors.png]
-
-Although the building is pretty big, it's not nearly as tall as those high rise office skyscrapers.
+[background:office_outdoors.png] Although the building is pretty big, it's not nearly as tall as those high rise office skyscrapers.
 
 It's a smaller company, thankfully. I don't think I could survive the culture of a big businessy business.
 
