@@ -1,14 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://r6o420f1463d"]
 
-[ext_resource type="Script" path="res://engine/timeline_player.gd" id="1_beur0"]
-[ext_resource type="PackedScene" uid="uid://dnt1wgo2wmd1d" path="res://engine/stage.tscn" id="2_ncjin"]
+[ext_resource type="Script" path="res://engine/TimelinePlayer.cs" id="1_0hur3"]
+[ext_resource type="PackedScene" uid="uid://dnt1wgo2wmd1d" path="res://engine/Stage.tscn" id="2_ncjin"]
 
 [node name="TimelinePlayer" type="Node"]
-script = ExtResource("1_beur0")
+script = ExtResource("1_0hur3")
 
 [node name="Stage" parent="." instance=ExtResource("2_ncjin")]
 unique_name_in_owner = true
-background_fade_duration = 1.0
 
 [node name="InputCover" type="Control" parent="."]
 layout_mode = 3
@@ -17,5 +16,3 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[connection signal="gui_input" from="InputCover" to="." method="_on_input_cover_gui_input"]

@@ -1,11 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://dnt1wgo2wmd1d"]
 
-[ext_resource type="Script" path="res://engine/stage.gd" id="1_qudqc"]
-[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://engine/dialog.tscn" id="2_s8xuk"]
+[ext_resource type="Script" path="res://engine/Stage.cs" id="1_v1llc"]
+[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://engine/Dialog.tscn" id="2_s8xuk"]
 
 [node name="Stage" type="Node"]
-script = ExtResource("1_qudqc")
-background_fade_duration = 0.0
+script = ExtResource("1_v1llc")
 
 [node name="BackgroundLayer" type="Node" parent="."]
 unique_name_in_owner = true

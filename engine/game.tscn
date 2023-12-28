@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://8vkbx2qocw2x"]
-
-[ext_resource type="PackedScene" uid="uid://r6o420f1463d" path="res://engine/timeline_player.tscn" id="1_b8kjv"]
-
-[node name="Game" type="Node"]
-
-[node name="TimelinePlayer" parent="." instance=ExtResource("1_b8kjv")]
-timeline_file = "res://content/timelines/ryder/the_first_day.md"
