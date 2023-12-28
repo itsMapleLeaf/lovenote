@@ -9,7 +9,7 @@ public partial class Timeline
 		@"(?<text>[^\[]+)?(?:\[(?:(?<directive_name>[a-z_]+)):(?<directive_value>.+?)\])?"
 	);
 
-	private readonly StageLine[] lines = Array.Empty<StageLine>();
+	private readonly List<StageLine> lines = new();
 	private int currentLineIndex = 0;
 
 	public Timeline(string source)
@@ -101,8 +101,8 @@ public partial class Timeline
 				}
 			}
 
-			line.EndState = state.CreateSnapshot();
-			lines = lines.Append(line).ToArray();
+			line.EndState = state.Copy();
+			lines.Add(line);
 		}
 	}
 
@@ -117,7 +117,7 @@ public partial class Timeline
 		{
 			lines[currentLineIndex].Skip(stage);
 		}
-		else if (currentLineIndex < lines.Length - 1)
+		else if (currentLineIndex < lines.Count - 1)
 		{
 			currentLineIndex += 1;
 			lines[currentLineIndex].Reset(stage);
@@ -133,7 +133,7 @@ public partial class Timeline
 	{
 		private readonly string directiveName;
 		private readonly string directiveValue;
-		private string[] positionalArgs = Array.Empty<string>();
+		private readonly List<string> positionalArgs = new();
 		private readonly Dictionary<string, string> namedArgs = new();
 
 		public DirectiveArgs(string directiveName, string directiveValue)
@@ -141,20 +141,16 @@ public partial class Timeline
 			this.directiveName = directiveName;
 			this.directiveValue = directiveValue;
 
-			var position = 0;
 			foreach (var valuePart in directiveValue.Split(",", false))
 			{
 				var argParts = valuePart.Split("=");
 				if (argParts.Length == 2)
 				{
-					var argName = argParts[0];
-					var argValue = argParts[1];
-					namedArgs[argName] = argValue;
+					namedArgs[argParts[0]] = argParts[1];
 				}
 				else
 				{
-					positionalArgs = positionalArgs.Append(valuePart).ToArray();
-					position += 1;
+					positionalArgs.Add(valuePart);
 				}
 			}
 		}
@@ -173,7 +169,7 @@ public partial class Timeline
 
 		public string GetRequiredArg(int position)
 		{
-			if (positionalArgs.Length <= position)
+			if (positionalArgs.Count <= position)
 			{
 				GD.PushError(
 					$"Missing required argument at position {position} in directive [{directiveName}:{directiveValue}]"
@@ -187,30 +183,25 @@ public partial class Timeline
 	private class StageState
 	{
 		public string Background = "";
-		public CharacterState[] Characters = Array.Empty<CharacterState>();
+		public List<CharacterState> Characters = new();
 
-		public StageState CreateSnapshot()
+		public StageState Copy()
 		{
-			var snapshot = new StageState
+			return new StageState
 			{
 				Background = Background,
-				Characters = new CharacterState[Characters.Length]
+				Characters = Characters.Select(c => c.CreateSnapshot()).ToList()
 			};
-			for (var i = 0; i < Characters.Length; i++)
-			{
-				snapshot.Characters[i] = Characters[i].CreateSnapshot();
-			}
-			return snapshot;
-		}
-
-		public void RemoveCharacter(string name)
-		{
-			Characters = Characters.Where(c => c.Name != name).ToArray();
 		}
 
 		internal void AddCharacter(CharacterState characterState)
 		{
-			Characters = Characters.Append(characterState).ToArray();
+			Characters.Add(characterState);
+		}
+
+		internal void RemoveCharacter(string name)
+		{
+			Characters.RemoveAll(c => c.Name == name);
 		}
 	}
 
@@ -234,7 +225,7 @@ public partial class Timeline
 	private class StageLine
 	{
 		public StageState EndState = new();
-		public StageDirective[] Directives = Array.Empty<StageDirective>();
+		public List<IStageDirective> Directives = new();
 		public int CurrentDirectiveIndex = 0;
 
 		public void Reset(Stage stage)
@@ -249,7 +240,7 @@ public partial class Timeline
 
 		public void Process(Stage stage, double delta)
 		{
-			while (CurrentDirectiveIndex < Directives.Length)
+			while (CurrentDirectiveIndex < Directives.Count)
 			{
 				var directive = Directives[CurrentDirectiveIndex];
 				directive.Process(stage, delta);
@@ -266,39 +257,39 @@ public partial class Timeline
 
 		public bool IsPlaying(Stage stage)
 		{
-			return CurrentDirectiveIndex < Directives.Length;
+			return CurrentDirectiveIndex < Directives.Count;
 		}
 
 		public void Skip(Stage stage)
 		{
-			while (CurrentDirectiveIndex < Directives.Length)
+			while (CurrentDirectiveIndex < Directives.Count)
 			{
 				Directives[CurrentDirectiveIndex].Skip(stage);
 				CurrentDirectiveIndex += 1;
 			}
 		}
 
-		internal void AddDirective(StageDirective directive)
+		internal void AddDirective(IStageDirective directive)
 		{
-			Directives = Directives.Append(directive).ToArray();
+			Directives.Add(directive);
 		}
 	}
 
-	private abstract class StageDirective
+	private interface IStageDirective
 	{
-		public virtual void Reset() { }
+		public void Reset() { }
 
-		public virtual void Process(Stage stage, double delta) { }
+		public void Process(Stage stage, double delta) { }
 
-		public virtual bool IsPlaying(Stage stage)
+		public bool IsPlaying(Stage stage)
 		{
 			return false;
 		}
 
-		public virtual void Skip(Stage stage) { }
+		public void Skip(Stage stage) { }
 	}
 
-	private class DialogDirective : StageDirective
+	private class DialogDirective : IStageDirective
 	{
 		private readonly string text;
 		private bool started = false;
@@ -322,12 +313,12 @@ public partial class Timeline
 			return text;
 		}
 
-		public override void Reset()
+		public void Reset()
 		{
 			started = false;
 		}
 
-		public override void Process(Stage stage, double delta)
+		public void Process(Stage stage, double delta)
 		{
 			if (!started)
 			{
@@ -336,19 +327,19 @@ public partial class Timeline
 			}
 		}
 
-		public override bool IsPlaying(Stage stage)
+		public bool IsPlaying(Stage stage)
 		{
 			return stage.Dialog.IsPlaying();
 		}
 
-		public override void Skip(Stage stage)
+		public void Skip(Stage stage)
 		{
 			Process(stage, 0);
 			stage.Dialog.Skip();
 		}
 	}
 
-	private class SpeakerDirective : StageDirective
+	private class SpeakerDirective : IStageDirective
 	{
 		private readonly string speakerName;
 
@@ -357,13 +348,13 @@ public partial class Timeline
 			this.speakerName = speakerName;
 		}
 
-		public override void Process(Stage stage, double delta)
+		public void Process(Stage stage, double delta)
 		{
 			stage.Dialog.Speaker = speakerName;
 		}
 	}
 
-	private class BackgroundDirective : StageDirective
+	private class BackgroundDirective : IStageDirective
 	{
 		private readonly Texture2D? background;
 
@@ -380,7 +371,7 @@ public partial class Timeline
 			}
 		}
 
-		public override void Process(Stage stage, double delta)
+		public void Process(Stage stage, double delta)
 		{
 			if (background != null)
 			{
@@ -388,13 +379,13 @@ public partial class Timeline
 			}
 		}
 
-		public override void Skip(Stage stage)
+		public void Skip(Stage stage)
 		{
 			Process(stage, 0);
 		}
 	}
 
-	private class WaitDirective : StageDirective
+	private class WaitDirective : IStageDirective
 	{
 		private readonly double duration;
 		private double remaining;
@@ -405,28 +396,28 @@ public partial class Timeline
 			remaining = duration;
 		}
 
-		public override void Reset()
+		public void Reset()
 		{
 			remaining = duration;
 		}
 
-		public override void Process(Stage stage, double delta)
+		public void Process(Stage stage, double delta)
 		{
 			remaining -= delta;
 		}
 
-		public override void Skip(Stage stage)
+		public void Skip(Stage stage)
 		{
 			remaining = 0;
 		}
 
-		public override bool IsPlaying(Stage stage)
+		public bool IsPlaying(Stage stage)
 		{
 			return remaining > 0;
 		}
 	}
 
-	private class EnterDirective : StageDirective
+	private class EnterDirective : IStageDirective
 	{
 		private readonly string characterName;
 		private readonly double toPosition;
@@ -446,18 +437,18 @@ public partial class Timeline
 			this.duration = duration;
 		}
 
-		public override void Process(Stage stage, double delta)
+		public void Process(Stage stage, double delta)
 		{
 			stage.EnterCharacter(characterName, fromPosition, toPosition, duration);
 		}
 
-		public override void Skip(Stage stage)
+		public void Skip(Stage stage)
 		{
 			stage.EnterCharacter(characterName, fromPosition, toPosition, 0);
 		}
 	}
 
-	private class LeaveDirective : StageDirective
+	private class LeaveDirective : IStageDirective
 	{
 		private readonly string characterName;
 		private readonly double byPosition;
@@ -470,12 +461,12 @@ public partial class Timeline
 			this.duration = duration;
 		}
 
-		public override void Process(Stage stage, double delta)
+		public void Process(Stage stage, double delta)
 		{
 			stage.LeaveCharacter(characterName, byPosition, duration);
 		}
 
-		public override void Skip(Stage stage)
+		public void Skip(Stage stage)
 		{
 			stage.LeaveCharacter(characterName, byPosition, 0);
 		}
