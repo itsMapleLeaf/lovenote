@@ -1,0 +1,6 @@
+[*]
+indent_style = tab
+
+[*.cs]
+dotnet_diagnostic.CA1050.severity = none  # suppress "Declare types in namespaces"
+dotnet_diagnostic.IDE0002.severity = none # suppress "Simplify member access"
