@@ -7,7 +7,7 @@ public partial class TimelinePlayer : Node
 	public string? TimelineFile;
 
 	private Timeline? timeline;
-	private Stage Stage => GetNode<Stage>("Stage");
+	private Stage Stage => GetNode<Stage>("%Stage");
 
 	public override void _Ready()
 	{
@@ -17,7 +17,7 @@ public partial class TimelinePlayer : Node
 		}
 		timeline = new Timeline(FileAccess.GetFileAsString(TimelineFile));
 
-		GetNode<Control>("InputCover").GuiInput += (@event) =>
+		GetNode<Control>("%InputCover").GuiInput += (@event) =>
 		{
 			if (@event.IsActionPressed("dialog_advance"))
 			{

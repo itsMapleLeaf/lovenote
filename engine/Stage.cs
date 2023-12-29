@@ -7,11 +7,11 @@ public partial class Stage : Node
 	[Export]
 	public double BackgroundFadeDuration = 1.0;
 
-	public Dialog Dialog => GetNode<Dialog>("Dialog");
+	public Dialog Dialog => GetNode<Dialog>("%Dialog");
 
 	private Background? background;
-	private Node BackgroundLayer => GetNode<Node>("BackgroundLayer");
-	private Node CharacterLayer => GetNode<Node>("CharacterLayer");
+	private Node BackgroundLayer => GetNode<Node>("%BackgroundLayer");
+	private Node CharacterLayer => GetNode<Node>("%CharacterLayer");
 
 	public override void _Ready() { }
 

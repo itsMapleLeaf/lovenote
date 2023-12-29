@@ -37,7 +37,7 @@ public partial class Character : Control
 
 	public override void _Ready()
 	{
-		sprite = GetNode<Control>("Sprite");
+		sprite = GetNode<Control>("%Sprite");
 	}
 
 	/// <param name="fromPosition">The position to start from, relative to toPosition</param>
