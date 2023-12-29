@@ -9,100 +9,134 @@ public partial class Timeline
 		@"(?<text>[^\[]+)?(?:\[(?:(?<directive_name>[a-z_]+)):(?<directive_value>.+?)\])?"
 	);
 
-	private readonly List<StageLine> lines = new();
-	private int currentLineIndex = 0;
+	readonly List<StageLine> lines = new();
+	int currentLineIndex = 0;
 
-	public Timeline(string source)
+	public static Timeline FromFile(string path)
 	{
-		if (source == string.Empty)
-		{
-			throw new Exception("Timeline source is empty");
-		}
+		return new Timeline(SourceFile.FromFile(path));
+	}
 
-		var state = new StageState();
-
-		foreach (var sourceLine in source.Split("\n", false))
+	Timeline(SourceFile sourceFile)
+	{
+		foreach (var sourceLine in sourceFile.Lines())
 		{
 			var line = new StageLine();
 
-			foreach (var match in textAndDirectiveRegex.SearchAll(sourceLine))
+			foreach (var (text, directive) in sourceLine.Parts())
 			{
-				var text = match.GetString("text");
-				if (text != "")
+				if (text is not null)
 				{
 					line.AddDirective(new DialogDirective(text));
 				}
 
-				var directiveName = match.GetString("directive_name");
-				var directiveValue = match.GetString("directive_value");
-				if (directiveName != "" && directiveValue != "")
+				if (directive is not null)
 				{
-					var args = new DirectiveArgs(directiveName, directiveValue);
-					switch (directiveName)
+					switch (directive.name)
 					{
 						case "speaker":
 						{
-							line.AddDirective(new SpeakerDirective(directiveValue));
+							line.AddDirective(new SpeakerDirective(directive.value));
 							break;
 						}
 
 						case "background":
 						{
-							line.AddDirective(new BackgroundDirective(directiveValue));
-							state.Background = directiveValue;
+							var resourcePath = $"res://content/backgrounds/{directive.value}";
+							if (!ResourceLoader.Exists(resourcePath))
+							{
+								directive.PrintError(
+									$"Resource path {resourcePath} does not exist"
+								);
+								break;
+							}
+
+							var resource = GD.Load(resourcePath);
+							if (resource is not Texture2D texture)
+							{
+								directive.PrintError(
+									$"Resource path {resourcePath} is not a valid texture"
+								);
+								break;
+							}
+
+							line.AddDirective(new BackgroundDirective(texture));
 							break;
 						}
 
 						case "wait":
 						{
-							var duration = args.GetRequiredArg(0).ToFloat();
+							var durationArg = directive.GetRequiredArg(0)?.AsDouble();
+							if (durationArg is not double duration)
+								break;
+
 							line.AddDirective(new WaitDirective(duration));
 							break;
 						}
 
 						case "enter":
 						{
-							var characterName = args.GetRequiredArg(0);
-							var toPosition = args.GetRequiredArg("to").ToFloat();
-							var fromPosition = args.GetRequiredArg("from").ToFloat();
-							var duration = args.GetRequiredArg("duration").ToFloat();
+							var characterName = directive.GetRequiredArg(0)?.AsString();
+							if (characterName is null)
+								break;
+
+							var toPosition = directive.GetRequiredArg("to")?.AsDouble();
+							if (toPosition is null)
+								break;
+
+							var fromPosition = directive.GetRequiredArg("from")?.AsDouble();
+							if (fromPosition is null)
+								break;
+
+							var duration = directive.GetRequiredArg("duration")?.AsDouble();
+							if (duration is null)
+								break;
+
 							line.AddDirective(
 								new EnterDirective(
 									characterName,
-									toPosition,
-									fromPosition,
-									duration
+									toPosition.Value,
+									fromPosition.Value,
+									duration.Value
 								)
 							);
-							state.AddCharacter(new CharacterState(characterName, fromPosition));
 							break;
 						}
 
 						case "leave":
 						{
-							var characterName = args.GetRequiredArg(0);
-							var byPosition = args.GetRequiredArg("by").ToFloat();
-							var duration = args.GetRequiredArg("duration").ToFloat();
+							var characterName = directive.GetRequiredArg(0)?.AsString();
+							if (characterName is null)
+								break;
+
+							var byPosition = directive.GetRequiredArg("by")?.AsDouble();
+							if (byPosition is null)
+								break;
+
+							var duration = directive.GetRequiredArg("duration")?.AsDouble();
+							if (duration is null)
+								break;
 
 							line.AddDirective(
-								new LeaveDirective(characterName, byPosition, duration)
+								new LeaveDirective(characterName, byPosition.Value, duration.Value)
 							);
 
-							state.RemoveCharacter(characterName);
 							break;
 						}
 
 						default:
 						{
-							GD.PushError($"Unknown directive: [{directiveName}:{directiveValue}]");
+							directive.PrintError("Unknown directive");
 							break;
 						}
 					}
 				}
 			}
 
-			line.EndState = state.Copy();
-			lines.Add(line);
+			if (!line.IsEmpty())
+			{
+				lines.Add(line);
+			}
 		}
 	}
 
@@ -129,19 +163,92 @@ public partial class Timeline
 		return !lines[currentLineIndex].IsPlaying(stage);
 	}
 
-	private class DirectiveArgs
+	internal class SourceFile
 	{
-		private readonly string directiveName;
-		private readonly string directiveValue;
-		private readonly List<string> positionalArgs = new();
-		private readonly Dictionary<string, string> namedArgs = new();
+		internal readonly string path;
+		readonly string content;
 
-		public DirectiveArgs(string directiveName, string directiveValue)
+		SourceFile(string path, string content)
 		{
-			this.directiveName = directiveName;
-			this.directiveValue = directiveValue;
+			this.path = path;
+			this.content = content;
+		}
 
-			foreach (var valuePart in directiveValue.Split(",", false))
+		public static SourceFile FromFile(string path)
+		{
+			return new SourceFile(path, FileAccess.GetFileAsString(path));
+		}
+
+		internal IEnumerable<SourceLine> Lines()
+		{
+			var number = 1;
+			foreach (var content in content.Split("\n"))
+			{
+				yield return new SourceLine(this, content, number);
+				number += 1;
+			}
+		}
+
+		internal void PrintError(string message)
+		{
+			PrintError($"{path}: {message}");
+		}
+	}
+
+	internal class SourceLine
+	{
+		readonly SourceFile file;
+		readonly string content;
+		readonly int number;
+
+		internal SourceLine(SourceFile file, string content, int number)
+		{
+			this.file = file;
+			this.content = content;
+			this.number = number;
+		}
+
+		internal IEnumerable<(string? text, SourceDirective? directive)> Parts()
+		{
+			foreach (var match in textAndDirectiveRegex.SearchAll(content))
+			{
+				var text = match.GetString("text");
+				if (text != "")
+				{
+					yield return (text, null);
+				}
+
+				var directiveName = match.GetString("directive_name");
+				var directiveValue = match.GetString("directive_value");
+
+				if (directiveName != "" && directiveValue != "")
+				{
+					yield return (null, new SourceDirective(this, directiveName, directiveValue));
+				}
+			}
+		}
+
+		internal void PrintError(string message)
+		{
+			GD.PrintErr($"{file.path}:{number}: {message}");
+		}
+	}
+
+	internal class SourceDirective
+	{
+		readonly SourceLine line;
+		internal string name;
+		internal string value;
+		readonly Dictionary<string, string> namedArgs = new();
+		readonly List<string> positionalArgs = new();
+
+		internal SourceDirective(SourceLine line, string name, string value)
+		{
+			this.line = line;
+			this.name = name;
+			this.value = value;
+
+			foreach (var valuePart in value.Split(",", false))
 			{
 				var argParts = valuePart.Split("=");
 				if (argParts.Length == 2)
@@ -150,83 +257,73 @@ public partial class Timeline
 				}
 				else
 				{
-					positionalArgs.Add(valuePart);
+					positionalArgs.Add(argParts[0]);
 				}
 			}
 		}
 
-		public string GetRequiredArg(string name)
+		internal void PrintError(string message)
+		{
+			line.PrintError($"Invalid directive [{name}:{value}]: {message}");
+		}
+
+		internal Arg? GetRequiredArg(string name)
 		{
 			if (!namedArgs.ContainsKey(name))
 			{
-				GD.PushError(
-					$"Missing required argument \"{name}\" in directive [{directiveName}:{directiveValue}]"
-				);
-				return "";
+				PrintError($"Missing required argument '{name}'");
+				return null;
 			}
-			return namedArgs[name];
+			return new Arg(this, namedArgs[name]);
 		}
 
-		public string GetRequiredArg(int position)
+		internal Arg? GetRequiredArg(int position)
 		{
 			if (positionalArgs.Count <= position)
 			{
-				GD.PushError(
-					$"Missing required argument at position {position} in directive [{directiveName}:{directiveValue}]"
-				);
-				return "";
+				PrintError($"Missing required argument at position {position}");
+				return null;
 			}
-			return positionalArgs[position];
+			return new Arg(this, positionalArgs[position]);
 		}
-	}
 
-	private class StageState
-	{
-		public string Background = "";
-		public List<CharacterState> Characters = new();
-
-		public StageState Copy()
+		internal class Arg
 		{
-			return new StageState
+			readonly SourceDirective directive;
+			readonly string value;
+
+			internal Arg(SourceDirective directive, string value)
 			{
-				Background = Background,
-				Characters = Characters.Select(c => c.CreateSnapshot()).ToList()
-			};
-		}
+				this.directive = directive;
+				this.value = value;
+			}
 
-		internal void AddCharacter(CharacterState characterState)
-		{
-			Characters.Add(characterState);
-		}
+			internal string AsString()
+			{
+				return value;
+			}
 
-		internal void RemoveCharacter(string name)
-		{
-			Characters.RemoveAll(c => c.Name == name);
-		}
-	}
-
-	private class CharacterState
-	{
-		public string Name;
-		public double Position;
-
-		public CharacterState(string name, double position)
-		{
-			Name = name;
-			Position = position;
-		}
-
-		public CharacterState CreateSnapshot()
-		{
-			return new CharacterState(Name, Position);
+			internal double? AsDouble()
+			{
+				if (!value.IsValidFloat())
+				{
+					directive.PrintError($"Invalid float value '{value}'");
+					return null;
+				}
+				return value.ToFloat();
+			}
 		}
 	}
 
 	private class StageLine
 	{
-		public StageState EndState = new();
 		public List<IStageDirective> Directives = new();
 		public int CurrentDirectiveIndex = 0;
+
+		internal bool IsEmpty()
+		{
+			return !Directives.Any();
+		}
 
 		public void Reset(Stage stage)
 		{
@@ -356,19 +453,11 @@ public partial class Timeline
 
 	private class BackgroundDirective : IStageDirective
 	{
-		private readonly Texture2D? background;
+		private readonly Texture2D background;
 
-		public BackgroundDirective(string file)
+		public BackgroundDirective(Texture2D background)
 		{
-			var resource = GD.Load($"res://content/backgrounds/{file}");
-			if (resource is not Texture2D texture)
-			{
-				GD.PushError("Background not found: " + file);
-			}
-			else
-			{
-				background = texture;
-			}
+			this.background = background;
 		}
 
 		public void Process(Stage stage, double delta)
