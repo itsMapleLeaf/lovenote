@@ -1,27 +1,15 @@
 using System.Collections.Generic;
 using Godot;
 
-/// <summary>
-/// A class for working with timeline source files.
-/// </summary>
-public class TimelineSourceFile
+public class TimelineFile
 {
-	static readonly RegEx textAndDirectiveRegex = RegEx.CreateFromString(
-		@"(?<text>[^\[]+)?(?:\[(?:(?<directive_name>[a-z_]+)):(?<directive_value>.+?)\])?"
-	);
-
-	internal readonly string path;
+	readonly string path;
 	readonly string content;
 
-	TimelineSourceFile(string path, string content)
+	public TimelineFile(string path)
 	{
 		this.path = path;
-		this.content = content;
-	}
-
-	public static TimelineSourceFile FromFile(string path)
-	{
-		return new TimelineSourceFile(path, FileAccess.GetFileAsString(path));
+		content = FileAccess.GetFileAsString(path);
 	}
 
 	internal IEnumerable<Line> Lines()
@@ -34,25 +22,29 @@ public class TimelineSourceFile
 		}
 	}
 
-	internal void PrintError(string message)
+	void PrintError(string message)
 	{
 		PrintError($"{path}: {message}");
 	}
 
-	public class Line
+	internal class Line
 	{
-		readonly TimelineSourceFile file;
+		static readonly RegEx textAndDirectiveRegex = RegEx.CreateFromString(
+			@"(?<text>[^\[]+)?(?:\[(?:(?<directive_name>[a-z_]+)):(?<directive_value>.+?)\])?"
+		);
+
+		readonly TimelineFile file;
 		readonly string content;
 		readonly int number;
 
-		internal Line(TimelineSourceFile file, string content, int number)
+		internal Line(TimelineFile file, string content, int number)
 		{
 			this.file = file;
 			this.content = content;
 			this.number = number;
 		}
 
-		public IEnumerable<(string? text, Directive? directive)> Parts()
+		internal IEnumerable<(string? text, Directive? directive)> Parts()
 		{
 			foreach (var match in textAndDirectiveRegex.SearchAll(content))
 			{
@@ -72,16 +64,16 @@ public class TimelineSourceFile
 			}
 		}
 
-		public void PrintError(string message)
+		internal void PrintError(string message)
 		{
 			GD.PrintErr($"{file.path}:{number}: {message}");
 		}
 	}
 
-	public class Directive
+	internal class Directive
 	{
-		public string Name;
-		public string Value;
+		internal readonly string name;
+		internal readonly string value;
 
 		readonly Line line;
 		readonly Dictionary<string, string> namedArgs = new();
@@ -90,8 +82,8 @@ public class TimelineSourceFile
 		internal Directive(Line line, string name, string value)
 		{
 			this.line = line;
-			Name = name;
-			Value = value;
+			this.name = name;
+			this.value = value;
 
 			foreach (var valuePart in value.Split(",", false))
 			{
@@ -107,12 +99,12 @@ public class TimelineSourceFile
 			}
 		}
 
-		public void PrintError(string message)
+		internal void PrintError(string message)
 		{
-			line.PrintError($"Invalid directive [{Name}:{Value}]: {message}");
+			line.PrintError($"Invalid directive [{name}:{value}]: {message}");
 		}
 
-		public DirectiveArg? GetOptionalArg(string name)
+		internal DirectiveArg? GetOptionalArg(string name)
 		{
 			if (!namedArgs.ContainsKey(name))
 			{
@@ -121,7 +113,7 @@ public class TimelineSourceFile
 			return new DirectiveArg(this, namedArgs[name]);
 		}
 
-		public DirectiveArg? GetOptionalArg(int position)
+		internal DirectiveArg? GetOptionalArg(int position)
 		{
 			if (positionalArgs.Count <= position)
 			{
@@ -130,7 +122,7 @@ public class TimelineSourceFile
 			return new DirectiveArg(this, positionalArgs[position]);
 		}
 
-		public DirectiveArg? GetRequiredArg(string name)
+		internal DirectiveArg? GetRequiredArg(string name)
 		{
 			if (!namedArgs.ContainsKey(name))
 			{
@@ -140,7 +132,7 @@ public class TimelineSourceFile
 			return new DirectiveArg(this, namedArgs[name]);
 		}
 
-		public DirectiveArg? GetRequiredArg(int position)
+		internal DirectiveArg? GetRequiredArg(int position)
 		{
 			if (positionalArgs.Count <= position)
 			{
@@ -151,7 +143,7 @@ public class TimelineSourceFile
 		}
 	}
 
-	public class DirectiveArg
+	internal class DirectiveArg
 	{
 		readonly Directive directive;
 		readonly string value;
@@ -162,12 +154,12 @@ public class TimelineSourceFile
 			this.value = value;
 		}
 
-		public string AsString()
+		internal string AsString()
 		{
 			return value;
 		}
 
-		public double? AsDouble()
+		internal double? AsDouble()
 		{
 			if (!value.IsValidFloat())
 			{
