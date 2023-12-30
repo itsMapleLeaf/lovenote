@@ -4,16 +4,17 @@ using Godot;
 public partial class TimelinePlayer : Node
 {
 	[Export(PropertyHint.File, "*.md")]
-	public string? TimelineFile;
+	public string? FilePath;
 
 	private Timeline? timeline;
 	private Stage Stage => GetNode<Stage>("%Stage");
 
 	public override void _Ready()
 	{
-		if (TimelineFile != null)
+		if (FilePath != null)
 		{
-			timeline = Timeline.FromFile(TimelineFile);
+			timeline = new Timeline(Stage);
+			timeline.Load(FilePath);
 		}
 		else
 		{

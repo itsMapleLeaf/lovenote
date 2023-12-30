@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -9,9 +10,11 @@ public partial class Stage : Node
 
 	public Dialog Dialog => GetNode<Dialog>("%Dialog");
 
-	private Background? background;
-	private Node BackgroundLayer => GetNode<Node>("%BackgroundLayer");
-	private Node CharacterLayer => GetNode<Node>("%CharacterLayer");
+	Background? background;
+	Node BackgroundLayer => GetNode<Node>("%BackgroundLayer");
+
+	readonly Dictionary<string, Character> characters = new();
+	Node CharacterLayer => GetNode<Node>("%CharacterLayer");
 
 	public override void _Ready() { }
 
@@ -24,34 +27,19 @@ public partial class Stage : Node
 		background.Enter(texture, BackgroundFadeDuration);
 	}
 
-	public void EnterCharacter(string name, double fromPosition, double toPosition, double duration)
+	public void AddCharacter(Character character)
 	{
-		string scenePath = $"res://content/characters/{name}.tscn";
-		var scene = GD.Load(scenePath);
-		if (scene is not PackedScene packedScene)
-		{
-			GD.PushError($"Character \"{name}\" not found - file `{scenePath}` does not exist");
-			return;
-		}
-
-		var node = packedScene.Instantiate();
-		if (node is not Character character)
-		{
-			GD.PushError($"Scene file \"{scenePath}\" is not a Character");
-			return;
-		}
-
+		characters.Add(character.CharacterName, character);
 		CharacterLayer.AddChild(character);
-		character.CharacterName = name;
-		character.EnterTweened(fromPosition, toPosition, duration);
 	}
 
-	public void LeaveCharacter(string name, double distance, double duration)
+	public void RemoveCharacter(string name)
 	{
-		CharacterLayer
-			.GetChildren()
-			.Cast<Character>()
-			.FirstOrDefault(c => c.CharacterName == name)
-			?.LeaveTweened(distance, duration);
+		characters.Remove(name);
+	}
+
+	public Character? GetCharacter(string name)
+	{
+		return characters.TryGetValue(name, out var character) ? character : null;
 	}
 }

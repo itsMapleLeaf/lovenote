@@ -10,14 +10,17 @@ public partial class Timeline
 {
 	readonly List<StageLine> lines = new();
 	int currentLineIndex = 0;
+	readonly Stage stage;
 
-	public static Timeline FromFile(string path)
+	public Timeline(Stage stage)
 	{
-		return new Timeline(TimelineSourceFile.FromFile(path));
+		this.stage = stage;
 	}
 
-	Timeline(TimelineSourceFile sourceFile)
+	public void Load(string path)
 	{
+		var sourceFile = TimelineSourceFile.FromFile(path);
+
 		foreach (var sourceLine in sourceFile.Lines())
 		{
 			var line = new StageLine();
@@ -76,48 +79,75 @@ public partial class Timeline
 						case "enter":
 						{
 							var characterName = directive.GetRequiredArg(0)?.AsString();
-							if (characterName is null)
-								break;
-
 							var toPosition = directive.GetRequiredArg("to")?.AsDouble();
-							if (toPosition is null)
-								break;
-
 							var fromPosition = directive.GetRequiredArg("from")?.AsDouble();
-							if (fromPosition is null)
-								break;
+							var duration = directive.GetOptionalArg("duration")?.AsDouble();
 
-							var duration = directive.GetRequiredArg("duration")?.AsDouble();
-							if (duration is null)
-								break;
+							Character? character = null;
+							if (characterName is not null)
+							{
+								var scenePath = $"res://content/characters/{characterName}.tscn";
+								if (!ResourceLoader.Exists(scenePath))
+								{
+									directive.PrintError(
+										$"Resource path {scenePath} does not exist"
+									);
+									break;
+								}
 
-							line.AddDirective(
-								new EnterDirective(
-									characterName,
-									toPosition.Value,
-									fromPosition.Value,
-									duration.Value
-								)
-							);
+								var node = GD.Load<PackedScene>(scenePath).Instantiate();
+								if (node is not Character _character)
+								{
+									directive.PrintError(
+										$"Resource path {scenePath} is not a valid character scene"
+									);
+									break;
+								}
+
+								character = _character;
+							}
+
+							if (
+								character is not null
+								&& toPosition is not null
+								&& fromPosition is not null
+							)
+							{
+								stage.AddCharacter(character);
+								line.AddDirective(
+									new EnterDirective(
+										character,
+										toPosition.Value,
+										fromPosition.Value,
+										duration
+									)
+								);
+							}
 							break;
 						}
 
 						case "leave":
 						{
 							var characterName = directive.GetRequiredArg(0)?.AsString();
-							if (characterName is null)
-								break;
-
 							var byPosition = directive.GetRequiredArg("by")?.AsDouble();
+							var duration = directive.GetOptionalArg("duration")?.AsDouble();
+
+							var character = characterName is null
+								? null
+								: stage.GetCharacter(characterName);
+							if (character is null)
+							{
+								directive.PrintError(
+									$"Character {characterName} not added to stage. Are you missing an 'enter' directive?"
+								);
+								break;
+							}
+
 							if (byPosition is null)
 								break;
 
-							var duration = directive.GetRequiredArg("duration")?.AsDouble();
-							if (duration is null)
-								break;
-
 							line.AddDirective(
-								new LeaveDirective(characterName, byPosition.Value, duration.Value)
+								new LeaveDirective(character, byPosition.Value, duration)
 							);
 
 							break;
@@ -355,56 +385,62 @@ public partial class Timeline
 
 	private class EnterDirective : IStageDirective
 	{
-		private readonly string characterName;
-		private readonly double toPosition;
-		private readonly double fromPosition;
-		private readonly double duration;
+		private readonly Character character;
+		private readonly double initialPosition;
+		private readonly double targetPosition;
+		private readonly double? duration;
 
 		public EnterDirective(
-			string characterName,
-			double toPosition,
-			double fromPosition,
-			double duration
+			Character character,
+			double targetPosition,
+			double initialOffset,
+			double? duration
 		)
 		{
-			this.characterName = characterName;
-			this.toPosition = toPosition;
-			this.fromPosition = fromPosition;
+			this.character = character;
+			this.initialPosition = targetPosition + initialOffset;
+			this.targetPosition = targetPosition;
 			this.duration = duration;
 		}
 
 		public void Process(Stage stage, double delta)
 		{
-			stage.EnterCharacter(characterName, fromPosition, toPosition, duration);
+			character.StagePosition = initialPosition;
+			character.MoveTo(targetPosition, duration);
+			character.FadeIn(duration);
 		}
 
 		public void Skip(Stage stage)
 		{
-			stage.EnterCharacter(characterName, fromPosition, toPosition, 0);
+			character.FinishTween();
+			character.FadeIn(0);
+			character.StagePosition = targetPosition;
 		}
 	}
 
 	private class LeaveDirective : IStageDirective
 	{
-		private readonly string characterName;
+		private readonly Character character;
 		private readonly double byPosition;
-		private readonly double duration;
+		private readonly double? duration;
 
-		public LeaveDirective(string characterName, double byPosition, double duration)
+		public LeaveDirective(Character character, double byPosition, double? duration)
 		{
-			this.characterName = characterName;
+			this.character = character;
 			this.byPosition = byPosition;
 			this.duration = duration;
 		}
 
 		public void Process(Stage stage, double delta)
 		{
-			stage.LeaveCharacter(characterName, byPosition, duration);
+			character.MoveBy(byPosition, duration);
+			character.FadeOut(duration);
 		}
 
 		public void Skip(Stage stage)
 		{
-			stage.LeaveCharacter(characterName, byPosition, 0);
+			character.FinishTween();
+			character.FadeOut(0);
 		}
 	}
 }

@@ -3,7 +3,9 @@ using Godot;
 
 public partial class Character : Control
 {
-	private double stagePosition = 0.5;
+	const double DEFAULT_TWEEN_DUTATION = 0.5;
+
+	double stagePosition = 0.5;
 
 	[Export(PropertyHint.Range, "0, 1, 0.05")]
 	public double StagePosition
@@ -17,7 +19,7 @@ public partial class Character : Control
 		}
 	}
 
-	private Vector2 spriteOffset = Vector2.Zero;
+	Vector2 spriteOffset = Vector2.Zero;
 
 	[Export]
 	public Vector2 SpriteOffset
@@ -26,69 +28,58 @@ public partial class Character : Control
 		set
 		{
 			spriteOffset = value;
-			this.AfterReady(() => sprite!.Position = spriteOffset);
+			this.AfterReady(() => Sprite!.Position = spriteOffset);
 		}
 	}
 
 	public string CharacterName = "";
 
-	private Tween? tween;
-	private Control? sprite;
-
-	public override void _Ready()
-	{
-		sprite = GetNode<Control>("%Sprite");
-	}
-
-	/// <param name="fromPosition">The position to start from, relative to toPosition</param>
-	/// <param name="toPosition">The position to end at</param>
-	/// <param name="duration">The duration of the tween</param>
-	public void EnterTweened(double fromPosition, double toPosition, double duration)
-	{
-		PauseTween();
-
-		StagePosition = toPosition + fromPosition;
-
-		tween = CreateTween()
-			.SetParallel(true)
+	Tween? tween;
+	Tween Tween =>
+		tween ??= CreateTween()
 			.SetEase(Tween.EaseType.Out)
-			.SetTrans(Tween.TransitionType.Quad);
+			.SetTrans(Tween.TransitionType.Quad)
+			.SetParallel();
 
-		tween.TweenProperty(this, PropertyName.StagePosition.ToString(), toPosition, duration);
-		tween.TweenProperty(
+	Control Sprite => GetNode<Control>("%Sprite");
+
+	public void MoveTo(double position, double? duration)
+	{
+		Tween.TweenProperty(
 			this,
-			Character.PropertyName.Modulate.ToString(),
-			new Color(Modulate, 1),
-			duration
+			PropertyName.StagePosition.ToString(),
+			position,
+			duration ?? DEFAULT_TWEEN_DUTATION
 		);
 	}
 
-	/// <param name="byPosition">The amount to move by while leaving</param>
-	/// <param name="duration">The duration of the tween</param>
-	public async void LeaveTweened(double byPosition, double duration)
+	public void MoveBy(double amount, double? duration)
 	{
-		PauseTween();
-
-		tween = CreateTween()
-			.SetParallel(true)
-			.SetEase(Tween.EaseType.In)
-			.SetTrans(Tween.TransitionType.Quad);
-
-		tween.TweenProperty(this, PropertyName.StagePosition.ToString(), byPosition, duration);
-		tween.TweenProperty(
-			this,
-			Character.PropertyName.Modulate.ToString(),
-			new Color(Modulate, 0),
-			duration
-		);
-
-		await ToSignal(tween, Tween.SignalName.Finished);
-
-		QueueFree();
+		MoveTo(StagePosition + amount, duration);
 	}
 
-	public void PauseTween()
+	public void FadeIn(double? duration)
 	{
-		tween?.Pause();
+		Tween.TweenProperty(
+			this,
+			Character.PropertyName.Modulate.ToString(),
+			Colors.White,
+			duration ?? DEFAULT_TWEEN_DUTATION
+		);
+	}
+
+	public void FadeOut(double? duration)
+	{
+		Tween.TweenProperty(
+			this,
+			Character.PropertyName.Modulate.ToString(),
+			Colors.Transparent,
+			duration ?? DEFAULT_TWEEN_DUTATION
+		);
+	}
+
+	public void FinishTween()
+	{
+		Tween.CustomStep(double.PositiveInfinity);
 	}
 }

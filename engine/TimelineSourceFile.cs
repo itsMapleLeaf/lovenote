@@ -112,6 +112,24 @@ public class TimelineSourceFile
 			line.PrintError($"Invalid directive [{Name}:{Value}]: {message}");
 		}
 
+		public DirectiveArg? GetOptionalArg(string name)
+		{
+			if (!namedArgs.ContainsKey(name))
+			{
+				return null;
+			}
+			return new DirectiveArg(this, namedArgs[name]);
+		}
+
+		public DirectiveArg? GetOptionalArg(int position)
+		{
+			if (positionalArgs.Count <= position)
+			{
+				return null;
+			}
+			return new DirectiveArg(this, positionalArgs[position]);
+		}
+
 		public DirectiveArg? GetRequiredArg(string name)
 		{
 			if (!namedArgs.ContainsKey(name))
