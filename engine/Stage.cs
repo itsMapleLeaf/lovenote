@@ -61,6 +61,7 @@ public partial class Stage : Node
 	public override void _Process(double delta)
 	{
 		CurrentLine?.Process(delta);
+		Dialog.AdvanceIndicatorVisible = CurrentLine?.IsPlaying() != true;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
