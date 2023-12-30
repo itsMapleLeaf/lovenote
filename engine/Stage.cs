@@ -30,14 +30,14 @@ public partial class Stage : Node
 		var scene = GD.Load(scenePath);
 		if (scene is not PackedScene packedScene)
 		{
-			GD.PushError($"Character {name} not found - file {scenePath} does not exist");
+			GD.PushError($"Character \"{name}\" not found - file `{scenePath}` does not exist");
 			return;
 		}
 
 		var node = packedScene.Instantiate();
 		if (node is not Character character)
 		{
-			GD.PushError($"Scene file {scenePath} is not a Character");
+			GD.PushError($"Scene file \"{scenePath}\" is not a Character");
 			return;
 		}
 
