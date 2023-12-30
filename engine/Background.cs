@@ -10,7 +10,7 @@ public partial class Background : TextureRect
 		Modulate = new Color(Modulate, 0);
 	}
 
-	public void FadeIn()
+	public void FadeIn(double duration = 1.0)
 	{
 		tween?.Pause();
 		tween = CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
@@ -18,11 +18,11 @@ public partial class Background : TextureRect
 			this,
 			CanvasItem.PropertyName.Modulate.ToString(),
 			new Color(Modulate, 1),
-			1.0
+			duration
 		);
 	}
 
-	public void FadeOut()
+	public void FadeOut(double duration = 1.0)
 	{
 		tween?.Pause();
 		tween = CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
@@ -30,7 +30,7 @@ public partial class Background : TextureRect
 			this,
 			CanvasItem.PropertyName.Modulate.ToString(),
 			new Color(Modulate, 0),
-			1.0
+			duration
 		);
 	}
 }
