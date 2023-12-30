@@ -70,8 +70,6 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 1
 script = ExtResource("1_60yat")
-Speaker = "Ryder"
-Text = "Have you ever had a dream that, that, um, that you had, uh, that you had to, you could, you do, you wit, you wa, you could do so, you do you could, you want, you wanted him to do you so much you could do anything?"
 
 [node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 1
