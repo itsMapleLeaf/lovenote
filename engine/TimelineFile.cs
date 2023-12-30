@@ -12,7 +12,7 @@ public class TimelineFile
 		content = FileAccess.GetFileAsString(path);
 	}
 
-	internal IEnumerable<Line> Lines()
+	IEnumerable<Line> Lines()
 	{
 		var number = 1;
 		foreach (var content in content.Split("\n"))
@@ -22,12 +22,17 @@ public class TimelineFile
 		}
 	}
 
+	public static IEnumerable<Line> Lines(string path)
+	{
+		return new TimelineFile(path).Lines();
+	}
+
 	void PrintError(string message)
 	{
 		PrintError($"{path}: {message}");
 	}
 
-	internal class Line
+	public class Line
 	{
 		static readonly RegEx textAndDirectiveRegex = RegEx.CreateFromString(
 			@"(?<text>[^\[]+)?(?:\[(?:(?<directive_name>[a-z_]+)):(?<directive_value>.+?)\])?"

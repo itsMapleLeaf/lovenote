@@ -107,6 +107,7 @@ public abstract class StageDirective
 		return null;
 	}
 
+	internal abstract StageSnapshot UpdateSnapshot(StageSnapshot snapshot);
 	internal abstract void Reset();
 	internal abstract void Process(Stage stage, double delta);
 	internal abstract bool IsPlaying(Stage stage);
@@ -134,6 +135,11 @@ public abstract class StageDirective
 			text = italicsRegex.Sub(text, "[i]$2[/i]", true);
 
 			return text;
+		}
+
+		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
+		{
+			return snapshot with { DialogText = text };
 		}
 
 		internal override void Reset()
@@ -171,6 +177,11 @@ public abstract class StageDirective
 			this.speakerName = speakerName;
 		}
 
+		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
+		{
+			return snapshot with { DialogSpeaker = speakerName };
+		}
+
 		internal override void Reset() { }
 
 		internal override void Process(Stage stage, double delta)
@@ -196,6 +207,11 @@ public abstract class StageDirective
 		public BackgroundDirective(string name)
 		{
 			this.name = name;
+		}
+
+		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
+		{
+			return snapshot with { Background = name };
 		}
 
 		internal override void Reset() { }
@@ -225,6 +241,11 @@ public abstract class StageDirective
 		{
 			this.duration = duration;
 			remaining = duration;
+		}
+
+		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
+		{
+			return snapshot;
 		}
 
 		internal override void Reset()
@@ -268,6 +289,17 @@ public abstract class StageDirective
 			this.duration = duration;
 		}
 
+		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
+		{
+			return snapshot with
+			{
+				Characters = snapshot.Characters.SetItem(
+					character.CharacterName,
+					(character.CharacterName, targetPosition)
+				),
+			};
+		}
+
 		internal override void Reset()
 		{
 			character.FinishTweens();
@@ -305,6 +337,14 @@ public abstract class StageDirective
 			this.character = character;
 			this.byPosition = byPosition;
 			this.duration = duration;
+		}
+
+		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
+		{
+			return snapshot with
+			{
+				Characters = snapshot.Characters.Remove(character.CharacterName),
+			};
 		}
 
 		internal override void Reset()

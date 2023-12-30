@@ -6,3 +6,4 @@
 
 [node name="Stage" parent="." instance=ExtResource("1_guxbj")]
 timelineFilePath = "res://content/timelines/ryder/the_first_day.md"
+PreviewLineIndex = 12

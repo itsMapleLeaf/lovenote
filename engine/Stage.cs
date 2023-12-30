@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 
 public partial class Stage : Node
@@ -12,7 +11,22 @@ public partial class Stage : Node
 	string timelineFilePath = "";
 
 	[Export]
-	double backgroundFadeDuration = 1.0;
+	int PreviewLineIndex
+	{
+		get => _previewLineIndex;
+		set
+		{
+			if (lines.Count == 0)
+			{
+				_previewLineIndex = value;
+				return;
+			}
+
+			_previewLineIndex = Mathf.Clamp(value, 0, lines.Count - 1);
+			SeekTo(_previewLineIndex);
+		}
+	}
+	int _previewLineIndex = 0;
 
 	readonly List<StageLine> lines = new();
 	int currentLineIndex = 0;
@@ -38,6 +52,7 @@ public partial class Stage : Node
 		LoadTimeline();
 		InputCover.GuiInput += _UnhandledInput;
 		CurrentLine?.Reset();
+		SeekTo(PreviewLineIndex);
 	}
 
 	void LoadTimeline()
@@ -48,14 +63,21 @@ public partial class Stage : Node
 			return;
 		}
 
-		foreach (var sourceLine in new TimelineFile(timelineFilePath).Lines())
+		var currentEndState = StageSnapshot.Empty;
+
+		foreach (var sourceLine in TimelineFile.Lines(timelineFilePath))
 		{
-			var line = new StageLine(sourceLine, this);
+			var line = new StageLine(sourceLine, this, currentEndState);
 			if (!line.IsEmpty())
 			{
 				lines.Add(line);
+				currentEndState = line.endState;
 			}
 		}
+
+		GD.PrintRich(
+			$"[color=gray]Loaded timeline with [color=white]{lines.Count}[/color] lines[/color]"
+		);
 	}
 
 	public override void _Process(double delta)
@@ -66,9 +88,17 @@ public partial class Stage : Node
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
-		if (@event.IsActionPressed("dialog_advance"))
+		if (@event.IsActionPressed(InputActionName.DialogAdvance))
 		{
 			Advance();
+		}
+		if (@event.IsActionPressed(InputActionName.DialogBack))
+		{
+			Back();
+		}
+		if (@event.IsActionPressed(InputActionName.DialogNext))
+		{
+			Next();
 		}
 	}
 
@@ -82,6 +112,66 @@ public partial class Stage : Node
 		{
 			currentLineIndex += 1;
 			CurrentLine?.Reset();
+		}
+	}
+
+	void Next()
+	{
+		if (currentLineIndex < lines.Count - 1)
+		{
+			currentLineIndex += 1;
+		}
+		if (CurrentLine is not null)
+		{
+			CurrentLine.Skip();
+			ApplySnapshot(CurrentLine.endState);
+		}
+	}
+
+	void Back()
+	{
+		if (currentLineIndex > 0)
+		{
+			currentLineIndex -= 1;
+		}
+		if (CurrentLine is not null)
+		{
+			CurrentLine.Skip();
+			ApplySnapshot(CurrentLine.endState);
+		}
+	}
+
+	void SeekTo(int index)
+	{
+		while (currentLineIndex < index)
+		{
+			Next();
+		}
+		while (currentLineIndex > index)
+		{
+			Back();
+		}
+	}
+
+	void ApplySnapshot(StageSnapshot snapshot)
+	{
+		Dialog.Speaker = snapshot.DialogSpeaker;
+		Dialog.Text = snapshot.DialogText;
+		Dialog.Skip();
+
+		ShowBackground(snapshot.Background, 0);
+
+		foreach (var (name, character) in characters)
+		{
+			if (snapshot.Characters.ContainsKey(name))
+			{
+				character.StagePosition = snapshot.Characters[name].position;
+				character.FadeIn(0);
+			}
+			else
+			{
+				character.FadeOut(0);
+			}
 		}
 	}
 
@@ -99,17 +189,17 @@ public partial class Stage : Node
 		BackgroundLayer.AddChild(background);
 	}
 
-	public void ShowBackground(string name)
+	public void ShowBackground(string? name, double fadeDuration = 1.0)
 	{
 		foreach (var (backgroundName, background) in backgrounds)
 		{
 			if (backgroundName == name)
 			{
-				background.FadeIn();
+				background.FadeIn(fadeDuration);
 			}
 			else
 			{
-				background.FadeOut();
+				background.FadeOut(fadeDuration);
 			}
 		}
 	}

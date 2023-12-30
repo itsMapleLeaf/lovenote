@@ -3,20 +3,23 @@ using System.Linq;
 
 public class StageLine
 {
+	readonly Stage stage;
+	public readonly StageSnapshot endState;
 	public List<StageDirective> Directives = new();
 	public int CurrentDirectiveIndex = 0;
 
-	readonly Stage stage;
-
-	internal StageLine(TimelineFile.Line sourceLine, Stage stage)
+	internal StageLine(TimelineFile.Line sourceLine, Stage stage, StageSnapshot previousEndState)
 	{
 		this.stage = stage;
+		endState = previousEndState with { DialogSpeaker = "", DialogText = "" };
 
 		foreach (var (text, directive) in sourceLine.Parts())
 		{
 			if (text is not null)
 			{
-				AddDirective(new StageDirective.DialogDirective(text));
+				var dialogDirective = new StageDirective.DialogDirective(text);
+				AddDirective(dialogDirective);
+				endState = dialogDirective.UpdateSnapshot(endState);
 			}
 
 			if (directive is null)
@@ -28,6 +31,7 @@ public class StageLine
 			if (stageDirective is not null)
 			{
 				AddDirective(stageDirective);
+				endState = stageDirective.UpdateSnapshot(endState);
 			}
 		}
 	}

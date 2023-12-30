@@ -1,5 +1,7 @@
 public class InputActionName
 {
-	public const string AdvanceDialog = "advance_dialog";
+	public const string DialogAdvance = "dialog_advance";
+	public const string DialogBack = "dialog_back";
+	public const string DialogNext = "dialog_next";
 	public const string Quit = "quit";
 }
