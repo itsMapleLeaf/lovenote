@@ -3,21 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
+/// <summary>
+/// Plays out a scripted timeline on the stage.
+/// </summary>
 public partial class Timeline
 {
-	static readonly RegEx textAndDirectiveRegex = RegEx.CreateFromString(
-		@"(?<text>[^\[]+)?(?:\[(?:(?<directive_name>[a-z_]+)):(?<directive_value>.+?)\])?"
-	);
-
 	readonly List<StageLine> lines = new();
 	int currentLineIndex = 0;
 
 	public static Timeline FromFile(string path)
 	{
-		return new Timeline(SourceFile.FromFile(path));
+		return new Timeline(TimelineSourceFile.FromFile(path));
 	}
 
-	Timeline(SourceFile sourceFile)
+	Timeline(TimelineSourceFile sourceFile)
 	{
 		foreach (var sourceLine in sourceFile.Lines())
 		{
@@ -32,17 +31,17 @@ public partial class Timeline
 
 				if (directive is not null)
 				{
-					switch (directive.name)
+					switch (directive.Name)
 					{
 						case "speaker":
 						{
-							line.AddDirective(new SpeakerDirective(directive.value));
+							line.AddDirective(new SpeakerDirective(directive.Value));
 							break;
 						}
 
 						case "background":
 						{
-							var resourcePath = $"res://content/backgrounds/{directive.value}";
+							var resourcePath = $"res://content/backgrounds/{directive.Value}";
 							if (!ResourceLoader.Exists(resourcePath))
 							{
 								directive.PrintError(
@@ -161,158 +160,6 @@ public partial class Timeline
 	public bool IsReadyToAdvance(Stage stage)
 	{
 		return !lines[currentLineIndex].IsPlaying(stage);
-	}
-
-	internal class SourceFile
-	{
-		internal readonly string path;
-		readonly string content;
-
-		SourceFile(string path, string content)
-		{
-			this.path = path;
-			this.content = content;
-		}
-
-		public static SourceFile FromFile(string path)
-		{
-			return new SourceFile(path, FileAccess.GetFileAsString(path));
-		}
-
-		internal IEnumerable<SourceLine> Lines()
-		{
-			var number = 1;
-			foreach (var content in content.Split("\n"))
-			{
-				yield return new SourceLine(this, content, number);
-				number += 1;
-			}
-		}
-
-		internal void PrintError(string message)
-		{
-			PrintError($"{path}: {message}");
-		}
-	}
-
-	internal class SourceLine
-	{
-		readonly SourceFile file;
-		readonly string content;
-		readonly int number;
-
-		internal SourceLine(SourceFile file, string content, int number)
-		{
-			this.file = file;
-			this.content = content;
-			this.number = number;
-		}
-
-		internal IEnumerable<(string? text, SourceDirective? directive)> Parts()
-		{
-			foreach (var match in textAndDirectiveRegex.SearchAll(content))
-			{
-				var text = match.GetString("text");
-				if (text != "")
-				{
-					yield return (text, null);
-				}
-
-				var directiveName = match.GetString("directive_name");
-				var directiveValue = match.GetString("directive_value");
-
-				if (directiveName != "" && directiveValue != "")
-				{
-					yield return (null, new SourceDirective(this, directiveName, directiveValue));
-				}
-			}
-		}
-
-		internal void PrintError(string message)
-		{
-			GD.PrintErr($"{file.path}:{number}: {message}");
-		}
-	}
-
-	internal class SourceDirective
-	{
-		readonly SourceLine line;
-		internal string name;
-		internal string value;
-		readonly Dictionary<string, string> namedArgs = new();
-		readonly List<string> positionalArgs = new();
-
-		internal SourceDirective(SourceLine line, string name, string value)
-		{
-			this.line = line;
-			this.name = name;
-			this.value = value;
-
-			foreach (var valuePart in value.Split(",", false))
-			{
-				var argParts = valuePart.Split("=");
-				if (argParts.Length == 2)
-				{
-					namedArgs[argParts[0]] = argParts[1];
-				}
-				else
-				{
-					positionalArgs.Add(argParts[0]);
-				}
-			}
-		}
-
-		internal void PrintError(string message)
-		{
-			line.PrintError($"Invalid directive [{name}:{value}]: {message}");
-		}
-
-		internal Arg? GetRequiredArg(string name)
-		{
-			if (!namedArgs.ContainsKey(name))
-			{
-				PrintError($"Missing required argument '{name}'");
-				return null;
-			}
-			return new Arg(this, namedArgs[name]);
-		}
-
-		internal Arg? GetRequiredArg(int position)
-		{
-			if (positionalArgs.Count <= position)
-			{
-				PrintError($"Missing required argument at position {position}");
-				return null;
-			}
-			return new Arg(this, positionalArgs[position]);
-		}
-
-		internal class Arg
-		{
-			readonly SourceDirective directive;
-			readonly string value;
-
-			internal Arg(SourceDirective directive, string value)
-			{
-				this.directive = directive;
-				this.value = value;
-			}
-
-			internal string AsString()
-			{
-				return value;
-			}
-
-			internal double? AsDouble()
-			{
-				if (!value.IsValidFloat())
-				{
-					directive.PrintError($"Invalid float value '{value}'");
-					return null;
-				}
-				return value.ToFloat();
-			}
-		}
 	}
 
 	private class StageLine
