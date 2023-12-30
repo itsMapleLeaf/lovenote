@@ -30,7 +30,8 @@ public abstract class StageDirective
 					break;
 				}
 
-				return new BackgroundDirective(texture);
+				stage.AddBackground(directive.value, texture);
+				return new BackgroundDirective(directive.value);
 			}
 
 			case "wait":
@@ -190,18 +191,18 @@ public abstract class StageDirective
 
 	class BackgroundDirective : StageDirective
 	{
-		readonly Texture2D background;
+		readonly string name;
 
-		public BackgroundDirective(Texture2D background)
+		public BackgroundDirective(string name)
 		{
-			this.background = background;
+			this.name = name;
 		}
 
 		internal override void Reset() { }
 
 		internal override void Process(Stage stage, double delta)
 		{
-			stage.SetBackground(background);
+			stage.ShowBackground(name);
 		}
 
 		internal override bool IsPlaying(Stage stage)
@@ -269,7 +270,7 @@ public abstract class StageDirective
 
 		internal override void Reset()
 		{
-			character.FinishTween();
+			character.FinishTweens();
 			character.FadeOut(0);
 		}
 
@@ -287,7 +288,7 @@ public abstract class StageDirective
 
 		internal override void Skip(Stage stage)
 		{
-			character.FinishTween();
+			character.FinishTweens();
 			character.FadeIn(0);
 			character.StagePosition = targetPosition;
 		}
@@ -308,7 +309,7 @@ public abstract class StageDirective
 
 		internal override void Reset()
 		{
-			character.FinishTween();
+			character.FinishTweens();
 			character.FadeIn(0);
 		}
 
@@ -325,7 +326,7 @@ public abstract class StageDirective
 
 		internal override void Skip(Stage stage)
 		{
-			character.FinishTween();
+			character.FinishTweens();
 			character.FadeOut(0);
 		}
 	}

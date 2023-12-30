@@ -34,18 +34,18 @@ public partial class Character : Control
 
 	public string CharacterName = "";
 
-	Tween? tween;
-	Tween Tween =>
-		tween ??= CreateTween()
-			.SetEase(Tween.EaseType.Out)
-			.SetTrans(Tween.TransitionType.Quad)
-			.SetParallel();
+	Tween? positionTween;
+	Tween? modulateTween;
 
 	Control Sprite => GetNode<Control>("%Sprite");
 
 	public void MoveTo(double position, double? duration)
 	{
-		Tween.TweenProperty(
+		positionTween?.Pause();
+		positionTween = CreateTween()
+			.SetEase(Tween.EaseType.Out)
+			.SetTrans(Tween.TransitionType.Quad);
+		positionTween.TweenProperty(
 			this,
 			PropertyName.StagePosition.ToString(),
 			position,
@@ -55,12 +55,17 @@ public partial class Character : Control
 
 	public void MoveBy(double amount, double? duration)
 	{
+		positionTween?.CustomStep(double.PositiveInfinity);
 		MoveTo(StagePosition + amount, duration);
 	}
 
 	public void FadeIn(double? duration)
 	{
-		Tween.TweenProperty(
+		modulateTween?.Pause();
+		modulateTween = CreateTween()
+			.SetEase(Tween.EaseType.Out)
+			.SetTrans(Tween.TransitionType.Quad);
+		modulateTween.TweenProperty(
 			this,
 			Character.PropertyName.Modulate.ToString(),
 			Colors.White,
@@ -70,16 +75,21 @@ public partial class Character : Control
 
 	public void FadeOut(double? duration)
 	{
-		Tween.TweenProperty(
+		modulateTween?.Pause();
+		modulateTween = CreateTween()
+			.SetEase(Tween.EaseType.Out)
+			.SetTrans(Tween.TransitionType.Quad);
+		modulateTween.TweenProperty(
 			this,
 			Character.PropertyName.Modulate.ToString(),
-			Colors.Transparent,
+			new Color(Modulate, 0),
 			duration ?? DEFAULT_TWEEN_DUTATION
 		);
 	}
 
-	public void FinishTween()
+	public void FinishTweens()
 	{
-		Tween.CustomStep(double.PositiveInfinity);
+		positionTween?.CustomStep(double.PositiveInfinity);
+		modulateTween?.CustomStep(double.PositiveInfinity);
 	}
 }

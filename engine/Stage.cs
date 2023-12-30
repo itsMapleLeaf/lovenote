@@ -1,8 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public partial class Stage : Node
 {
+	static readonly PackedScene backgroundScene = GD.Load<PackedScene>(
+		"res://engine/Background.tscn"
+	);
+
 	[Export(PropertyHint.File, "*.md")]
 	string timelineFilePath = "";
 
@@ -11,7 +16,7 @@ public partial class Stage : Node
 
 	readonly List<StageLine> lines = new();
 	int currentLineIndex = 0;
-	Background? background;
+	readonly Dictionary<string, Background> backgrounds = new();
 	readonly Dictionary<string, Character> characters = new();
 
 	StageLine? CurrentLine => currentLineIndex < lines.Count ? lines[currentLineIndex] : null;
@@ -79,24 +84,39 @@ public partial class Stage : Node
 		}
 	}
 
-	public void SetBackground(Texture2D texture)
+	public void AddBackground(string name, Texture2D texture)
 	{
-		background?.Leave(backgroundFadeDuration);
+		if (backgrounds.ContainsKey(name))
+		{
+			return;
+		}
 
-		background = GD.Load<PackedScene>("res://engine/Background.tscn").Instantiate<Background>();
+		var background = backgroundScene.Instantiate<Background>();
+		background.Name = name;
+		background.Texture = texture;
+		backgrounds.Add(name, background);
 		BackgroundLayer.AddChild(background);
-		background.Enter(texture, backgroundFadeDuration);
+	}
+
+	public void ShowBackground(string name)
+	{
+		foreach (var (backgroundName, background) in backgrounds)
+		{
+			if (backgroundName == name)
+			{
+				background.FadeIn();
+			}
+			else
+			{
+				background.FadeOut();
+			}
+		}
 	}
 
 	public void AddCharacter(Character character)
 	{
 		characters.Add(character.CharacterName, character);
 		CharacterLayer.AddChild(character);
-	}
-
-	public void RemoveCharacter(string name)
-	{
-		characters.Remove(name);
 	}
 
 	public Character? GetCharacter(string name)

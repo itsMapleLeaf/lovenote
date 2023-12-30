@@ -3,38 +3,34 @@ using Godot;
 
 public partial class Background : TextureRect
 {
+	Tween? tween;
+
 	public override void _Ready()
 	{
 		Modulate = new Color(Modulate, 0);
 	}
 
-	public void Enter(Texture2D texture, double fadeDuration)
+	public void FadeIn()
 	{
-		Texture = texture;
-
-		var tween = CreateTween();
-		tween
-			.TweenProperty(
-				this,
-				CanvasItem.PropertyName.Modulate.ToString(),
-				new Color(Modulate, 1),
-				fadeDuration
-			)
-			.From(new Color(Modulate, 0));
+		tween?.Pause();
+		tween = CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
+		tween.TweenProperty(
+			this,
+			CanvasItem.PropertyName.Modulate.ToString(),
+			new Color(Modulate, 1),
+			1.0
+		);
 	}
 
-	public async void Leave(double fadeDuration)
+	public void FadeOut()
 	{
-		var tween = CreateTween();
-		tween
-			.TweenProperty(
-				this,
-				CanvasItem.PropertyName.Modulate.ToString(),
-				new Color(Modulate, 0),
-				fadeDuration
-			)
-			.From(new Color(Modulate, 1));
-		await ToSignal(tween, Tween.SignalName.Finished);
-		QueueFree();
+		tween?.Pause();
+		tween = CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
+		tween.TweenProperty(
+			this,
+			CanvasItem.PropertyName.Modulate.ToString(),
+			new Color(Modulate, 0),
+			1.0
+		);
 	}
 }
