@@ -5,6 +5,7 @@ using System.Linq;
 public class StageLine
 {
 	readonly Stage stage;
+	public readonly StageSnapshot startState;
 	public readonly StageSnapshot endState;
 	public List<StageDirective> directives = new();
 	Action? currentCancelAction;
@@ -12,7 +13,7 @@ public class StageLine
 	public StageLine(TimelineFile.Line sourceLine, Stage stage, StageSnapshot previousEndState)
 	{
 		this.stage = stage;
-		endState = previousEndState with { DialogSpeaker = "", DialogText = "" };
+		endState = startState = previousEndState with { DialogSpeaker = "", DialogText = "" };
 
 		foreach (var (text, directive) in sourceLine.Parts())
 		{
