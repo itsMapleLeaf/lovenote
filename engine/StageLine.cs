@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -5,10 +6,10 @@ public class StageLine
 {
 	readonly Stage stage;
 	public readonly StageSnapshot endState;
-	public List<StageDirective> Directives = new();
-	public int CurrentDirectiveIndex = 0;
+	public List<StageDirective> directives = new();
+	Action? currentCancelAction;
 
-	internal StageLine(TimelineFile.Line sourceLine, Stage stage, StageSnapshot previousEndState)
+	public StageLine(TimelineFile.Line sourceLine, Stage stage, StageSnapshot previousEndState)
 	{
 		this.stage = stage;
 		endState = previousEndState with { DialogSpeaker = "", DialogText = "" };
@@ -36,54 +37,42 @@ public class StageLine
 		}
 	}
 
-	internal bool IsEmpty()
+	public void AddDirective(StageDirective directive)
 	{
-		return !Directives.Any();
+		directives.Add(directive);
 	}
 
-	public void Reset()
+	public bool IsEmpty()
 	{
-		CurrentDirectiveIndex = 0;
-		foreach (var directive in Directives)
+		return !directives.Any();
+	}
+
+	public void Play()
+	{
+		RunDirectiveAt(0);
+	}
+
+	void RunDirectiveAt(int index)
+	{
+		var directive = directives.ElementAtOrDefault(index);
+		if (directive is null)
 		{
-			directive.Reset();
+			currentCancelAction = null;
 		}
-		stage.Dialog.Reset();
-	}
-
-	public void Process(double delta)
-	{
-		while (CurrentDirectiveIndex < Directives.Count)
+		else
 		{
-			var directive = Directives[CurrentDirectiveIndex];
-			directive.Process(stage, delta);
-			if (directive.IsPlaying(stage))
-			{
-				break;
-			}
-			else
-			{
-				CurrentDirectiveIndex += 1;
-			}
+			currentCancelAction = directive.Run(stage, () => RunDirectiveAt(index + 1));
 		}
 	}
 
 	public bool IsPlaying()
 	{
-		return CurrentDirectiveIndex < Directives.Count;
+		return currentCancelAction is not null;
 	}
 
-	public void Skip()
+	public void Cancel()
 	{
-		while (CurrentDirectiveIndex < Directives.Count)
-		{
-			Directives[CurrentDirectiveIndex].Skip(stage);
-			CurrentDirectiveIndex += 1;
-		}
-	}
-
-	internal void AddDirective(StageDirective directive)
-	{
-		Directives.Add(directive);
+		currentCancelAction?.Invoke();
+		currentCancelAction = null;
 	}
 }

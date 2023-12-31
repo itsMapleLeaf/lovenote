@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public abstract class StageDirective
@@ -98,15 +99,11 @@ public abstract class StageDirective
 	}
 
 	internal abstract StageSnapshot UpdateSnapshot(StageSnapshot snapshot);
-	internal abstract void Reset();
-	internal abstract void Process(Stage stage, double delta);
-	internal abstract bool IsPlaying(Stage stage);
-	internal abstract void Skip(Stage stage);
+	internal abstract Action Run(Stage stage, Action complete);
 
 	internal class DialogDirective : StageDirective
 	{
 		readonly string text;
-		bool started = false;
 
 		public DialogDirective(string text)
 		{
@@ -129,32 +126,14 @@ public abstract class StageDirective
 
 		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
 		{
-			return snapshot with { DialogText = text };
+			return snapshot with { DialogText = snapshot.DialogText + " " + text };
 		}
 
-		internal override void Reset()
+		internal override Action Run(Stage stage, Action complete)
 		{
-			started = false;
-		}
-
-		internal override void Process(Stage stage, double delta)
-		{
-			if (!started)
-			{
-				stage.Dialog.Text += " " + text;
-				started = true;
-			}
-		}
-
-		internal override bool IsPlaying(Stage stage)
-		{
-			return stage.Dialog.IsPlaying();
-		}
-
-		internal override void Skip(Stage stage)
-		{
-			Process(stage, 0);
-			stage.Dialog.Skip();
+			var tween = stage.Dialog.PlayText(text);
+			tween.Finished += complete;
+			return () => stage.Dialog.Skip();
 		}
 	}
 
@@ -172,21 +151,11 @@ public abstract class StageDirective
 			return snapshot with { DialogSpeaker = speakerName };
 		}
 
-		internal override void Reset() { }
-
-		internal override void Process(Stage stage, double delta)
+		internal override Action Run(Stage stage, Action complete)
 		{
 			stage.Dialog.Speaker = speakerName;
-		}
-
-		internal override bool IsPlaying(Stage stage)
-		{
-			return false;
-		}
-
-		internal override void Skip(Stage stage)
-		{
-			Process(stage, 0);
+			complete();
+			return () => { };
 		}
 	}
 
@@ -204,33 +173,21 @@ public abstract class StageDirective
 			return snapshot with { Background = name };
 		}
 
-		internal override void Reset() { }
-
-		internal override void Process(Stage stage, double delta)
+		internal override Action Run(Stage stage, Action complete)
 		{
 			stage.ShowBackground(name);
-		}
-
-		internal override bool IsPlaying(Stage stage)
-		{
-			return false;
-		}
-
-		internal override void Skip(Stage stage)
-		{
-			Process(stage, 0);
+			complete();
+			return () => { };
 		}
 	}
 
 	class WaitDirective : StageDirective
 	{
 		readonly double duration;
-		double remaining;
 
 		public WaitDirective(double duration)
 		{
 			this.duration = duration;
-			remaining = duration;
 		}
 
 		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
@@ -238,24 +195,17 @@ public abstract class StageDirective
 			return snapshot;
 		}
 
-		internal override void Reset()
+		internal override Action Run(Stage stage, Action complete)
 		{
-			remaining = duration;
-		}
-
-		internal override void Process(Stage stage, double delta)
-		{
-			remaining -= delta;
-		}
-
-		internal override void Skip(Stage stage)
-		{
-			remaining = 0;
-		}
-
-		internal override bool IsPlaying(Stage stage)
-		{
-			return remaining > 0;
+			var timer = new Timer
+			{
+				WaitTime = duration,
+				OneShot = true,
+				Autostart = true,
+			};
+			timer.Timeout += complete;
+			stage.AddChild(timer);
+			return () => timer.QueueFree();
 		}
 	}
 
@@ -290,29 +240,13 @@ public abstract class StageDirective
 			};
 		}
 
-		internal override void Reset()
-		{
-			character.FinishTweens();
-			character.FadeOut(0);
-		}
-
-		internal override void Process(Stage stage, double delta)
+		internal override Action Run(Stage stage, Action complete)
 		{
 			character.StagePosition = initialPosition;
 			character.MoveTo(targetPosition, duration);
 			character.FadeIn(duration);
-		}
-
-		internal override bool IsPlaying(Stage stage)
-		{
-			return false;
-		}
-
-		internal override void Skip(Stage stage)
-		{
-			character.FinishTweens();
-			character.FadeIn(0);
-			character.StagePosition = targetPosition;
+			complete();
+			return () => { };
 		}
 	}
 
@@ -337,27 +271,12 @@ public abstract class StageDirective
 			};
 		}
 
-		internal override void Reset()
-		{
-			character.FinishTweens();
-			character.FadeIn(0);
-		}
-
-		internal override void Process(Stage stage, double delta)
+		internal override Action Run(Stage stage, Action complete)
 		{
 			character.MoveBy(byPosition, duration);
 			character.FadeOut(duration);
-		}
-
-		internal override bool IsPlaying(Stage stage)
-		{
-			return false;
-		}
-
-		internal override void Skip(Stage stage)
-		{
-			character.FinishTweens();
-			character.FadeOut(0);
+			complete();
+			return () => { };
 		}
 	}
 }

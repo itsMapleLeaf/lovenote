@@ -13,6 +13,13 @@ public partial class Background : TextureRect
 	public void FadeIn(double duration = 1.0)
 	{
 		tween?.Pause();
+
+		if (duration == 0)
+		{
+			Modulate = new Color(Modulate, 1);
+			return;
+		}
+
 		tween = CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
 		tween.TweenProperty(
 			this,
@@ -25,6 +32,13 @@ public partial class Background : TextureRect
 	public void FadeOut(double duration = 1.0)
 	{
 		tween?.Pause();
+
+		if (duration == 0)
+		{
+			Modulate = new Color(Modulate, 0);
+			return;
+		}
+
 		tween = CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
 		tween.TweenProperty(
 			this,

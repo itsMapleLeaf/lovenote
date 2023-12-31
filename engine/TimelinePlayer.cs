@@ -1,9 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public partial class TimelinePlayer : Node
 {
+	List<StageLine> lines = new();
+	bool isTimelineLoaded = false;
+
+	int _currentLineIndex = 0;
+	int CurrentLineIndex
+	{
+		get => _currentLineIndex;
+		set { _currentLineIndex = Mathf.Clamp(value, 0, lines.Count - 1); }
+	}
+
+	StageLine? CurrentLine => lines.ElementAtOrDefault(CurrentLineIndex);
+
+	Stage? _stage;
+	Stage Stage => _stage ??= GetNode<Stage>("%Stage");
+
+	Control? _inputCover;
+	Control InputCover => _inputCover ??= GetNode<Control>("%InputCover");
+
 	[Export(PropertyHint.File, "*.md")]
 	string timelineFilePath = "";
 
@@ -13,47 +32,29 @@ public partial class TimelinePlayer : Node
 		get => _previewLineIndex;
 		set
 		{
-			if (lines.Count == 0)
+			if (!isTimelineLoaded)
 			{
 				_previewLineIndex = value;
 				return;
 			}
 
-			_previewLineIndex = Mathf.Clamp(value, 0, lines.Count - 1);
-			SeekTo(_previewLineIndex);
+			_previewLineIndex = value;
+			SeekTo(value - 1);
+			Advance();
 		}
 	}
 	int _previewLineIndex = 0;
 
-	readonly List<StageLine> lines = new();
-
-	int currentLineIndex = 0;
-
-	StageLine? CurrentLine => currentLineIndex < lines.Count ? lines[currentLineIndex] : null;
-
-	Stage? _stage;
-	Stage Stage => _stage ??= GetNode<Stage>("%Stage");
-
-	Control? _inputCover;
-	Control InputCover => _inputCover ??= GetNode<Control>("%InputCover");
-
-	public override void _Ready()
-	{
-		LoadTimeline();
-		InputCover.GuiInput += _UnhandledInput;
-		CurrentLine?.Reset();
-		SeekTo(PreviewLineIndex);
-	}
-
-	void LoadTimeline()
+	List<StageLine> LoadTimeline()
 	{
 		if (timelineFilePath == "")
 		{
 			GD.PrintErr("Timeline file is not set");
-			return;
+			return new();
 		}
 
 		var currentEndState = StageSnapshot.Empty;
+		var lines = new List<StageLine>();
 
 		foreach (var sourceLine in TimelineFile.Lines(timelineFilePath))
 		{
@@ -68,11 +69,21 @@ public partial class TimelinePlayer : Node
 		GD.PrintRich(
 			$"[color=gray]Loaded timeline with [color=white]{lines.Count}[/color] lines[/color]"
 		);
+
+		return lines;
+	}
+
+	public override void _Ready()
+	{
+		lines = LoadTimeline();
+		isTimelineLoaded = true;
+		InputCover.GuiInput += _UnhandledInput;
+		SeekTo(_previewLineIndex - 1);
+		Advance();
 	}
 
 	public override void _Process(double delta)
 	{
-		CurrentLine?.Process(delta);
 		Stage.Dialog.AdvanceIndicatorVisible = CurrentLine?.IsPlaying() != true;
 	}
 
@@ -84,62 +95,46 @@ public partial class TimelinePlayer : Node
 		}
 		if (@event.IsActionPressed(InputActionName.DialogBack))
 		{
-			Back();
+			SeekBy(-1);
 		}
 		if (@event.IsActionPressed(InputActionName.DialogNext))
 		{
-			Next();
+			SeekBy(1);
 		}
+	}
+
+	void PlayLineAt(int index)
+	{
+		CurrentLine?.Cancel();
+		CurrentLineIndex = index;
+		Stage.Dialog.Clear();
+		CurrentLine?.Play();
+		_previewLineIndex = index;
 	}
 
 	void Advance()
 	{
 		if (CurrentLine?.IsPlaying() == true)
 		{
-			CurrentLine?.Skip();
-		}
-		else if (currentLineIndex < lines.Count - 1)
-		{
-			currentLineIndex += 1;
-			CurrentLine?.Reset();
-		}
-	}
-
-	void Next()
-	{
-		if (currentLineIndex < lines.Count - 1)
-		{
-			currentLineIndex += 1;
-		}
-		if (CurrentLine is not null)
-		{
-			CurrentLine.Skip();
+			CurrentLine.Cancel();
 			Stage.ApplySnapshot(CurrentLine.endState);
 		}
-	}
-
-	void Back()
-	{
-		if (currentLineIndex > 0)
+		else
 		{
-			currentLineIndex -= 1;
-		}
-		if (CurrentLine is not null)
-		{
-			CurrentLine.Skip();
-			Stage.ApplySnapshot(CurrentLine.endState);
+			PlayLineAt(CurrentLineIndex + 1);
 		}
 	}
 
 	void SeekTo(int index)
 	{
-		while (currentLineIndex < index)
-		{
-			Next();
-		}
-		while (currentLineIndex > index)
-		{
-			Back();
-		}
+		CurrentLine?.Cancel();
+		CurrentLineIndex = index;
+		Stage.ApplySnapshot(CurrentLine?.endState ?? StageSnapshot.Empty);
+		_previewLineIndex = index;
+	}
+
+	void SeekBy(int delta)
+	{
+		SeekTo(CurrentLineIndex + delta);
 	}
 }
