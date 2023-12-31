@@ -7,100 +7,90 @@ public abstract class StageDirective
 		Stage stage
 	)
 	{
-		switch (directive.name)
+		if (directive.name == "speaker")
 		{
-			case "speaker":
+			return new SpeakerDirective(directive.value);
+		}
+
+		if (directive.name == "background")
+		{
+			var resourcePath = $"res://content/backgrounds/{directive.value}";
+			if (!ResourceLoader.Exists(resourcePath))
 			{
-				return new SpeakerDirective(directive.value);
+				directive.PrintError($"Resource path {resourcePath} does not exist");
+				return null;
 			}
 
-			case "background":
+			var resource = GD.Load(resourcePath);
+			if (resource is not Texture2D texture)
 			{
-				var resourcePath = $"res://content/backgrounds/{directive.value}";
-				if (!ResourceLoader.Exists(resourcePath))
-				{
-					directive.PrintError($"Resource path {resourcePath} does not exist");
-					break;
-				}
-
-				var resource = GD.Load(resourcePath);
-				if (resource is not Texture2D texture)
-				{
-					directive.PrintError($"Resource path {resourcePath} is not a valid texture");
-					break;
-				}
-
-				stage.AddBackground(directive.value, texture);
-				return new BackgroundDirective(directive.value);
+				directive.PrintError($"Resource path {resourcePath} is not a valid texture");
+				return null;
 			}
 
-			case "wait":
-			{
-				var durationArg = directive.GetRequiredArg(0)?.AsDouble();
-				if (durationArg is not double duration)
-					break;
+			stage.AddBackground(directive.value, texture);
+			return new BackgroundDirective(directive.value);
+		}
 
-				return new WaitDirective(duration);
+		if (directive.name == "wait")
+		{
+			var durationArg = directive.GetRequiredArg(0)?.AsDouble();
+			if (durationArg is not double duration)
+				return null;
+
+			return new WaitDirective(duration);
+		}
+
+		if (directive.name == "enter")
+		{
+			var characterName = directive.GetRequiredArg(0)?.AsString();
+			var toPosition = directive.GetRequiredArg("to")?.AsDouble();
+			var fromPosition = directive.GetRequiredArg("from")?.AsDouble();
+			var duration = directive.GetOptionalArg("duration")?.AsDouble();
+
+			if (characterName is null || toPosition is null || fromPosition is null)
+			{
+				return null;
 			}
 
-			case "enter":
+			var scenePath = $"res://content/characters/{characterName}.tscn";
+			if (!ResourceLoader.Exists(scenePath))
 			{
-				var characterName = directive.GetRequiredArg(0)?.AsString();
-				var toPosition = directive.GetRequiredArg("to")?.AsDouble();
-				var fromPosition = directive.GetRequiredArg("from")?.AsDouble();
-				var duration = directive.GetOptionalArg("duration")?.AsDouble();
+				directive.PrintError($"Resource path {scenePath} does not exist");
+				return null;
+			}
 
-				if (characterName is null || toPosition is null || fromPosition is null)
-				{
-					return null;
-				}
+			var node = GD.Load<PackedScene>(scenePath).Instantiate();
+			if (node is not Character character)
+			{
+				directive.PrintError($"Resource path {scenePath} is not a valid character scene");
+				return null;
+			}
 
-				var scenePath = $"res://content/characters/{characterName}.tscn";
-				if (!ResourceLoader.Exists(scenePath))
-				{
-					directive.PrintError($"Resource path {scenePath} does not exist");
-					return null;
-				}
+			stage.AddCharacter(character);
+			return new EnterDirective(character, toPosition.Value, fromPosition.Value, duration);
+		}
 
-				var node = GD.Load<PackedScene>(scenePath).Instantiate();
-				if (node is not Character character)
-				{
-					directive.PrintError(
-						$"Resource path {scenePath} is not a valid character scene"
-					);
-					return null;
-				}
+		if (directive.name == "leave")
+		{
+			var characterName = directive.GetRequiredArg(0)?.AsString();
+			var byPosition = directive.GetRequiredArg("by")?.AsDouble();
+			var duration = directive.GetOptionalArg("duration")?.AsDouble();
 
-				stage.AddCharacter(character);
-				return new EnterDirective(
-					character,
-					toPosition.Value,
-					fromPosition.Value,
-					duration
+			var character = characterName is null ? null : stage.GetCharacter(characterName);
+
+			if (character is null)
+			{
+				directive.PrintError(
+					$"Character {characterName} not added to stage. Are you missing an 'enter' directive?"
 				);
+				return null;
 			}
 
-			case "leave":
-			{
-				var characterName = directive.GetRequiredArg(0)?.AsString();
-				var byPosition = directive.GetRequiredArg("by")?.AsDouble();
-				var duration = directive.GetOptionalArg("duration")?.AsDouble();
+			if (byPosition is null)
+				return null;
 
-				var character = characterName is null ? null : stage.GetCharacter(characterName);
-
-				if (character is null)
-				{
-					directive.PrintError(
-						$"Character {characterName} not added to stage. Are you missing an 'enter' directive?"
-					);
-					return null;
-				}
-
-				if (byPosition is null)
-					return null;
-
-				return new LeaveDirective(character, byPosition.Value, duration);
-			}
+			return new LeaveDirective(character, byPosition.Value, duration);
 		}
 
 		directive.PrintError("Unknown directive");
