@@ -39,8 +39,7 @@ public partial class TimelinePlayer : Node
 			}
 
 			_previewLineIndex = value;
-			SeekTo(value - 1);
-			Advance();
+			PlayLineAt(_previewLineIndex, PlayMode.Play);
 		}
 	}
 	int _previewLineIndex = 0;
@@ -78,8 +77,7 @@ public partial class TimelinePlayer : Node
 		lines = LoadTimeline();
 		isTimelineLoaded = true;
 		InputCover.GuiInput += _UnhandledInput;
-		SeekTo(_previewLineIndex - 1);
-		Advance();
+		PlayLineAt(PreviewLineIndex, PlayMode.Play);
 	}
 
 	public override void _Process(double delta)
@@ -95,20 +93,35 @@ public partial class TimelinePlayer : Node
 		}
 		if (@event.IsActionPressed(InputActionName.DialogBack))
 		{
-			SeekBy(-1);
+			PlayLineAt(CurrentLineIndex - 1, PlayMode.Skip);
 		}
 		if (@event.IsActionPressed(InputActionName.DialogNext))
 		{
-			SeekBy(1);
+			PlayLineAt(CurrentLineIndex + 1, PlayMode.Skip);
 		}
 	}
 
-	void PlayLineAt(int index)
+	enum PlayMode
+	{
+		Play,
+		Skip,
+	}
+
+	void PlayLineAt(int index, PlayMode mode)
 	{
 		CurrentLine?.Cancel();
 		CurrentLineIndex = index;
-		Stage.Dialog.Clear();
-		CurrentLine?.Play();
+
+		if (mode == PlayMode.Skip)
+		{
+			Stage.ApplySnapshot(CurrentLine?.endState ?? StageSnapshot.Empty);
+		}
+		else
+		{
+			Stage.ApplySnapshot(CurrentLine?.startState ?? StageSnapshot.Empty);
+			CurrentLine?.Play();
+		}
+
 		_previewLineIndex = index;
 	}
 
@@ -116,25 +129,11 @@ public partial class TimelinePlayer : Node
 	{
 		if (CurrentLine?.IsPlaying() == true)
 		{
-			CurrentLine.Cancel();
-			Stage.ApplySnapshot(CurrentLine.endState);
+			PlayLineAt(CurrentLineIndex, PlayMode.Skip);
 		}
 		else
 		{
-			PlayLineAt(CurrentLineIndex + 1);
+			PlayLineAt(CurrentLineIndex + 1, PlayMode.Play);
 		}
-	}
-
-	void SeekTo(int index)
-	{
-		CurrentLine?.Cancel();
-		CurrentLineIndex = index;
-		Stage.ApplySnapshot(CurrentLine?.endState ?? StageSnapshot.Empty);
-		_previewLineIndex = index;
-	}
-
-	void SeekBy(int delta)
-	{
-		SeekTo(CurrentLineIndex + delta);
 	}
 }
