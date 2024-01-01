@@ -42,7 +42,7 @@ I'll get out my phone, make it look like I'm waiting for an Uber or something.
 
 I feel like such a dumbass.
 
-[enter:reina,to=0.6,from=0.1,duration=0.5] [speaker:???] Oh! Hey, Ryder!
+[enter:reina,to=0.7,from=0.1,duration=0.3] [speaker:???] Oh! Hey, Ryder!
 
 My anxiety immediately melts away, and my spirits are lifted.
 
