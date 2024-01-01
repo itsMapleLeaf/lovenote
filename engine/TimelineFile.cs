@@ -42,14 +42,14 @@ public class TimelineFile
 		readonly string content;
 		readonly int number;
 
-		internal Line(TimelineFile file, string content, int number)
+		public Line(TimelineFile file, string content, int number)
 		{
 			this.file = file;
 			this.content = content;
 			this.number = number;
 		}
 
-		internal IEnumerable<(string? text, Directive? directive)> Parts()
+		public IEnumerable<(string? text, Directive? directive)> Parts()
 		{
 			foreach (var match in textAndDirectiveRegex.SearchAll(content))
 			{
@@ -69,22 +69,22 @@ public class TimelineFile
 			}
 		}
 
-		internal void PrintError(string message)
+		public void PrintError(string message)
 		{
 			GD.PrintErr($"{file.path}:{number}: {message}");
 		}
 	}
 
-	internal class Directive
+	public class Directive
 	{
-		internal readonly string name;
-		internal readonly string value;
+		public readonly string name;
+		public readonly string value;
 
 		readonly Line line;
 		readonly Dictionary<string, string> namedArgs = new();
 		readonly List<string> positionalArgs = new();
 
-		internal Directive(Line line, string name, string value)
+		public Directive(Line line, string name, string value)
 		{
 			this.line = line;
 			this.name = name;
@@ -104,12 +104,12 @@ public class TimelineFile
 			}
 		}
 
-		internal void PrintError(string message)
+		public void PrintError(string message)
 		{
 			line.PrintError($"Invalid directive [{name}:{value}]: {message}");
 		}
 
-		internal DirectiveArg? GetOptionalArg(string name)
+		public DirectiveArg? GetOptionalArg(string name)
 		{
 			if (!namedArgs.ContainsKey(name))
 			{
@@ -118,7 +118,7 @@ public class TimelineFile
 			return new DirectiveArg(this, namedArgs[name]);
 		}
 
-		internal DirectiveArg? GetOptionalArg(int position)
+		public DirectiveArg? GetOptionalArg(int position)
 		{
 			if (positionalArgs.Count <= position)
 			{
@@ -127,7 +127,7 @@ public class TimelineFile
 			return new DirectiveArg(this, positionalArgs[position]);
 		}
 
-		internal DirectiveArg? GetRequiredArg(string name)
+		public DirectiveArg? GetRequiredArg(string name)
 		{
 			if (!namedArgs.ContainsKey(name))
 			{
@@ -137,7 +137,7 @@ public class TimelineFile
 			return new DirectiveArg(this, namedArgs[name]);
 		}
 
-		internal DirectiveArg? GetRequiredArg(int position)
+		public DirectiveArg? GetRequiredArg(int position)
 		{
 			if (positionalArgs.Count <= position)
 			{
@@ -148,23 +148,23 @@ public class TimelineFile
 		}
 	}
 
-	internal class DirectiveArg
+	public class DirectiveArg
 	{
 		readonly Directive directive;
 		readonly string value;
 
-		internal DirectiveArg(Directive directive, string value)
+		public DirectiveArg(Directive directive, string value)
 		{
 			this.directive = directive;
 			this.value = value;
 		}
 
-		internal string AsString()
+		public string AsString()
 		{
 			return value;
 		}
 
-		internal double? AsDouble()
+		public double? AsDouble()
 		{
 			if (!value.IsValidFloat())
 			{
