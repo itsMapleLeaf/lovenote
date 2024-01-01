@@ -44,12 +44,12 @@ public partial class TimelinePlayer : Node
 	}
 	int _previewLineIndex = 0;
 
-	List<StageLine> LoadTimeline()
+	IEnumerable<StageLine> LoadTimeline()
 	{
 		if (timelineFilePath == "")
 		{
 			GD.PrintErr("Timeline file is not set");
-			return new();
+			yield break;
 		}
 
 		var currentEndState = StageSnapshot.Empty;
@@ -60,7 +60,7 @@ public partial class TimelinePlayer : Node
 			var line = new StageLine(sourceLine, Stage, currentEndState);
 			if (!line.IsEmpty())
 			{
-				lines.Add(line);
+				yield return line;
 				currentEndState = line.endState;
 			}
 		}
@@ -68,13 +68,11 @@ public partial class TimelinePlayer : Node
 		GD.PrintRich(
 			$"[color=gray]Loaded timeline with [color=white]{lines.Count}[/color] lines[/color]"
 		);
-
-		return lines;
 	}
 
 	public override void _Ready()
 	{
-		lines = LoadTimeline();
+		lines = LoadTimeline().ToList();
 		isTimelineLoaded = true;
 		InputCover.GuiInput += _UnhandledInput;
 		PlayLineAt(PreviewLineIndex, PlayMode.Play);
