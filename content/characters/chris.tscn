@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://3j87mw7nbbl7"]
+
+[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://engine/Character.tscn" id="1_4vhjq"]
+[ext_resource type="Texture2D" uid="uid://crl35cqqusr8e" path="res://content/characters/chris.png" id="2_llbgu"]
+
+[node name="Note" instance=ExtResource("1_4vhjq")]
+
+[node name="Sprite" parent="BaseTransform" index="0"]
+texture = ExtResource("2_llbgu")
