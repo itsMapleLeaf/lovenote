@@ -4,7 +4,7 @@ This is it.
 
 I'm not really nervous. When it comes to stuff like this, as long as there's a set time and place, I just go and deal with it.
 
-[speed:0.2x]...
+[speed:0.1]...
 
 I'm a liar. I'm really nervous.
 

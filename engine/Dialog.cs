@@ -47,14 +47,17 @@ public partial class Dialog : Control
 	}
 
 	[Export]
-	public int RevealSpeed = 50;
+	public int revealSpeed = 50;
+
+	public double revealSpeedScale = 1.0;
 
 	Tween? tween;
 
-	public void Clear()
+	public void Reset()
 	{
 		Speaker = "";
 		Text = "";
+		revealSpeedScale = 1.0;
 	}
 
 	public Tween PlayText(string text)
@@ -70,7 +73,7 @@ public partial class Dialog : Control
 			DialogLabel,
 			RichTextLabel.PropertyName.VisibleCharacters.ToString(),
 			targetLength,
-			(targetLength - currentLength) / (double)RevealSpeed
+			(targetLength - currentLength) / (revealSpeed * revealSpeedScale)
 		);
 
 		return tween;

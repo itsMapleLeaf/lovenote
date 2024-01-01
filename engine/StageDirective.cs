@@ -13,6 +13,15 @@ public abstract class StageDirective
 			return new SpeakerDirective(directive.value);
 		}
 
+		if (directive.name == "speed")
+		{
+			var speed = directive.GetRequiredArg(0)?.AsDouble();
+			if (speed is null)
+				return null;
+
+			return new SpeedDirective(speed.Value);
+		}
+
 		if (directive.name == "background")
 		{
 			var resourcePath = $"res://content/backgrounds/{directive.value}";
@@ -275,6 +284,28 @@ public abstract class StageDirective
 		{
 			character.MoveBy(byPosition, duration);
 			character.FadeOut(duration);
+			complete();
+			return () => { };
+		}
+	}
+
+	class SpeedDirective : StageDirective
+	{
+		private readonly double speed;
+
+		public SpeedDirective(double speed)
+		{
+			this.speed = speed;
+		}
+
+		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
+		{
+			return snapshot;
+		}
+
+		internal override Action Run(Stage stage, Action complete)
+		{
+			stage.Dialog.revealSpeedScale = speed;
 			complete();
 			return () => { };
 		}
