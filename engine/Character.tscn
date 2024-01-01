@@ -4,7 +4,6 @@
 [ext_resource type="Script" path="res://engine/Character.cs" id="1_mt1uc"]
 
 [node name="Character" type="Control"]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
