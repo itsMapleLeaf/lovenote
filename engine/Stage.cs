@@ -49,10 +49,30 @@ public partial class Stage : Node
 	Node? _characterLayer;
 	Node CharacterLayer => _characterLayer ??= GetNode<Node>("%CharacterLayer");
 
-	public void AddCharacter(Character character)
+	public (Character? character, string? error) AddCharacter(string characterName)
 	{
-		characters.Add(character.CharacterName, character);
+		if (characters.ContainsKey(characterName))
+		{
+			return (null, null); // this isn't an actual error
+		}
+
+		var scenePath = $"res://content/characters/{characterName}.tscn";
+		if (!ResourceLoader.Exists(scenePath))
+		{
+			return (null, $"Resource path {scenePath} does not exist");
+		}
+
+		var node = GD.Load<PackedScene>(scenePath).Instantiate();
+		if (node is not Character character)
+		{
+			return (null, $"Resource path {scenePath} is not a valid character");
+		}
+
+		character.CharacterName = characterName;
+		characters.Add(characterName, character);
 		CharacterLayer.AddChild(character);
+
+		return (character, "");
 	}
 
 	public Character? GetCharacter(string name)

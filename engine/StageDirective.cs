@@ -63,21 +63,16 @@ public abstract class StageDirective
 				return null;
 			}
 
-			var scenePath = $"res://content/characters/{characterName}.tscn";
-			if (!ResourceLoader.Exists(scenePath))
+			var (character, error) = stage.AddCharacter(characterName);
+			if (character is null)
 			{
-				directive.PrintError($"Resource path {scenePath} does not exist");
+				if (error is not null)
+				{
+					directive.PrintError(error);
+				}
 				return null;
 			}
 
-			var node = GD.Load<PackedScene>(scenePath).Instantiate();
-			if (node is not Character character)
-			{
-				directive.PrintError($"Resource path {scenePath} is not a valid character scene");
-				return null;
-			}
-
-			stage.AddCharacter(character);
 			return new EnterDirective(character, toPosition.Value, fromPosition.Value, duration);
 		}
 
