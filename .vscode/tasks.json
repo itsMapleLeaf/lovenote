@@ -19,6 +19,10 @@
 				"kind": "build",
 				"isDefault": true
 			}
+		},
+		{
+			"label": "Open Godot Editor",
+			"command": "${env:GODOT4}"
 		}
 	]
 }
