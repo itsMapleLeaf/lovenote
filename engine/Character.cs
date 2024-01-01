@@ -39,6 +39,14 @@ public partial class Character : Control
 
 	Control Sprite => GetNode<Control>("%Sprite");
 
+	public override void _Ready()
+	{
+		if (CharacterName == "")
+		{
+			GD.PrintErr("Character name is not set");
+		}
+	}
+
 	public void MoveTo(double position, double? duration)
 	{
 		positionTween?.Pause();
