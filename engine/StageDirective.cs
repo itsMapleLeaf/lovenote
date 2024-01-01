@@ -323,11 +323,24 @@ public abstract class StageDirective
 
 		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
 		{
-			var position = args.ToPosition is not null
-				? args.ToPosition.Value
-				: args.ByPosition is not null
-					? snapshot.Characters[args.CharacterName].position + args.ByPosition.Value
-					: snapshot.Characters[args.CharacterName].position;
+			if (!snapshot.Characters.TryGetValue(args.CharacterName, out var character))
+			{
+				return snapshot;
+			}
+
+			double position;
+			if (args.ToPosition is not null)
+			{
+				position = args.ToPosition.Value;
+			}
+			else if (args.ByPosition is not null)
+			{
+				position = character.position + args.ByPosition.Value;
+			}
+			else
+			{
+				position = character.position;
+			}
 
 			return snapshot with
 			{
