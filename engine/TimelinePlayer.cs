@@ -112,6 +112,8 @@ public partial class TimelinePlayer : Node
 		CurrentLine?.Cancel();
 		CurrentLineIndex = index;
 
+		Stage.Dialog.Reset();
+
 		if (mode == PlayMode.Skip)
 		{
 			Stage.ApplySnapshot(CurrentLine?.endState ?? StageSnapshot.Empty);
