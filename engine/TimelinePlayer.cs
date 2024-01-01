@@ -61,6 +61,11 @@ public partial class TimelinePlayer : Node
 		{
 			PlayLineAt(currentLineIndex + 1, PlayMode.Skip);
 		}
+		if (@event.IsActionPressed(InputActionName.ReloadTimeline))
+		{
+			timeline = Timeline.FromFile(timelineFilePath, Stage);
+			PlayLineAt(currentLineIndex, PlayMode.Play);
+		}
 	}
 
 	enum PlayMode
