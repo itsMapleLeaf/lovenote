@@ -51,9 +51,9 @@ public partial class Stage : Node
 
 	public (Character? character, string? error) AddCharacter(string characterName)
 	{
-		if (characters.ContainsKey(characterName))
+		if (characters.TryGetValue(characterName, out Character? value))
 		{
-			return (null, null); // this isn't an actual error
+			return (value, null);
 		}
 
 		var scenePath = $"res://content/characters/{characterName}.tscn";
