@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Reflection;
 using Godot;
 
 public abstract class StageDirective
@@ -53,17 +57,11 @@ public abstract class StageDirective
 
 		if (directive.name == "enter")
 		{
-			var characterName = directive.GetRequiredArg(0)?.AsString();
-			var toPosition = directive.GetRequiredArg("to")?.AsDouble();
-			var fromPosition = directive.GetRequiredArg("from")?.AsDouble();
-			var duration = directive.GetOptionalArg("duration")?.AsDouble();
-
-			if (characterName is null || toPosition is null || fromPosition is null)
-			{
+			var args = ParseDirectiveArgs<EnterDirective.Args>(directive);
+			if (args is null)
 				return null;
-			}
 
-			var (character, error) = stage.AddCharacter(characterName);
+			var (character, error) = stage.AddCharacter(args.CharacterName);
 			if (character is null)
 			{
 				if (error is not null)
@@ -73,29 +71,53 @@ public abstract class StageDirective
 				return null;
 			}
 
-			return new EnterDirective(character, toPosition.Value, fromPosition.Value, duration);
+			return new EnterDirective(args, character);
 		}
 
-		if (directive.name == "leave")
+		// [move:<character>,to=<position>,(delay=<seconds>,duration=<seconds>))]
+		// [move:<character>,by=<amount>,(delay=<seconds>,duration=<seconds>))]
+		if (directive.name == "move")
 		{
-			var characterName = directive.GetRequiredArg(0)?.AsString();
-			var byPosition = directive.GetRequiredArg("by")?.AsDouble();
-			var duration = directive.GetOptionalArg("duration")?.AsDouble();
+			var args = ParseDirectiveArgs<MoveDirective.Args>(directive);
+			if (args is null)
+			{
+				return null;
+			}
 
-			var character = characterName is null ? null : stage.GetCharacter(characterName);
+			if (args.ToPosition is null && args.ByPosition is null)
+			{
+				directive.PrintError("Missing required argument 'to' or 'by'");
+				return null;
+			}
 
+			var character = stage.GetCharacter(args.CharacterName);
 			if (character is null)
 			{
 				directive.PrintError(
-					$"Character {characterName} not added to stage. Are you missing an 'enter' directive?"
+					$"Character {args.CharacterName} not added to stage. Are you missing an 'enter' directive?"
 				);
 				return null;
 			}
 
-			if (byPosition is null)
+			return new MoveDirective(args, character);
+		}
+
+		if (directive.name == "leave")
+		{
+			var args = ParseDirectiveArgs<LeaveDirective.Args>(directive);
+			if (args is null)
 				return null;
 
-			return new LeaveDirective(character, byPosition.Value, duration);
+			var character = stage.GetCharacter(args.CharacterName);
+			if (character is null)
+			{
+				directive.PrintError(
+					$"Character {args.CharacterName} not added to stage. Are you missing an 'enter' directive?"
+				);
+				return null;
+			}
+
+			return new LeaveDirective(args, character);
 		}
 
 		directive.PrintError("Unknown directive");
@@ -213,24 +235,21 @@ public abstract class StageDirective
 		}
 	}
 
-	class EnterDirective : StageDirective
+	class EnterDirective(EnterDirective.Args args, Character character) : StageDirective
 	{
-		readonly Character character;
-		readonly double initialPosition;
-		readonly double targetPosition;
-		readonly double? duration;
-
-		public EnterDirective(
-			Character character,
-			double targetPosition,
-			double initialOffset,
-			double? duration
-		)
+		public record Args
 		{
-			this.character = character;
-			this.initialPosition = targetPosition + initialOffset;
-			this.targetPosition = targetPosition;
-			this.duration = duration;
+			[PositionalArg(0)]
+			public required string CharacterName { get; init; }
+
+			[NamedArg("to")]
+			public required double ToPosition { get; init; }
+
+			[NamedArg("from")]
+			public required double FromPosition { get; init; }
+
+			[NamedArg("duration")]
+			public required double? Duration { get; init; }
 		}
 
 		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
@@ -238,33 +257,34 @@ public abstract class StageDirective
 			return snapshot with
 			{
 				Characters = snapshot.Characters.SetItem(
-					character.CharacterName,
-					(character.CharacterName, targetPosition)
+					args.CharacterName,
+					(args.CharacterName, args.ToPosition)
 				),
 			};
 		}
 
 		internal override Action Run(Stage stage, Action complete)
 		{
-			character.StagePosition = initialPosition;
-			character.MoveTo(targetPosition, duration);
-			character.FadeIn(duration);
+			character.StagePosition = args.ToPosition + args.FromPosition;
+			character.MoveTo(args.ToPosition, args.Duration);
+			character.FadeIn(args.Duration);
 			complete();
 			return () => { };
 		}
 	}
 
-	class LeaveDirective : StageDirective
+	class LeaveDirective(LeaveDirective.Args args, Character character) : StageDirective
 	{
-		readonly Character character;
-		readonly double byPosition;
-		readonly double? duration;
-
-		internal LeaveDirective(Character character, double byPosition, double? duration)
+		public record Args
 		{
-			this.character = character;
-			this.byPosition = byPosition;
-			this.duration = duration;
+			[PositionalArg(0)]
+			public required string CharacterName { get; init; }
+
+			[NamedArg("by")]
+			public required double ByPosition { get; init; }
+
+			[NamedArg("duration")]
+			public required double? Duration { get; init; }
 		}
 
 		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
@@ -277,8 +297,62 @@ public abstract class StageDirective
 
 		internal override Action Run(Stage stage, Action complete)
 		{
-			character.MoveBy(byPosition, duration);
-			character.FadeOut(duration);
+			character.MoveBy(args.ByPosition, args.Duration);
+			character.FadeOut(args.Duration);
+			complete();
+			return () => { };
+		}
+	}
+
+	class MoveDirective(MoveDirective.Args args, Character character) : StageDirective
+	{
+		public record Args
+		{
+			[PositionalArg(0)]
+			public required string CharacterName { get; init; }
+
+			[NamedArg("to")]
+			public required double? ToPosition { get; init; }
+
+			[NamedArg("by")]
+			public required double? ByPosition { get; init; }
+
+			[NamedArg("duration")]
+			public required double? Duration { get; init; }
+		}
+
+		internal override StageSnapshot UpdateSnapshot(StageSnapshot snapshot)
+		{
+			var position = args.ToPosition is not null
+				? args.ToPosition.Value
+				: args.ByPosition is not null
+					? snapshot.Characters[args.CharacterName].position + args.ByPosition.Value
+					: snapshot.Characters[args.CharacterName].position;
+
+			return snapshot with
+			{
+				Characters = snapshot.Characters.SetItem(
+					args.CharacterName,
+					(args.CharacterName, position)
+				),
+			};
+		}
+
+		internal override Action Run(Stage stage, Action complete)
+		{
+			if (args.ToPosition is not null)
+			{
+				character.MoveTo(args.ToPosition.Value, args.Duration);
+			}
+			else if (args.ByPosition is not null)
+			{
+				character.MoveBy(args.ByPosition.Value, args.Duration);
+			}
+			else
+			{
+				throw new Exception("Invalid move directive");
+			}
+
 			complete();
 			return () => { };
 		}
@@ -304,5 +378,129 @@ public abstract class StageDirective
 			complete();
 			return () => { };
 		}
+	}
+
+	[AttributeUsage(AttributeTargets.Property)]
+	class PositionalArgAttribute(int index) : Attribute
+	{
+		public int Index => index;
+	}
+
+	[AttributeUsage(AttributeTargets.Property)]
+	class NamedArgAttribute(string name) : Attribute
+	{
+		public string Name => name;
+	}
+
+	static T? ParseDirectiveArgs<T>(TimelineFile.Directive directive)
+		where T : class
+	{
+		var type = typeof(T);
+
+		var positionalArgProperties = type.GetProperties()
+			.Where(p => p.GetCustomAttribute<PositionalArgAttribute>() is not null)
+			.OrderBy(p => p.GetCustomAttribute<PositionalArgAttribute>()!.Index)
+			.ToArray();
+
+		var namedArgProperties = type.GetProperties()
+			.Where(p => p.GetCustomAttribute<NamedArgAttribute>() is not null)
+			.ToDictionary(p => p.GetCustomAttribute<NamedArgAttribute>()!.Name, p => p);
+
+		var result = Activator.CreateInstance(type);
+		var failed = false;
+
+		foreach (
+			var index in Enumerable.Range(
+				0,
+				Mathf.Max(positionalArgProperties.Length, directive.PositionalArgs.Count)
+			)
+		)
+		{
+			var arg = directive.PositionalArgs.ElementAtOrDefault(index);
+
+			if (arg is null)
+			{
+				directive.PrintError($"Missing required positional argument #{index + 1}");
+				failed = true;
+				continue;
+			}
+
+			if (index >= positionalArgProperties.Length)
+			{
+				directive.PrintError($"Extra argument \"{arg.Value}\"");
+				continue;
+			}
+
+			var propertyType = positionalArgProperties[index].PropertyType;
+			var propertyIsNullable = Nullable.GetUnderlyingType(propertyType) is not null;
+
+			if (propertyType == typeof(double))
+			{
+				var argValue = arg.AsDouble();
+				if (argValue is null && !propertyIsNullable)
+				{
+					directive.PrintError($"Argument {index} must be a number");
+					failed = true;
+					continue;
+				}
+				positionalArgProperties[index].SetValue(result, argValue);
+			}
+			else if (propertyType == typeof(string))
+			{
+				positionalArgProperties[index].SetValue(result, arg.Value);
+			}
+			else
+			{
+				directive.PrintError($"Argument {index} has unsupported type {propertyType}");
+			}
+		}
+
+		foreach (
+			var name in directive
+				.NamedArgs.Keys.ToImmutableHashSet()
+				.Union(namedArgProperties.Keys.AsEnumerable())
+		)
+		{
+			var property = namedArgProperties.GetValueOrDefault(name);
+			if (property is null)
+			{
+				directive.PrintError($"Unknown argument \"{name}\"");
+				continue;
+			}
+
+			var propertyType =
+				Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+			var propertyIsNullable = Nullable.GetUnderlyingType(property.PropertyType) is not null;
+
+			var arg = directive.NamedArgs.GetValueOrDefault(name);
+			if (arg is null && !propertyIsNullable)
+			{
+				directive.PrintError($"Missing required argument \"{name}\"");
+				failed = true;
+				continue;
+			}
+
+			if (propertyType == typeof(double))
+			{
+				var argValue = arg?.AsDouble();
+				if (argValue is null && !propertyIsNullable)
+				{
+					directive.PrintError($"Argument \"{name}\" must be a number");
+					failed = true;
+					continue;
+				}
+				property.SetValue(result, argValue);
+			}
+			else if (propertyType == typeof(string) && arg is not null)
+			{
+				property.SetValue(result, arg.Value);
+			}
+			else
+			{
+				directive.PrintError($"Argument \"{name}\" has unsupported type {property}");
+			}
+		}
+
+		return failed ? default : (T?)result;
 	}
 }

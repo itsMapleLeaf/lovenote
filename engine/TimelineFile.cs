@@ -1,16 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
-public class TimelineFile
+public class TimelineFile(string path)
 {
-	readonly string path;
-	readonly string content;
-
-	public TimelineFile(string path)
-	{
-		this.path = path;
-		content = FileAccess.GetFileAsString(path);
-	}
+	readonly string path = path;
+	readonly string content = FileAccess.GetFileAsString(path);
 
 	IEnumerable<Line> Lines()
 	{
@@ -32,22 +28,11 @@ public class TimelineFile
 		PrintError($"{path}: {message}");
 	}
 
-	public class Line
+	public class Line(TimelineFile file, string content, int number)
 	{
 		static readonly RegEx textAndDirectiveRegex = RegEx.CreateFromString(
 			@"(?<text>[^\[]+)?(?:\[(?:(?<directive_name>[a-z_]+)):(?<directive_value>.+?)\])?"
 		);
-
-		readonly TimelineFile file;
-		readonly string content;
-		readonly int number;
-
-		public Line(TimelineFile file, string content, int number)
-		{
-			this.file = file;
-			this.content = content;
-			this.number = number;
-		}
 
 		public IEnumerable<(string? text, Directive? directive)> Parts()
 		{
@@ -75,34 +60,24 @@ public class TimelineFile
 		}
 	}
 
-	public class Directive
+	public class Directive(Line line, string name, string value)
 	{
-		public readonly string name;
-		public readonly string value;
+		public readonly string name = name;
+		public readonly string value = value;
 
-		readonly Line line;
-		readonly Dictionary<string, string> namedArgs = new();
-		readonly List<string> positionalArgs = new();
+		readonly string[] directiveParts = value.Split(",", false);
 
-		public Directive(Line line, string name, string value)
-		{
-			this.line = line;
-			this.name = name;
-			this.value = value;
+		public Dictionary<string, DirectiveArg> NamedArgs =>
+			directiveParts
+				.Where(part => part.Contains('='))
+				.Select(part => part.Split("="))
+				.ToDictionary(parts => parts[0], parts => new DirectiveArg(this, parts[1]));
 
-			foreach (var valuePart in value.Split(",", false))
-			{
-				var argParts = valuePart.Split("=");
-				if (argParts.Length == 2)
-				{
-					namedArgs[argParts[0]] = argParts[1];
-				}
-				else
-				{
-					positionalArgs.Add(argParts[0]);
-				}
-			}
-		}
+		public List<DirectiveArg> PositionalArgs =>
+			directiveParts
+				.Where(part => !part.Contains('='))
+				.Select(part => new DirectiveArg(this, part))
+				.ToList();
 
 		public void PrintError(string message)
 		{
@@ -111,67 +86,47 @@ public class TimelineFile
 
 		public DirectiveArg? GetOptionalArg(string name)
 		{
-			if (!namedArgs.ContainsKey(name))
-			{
-				return null;
-			}
-			return new DirectiveArg(this, namedArgs[name]);
+			return NamedArgs.GetValueOrDefault(name);
 		}
 
 		public DirectiveArg? GetOptionalArg(int position)
 		{
-			if (positionalArgs.Count <= position)
-			{
-				return null;
-			}
-			return new DirectiveArg(this, positionalArgs[position]);
+			return PositionalArgs.ElementAtOrDefault(position);
 		}
 
 		public DirectiveArg? GetRequiredArg(string name)
 		{
-			if (!namedArgs.ContainsKey(name))
+			var arg = GetOptionalArg(name);
+			if (arg is null)
 			{
 				PrintError($"Missing required argument '{name}'");
-				return null;
 			}
-			return new DirectiveArg(this, namedArgs[name]);
+			return arg;
 		}
 
 		public DirectiveArg? GetRequiredArg(int position)
 		{
-			if (positionalArgs.Count <= position)
+			var arg = GetOptionalArg(position);
+			if (arg is null)
 			{
 				PrintError($"Missing required argument at position {position}");
-				return null;
 			}
-			return new DirectiveArg(this, positionalArgs[position]);
+			return arg;
 		}
 	}
 
-	public class DirectiveArg
+	public class DirectiveArg(Directive directive, string value)
 	{
-		readonly Directive directive;
-		readonly string value;
-
-		public DirectiveArg(Directive directive, string value)
-		{
-			this.directive = directive;
-			this.value = value;
-		}
-
-		public string AsString()
-		{
-			return value;
-		}
+		public string Value => value;
 
 		public double? AsDouble()
 		{
-			if (!value.IsValidFloat())
+			if (!double.TryParse(Value, out var result))
 			{
-				directive.PrintError($"Invalid float value '{value}'");
+				directive.PrintError($"\"{Value}\" is not a valid number");
 				return null;
 			}
-			return value.ToFloat();
+			return result;
 		}
 	}
 }
