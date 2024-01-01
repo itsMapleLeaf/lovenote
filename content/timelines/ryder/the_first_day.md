@@ -32,7 +32,7 @@ They interviewed me over Zoom. I only met a few people from here, but they seeme
 
 So, here I am.
 
-[background:office_front_door.png] [wait:1] [enter:ryder,to=0.3,from=-0.2,duration=1] I slow down at the front door for a bit. There's a small bit of anxiety that I might be entering the wrong door, or that I'm too early, or a trillion other dumb things my brain could come up with.
+[background:office_front_door.tres] [wait:1] [enter:ryder,to=0.3,from=-0.2,duration=1] I slow down at the front door for a bit. There's a small bit of anxiety that I might be entering the wrong door, or that I'm too early, or a trillion other dumb things my brain could come up with.
 
 I wait a bit to see if someone else goes in first. But not for too long, otherwise I'll look shifty.
 
@@ -52,9 +52,7 @@ I am warm. I have transcended.
 
 I couldn't be happier to hear a familiar face and voice.
 
-The plain, casual smile I give doesn't at all match the unending waterfall of joy and relief I feel inside.
-
-I slip my phone into the pocket of my hoodie, and I walk inside with Reina.
+I slip my phone into my pocket, and I walk inside with Reina.
 
 She's my twin sister. We applied to the same company, but for different positions.
 
@@ -70,9 +68,9 @@ Plus, we live like five minutes apart anyways.
 
 She calls for the elevator, and the big sliding doors open up right away. Then she hits the button for the third floor.
 
-Thank fuck she remembered the floor, because I sure as hell didn't.
+Thank god she remembered the floor, because I sure as hell didn't.
 
-We lean back against the elevator wall. My stomach falls as it rises.
+[background:elevator_interior.png] We lean back against the elevator wall. My stomach falls as it rises.
 
 I take a sip from my can of iced vanilla coffee. Simultaneously, she sips from her can of macha green tea.
 

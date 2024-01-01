@@ -6,4 +6,4 @@
 
 [node name="TimelinePlayer" parent="." instance=ExtResource("1_y41fd")]
 timelineFilePath = "res://content/timelines/ryder/the_first_day.md"
-PreviewLineIndex = 20
+PreviewLineIndex = 35
