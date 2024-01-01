@@ -1,18 +1,19 @@
 {
-	// Use IntelliSense to learn about possible attributes.
-	// Hover to view descriptions of existing attributes.
-	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
+		// For these launch configurations to work, you need to setup a GODOT4
+		// environment variable. On mac or linux, this can be done by adding
+		// the following to your .zshrc, .bashrc, or .bash_profile file:
+		// export GODOT4="/Applications/Godot.app/Contents/MacOS/Godot"
 		{
-			"name": "GDScript Godot",
-			"type": "godot",
+			"name": "Play",
+			"type": "coreclr",
 			"request": "launch",
-			"project": "${workspaceFolder}",
-			"port": 6007,
-			"address": "127.0.0.1",
-			"launch_game_instance": true,
-			"launch_scene": false
+			"preLaunchTask": "build",
+			"program": "${env:GODOT4}",
+			"args": [],
+			"cwd": "${workspaceFolder}",
+			"stopAtEntry": false
 		}
 	]
 }
