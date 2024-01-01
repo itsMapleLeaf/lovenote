@@ -5,17 +5,29 @@ using Godot;
 
 public partial class TimelinePlayer : Node
 {
-	List<StageLine> lines = new();
-	bool isTimelineLoaded = false;
+	[Export(PropertyHint.File, "*.md")]
+	string timelineFilePath = "";
 
-	int _currentLineIndex = 0;
-	int CurrentLineIndex
+	[Export(PropertyHint.Range, "0,999999,1")]
+	int PreviewLineIndex
 	{
-		get => _currentLineIndex;
-		set { _currentLineIndex = Mathf.Clamp(value, 0, lines.Count - 1); }
+		get => currentLineIndex;
+		set
+		{
+			if (timeline is null)
+			{
+				currentLineIndex = value;
+			}
+			else
+			{
+				PlayLineAt(value, PlayMode.Play);
+			}
+		}
 	}
 
-	StageLine? CurrentLine => lines.ElementAtOrDefault(CurrentLineIndex);
+	Timeline? timeline;
+	int currentLineIndex = 0;
+	StageLine? CurrentLine => timeline?.LineAt(currentLineIndex);
 
 	Stage? _stage;
 	Stage Stage => _stage ??= GetNode<Stage>("%Stage");
@@ -23,59 +35,11 @@ public partial class TimelinePlayer : Node
 	Control? _inputCover;
 	Control InputCover => _inputCover ??= GetNode<Control>("%InputCover");
 
-	[Export(PropertyHint.File, "*.md")]
-	string timelineFilePath = "";
-
-	[Export]
-	int PreviewLineIndex
-	{
-		get => _previewLineIndex;
-		set
-		{
-			if (!isTimelineLoaded)
-			{
-				_previewLineIndex = value;
-				return;
-			}
-
-			_previewLineIndex = value;
-			PlayLineAt(_previewLineIndex, PlayMode.Play);
-		}
-	}
-	int _previewLineIndex = 0;
-
-	IEnumerable<StageLine> LoadTimeline()
-	{
-		if (timelineFilePath == "")
-		{
-			GD.PrintErr("Timeline file is not set");
-			yield break;
-		}
-
-		var currentEndState = StageSnapshot.Empty;
-		var lines = new List<StageLine>();
-
-		foreach (var sourceLine in TimelineFile.Lines(timelineFilePath))
-		{
-			var line = new StageLine(sourceLine, Stage, currentEndState);
-			if (!line.IsEmpty())
-			{
-				yield return line;
-				currentEndState = line.endState;
-			}
-		}
-
-		GD.PrintRich(
-			$"[color=gray]Loaded timeline with [color=white]{lines.Count}[/color] lines[/color]"
-		);
-	}
-
 	public override void _Ready()
 	{
-		lines = LoadTimeline().ToList();
-		isTimelineLoaded = true;
+		timeline = Timeline.FromFile(timelineFilePath, Stage);
 		InputCover.GuiInput += _UnhandledInput;
-		PlayLineAt(PreviewLineIndex, PlayMode.Play);
+		PlayLineAt(currentLineIndex, PlayMode.Play);
 	}
 
 	public override void _Process(double delta)
@@ -91,11 +55,11 @@ public partial class TimelinePlayer : Node
 		}
 		if (@event.IsActionPressed(InputActionName.DialogBack))
 		{
-			PlayLineAt(CurrentLineIndex - 1, PlayMode.Skip);
+			PlayLineAt(currentLineIndex - 1, PlayMode.Skip);
 		}
 		if (@event.IsActionPressed(InputActionName.DialogNext))
 		{
-			PlayLineAt(CurrentLineIndex + 1, PlayMode.Skip);
+			PlayLineAt(currentLineIndex + 1, PlayMode.Skip);
 		}
 	}
 
@@ -107,8 +71,13 @@ public partial class TimelinePlayer : Node
 
 	void PlayLineAt(int index, PlayMode mode)
 	{
+		if (timeline is null)
+		{
+			return;
+		}
+
 		CurrentLine?.Cancel();
-		CurrentLineIndex = index;
+		currentLineIndex = Mathf.Clamp(index, 0, timeline?.Lines.Count ?? 0);
 
 		Stage.Dialog.Reset();
 
@@ -121,19 +90,17 @@ public partial class TimelinePlayer : Node
 			Stage.ApplySnapshot(CurrentLine?.startState ?? StageSnapshot.Empty);
 			CurrentLine?.Play();
 		}
-
-		_previewLineIndex = index;
 	}
 
 	void Advance()
 	{
 		if (CurrentLine?.IsPlaying() == true)
 		{
-			PlayLineAt(CurrentLineIndex, PlayMode.Skip);
+			PlayLineAt(currentLineIndex, PlayMode.Skip);
 		}
 		else
 		{
-			PlayLineAt(CurrentLineIndex + 1, PlayMode.Play);
+			PlayLineAt(currentLineIndex + 1, PlayMode.Play);
 		}
 	}
 }
