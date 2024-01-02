@@ -37,6 +37,12 @@ public partial class TimelinePlayer : Node
 
 	public override void _Ready()
 	{
+		if (timelineFilePath == "")
+		{
+			GD.PrintErr("Timeline file not set");
+			return;
+		}
+
 		timeline = Timeline.FromFile(timelineFilePath, Stage);
 		InputCover.GuiInput += _UnhandledInput;
 		PlayLineAt(currentLineIndex, PlayMode.Play);
