@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://com2s4ayreinn"]
+[gd_scene load_steps=2 format=3 uid="uid://com2s4ayreinn"]
 
 [ext_resource type="Texture2D" uid="uid://c4dnak4cv8mxt" path="res://content/characters/ryder.png" id="1_2f432"]
-[ext_resource type="Script" path="res://engine/Character.cs" id="1_mt1uc"]
 
 [node name="Character" type="Control"]
 layout_mode = 3
@@ -12,7 +11,6 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
-script = ExtResource("1_mt1uc")
 
 [node name="BaseTransform" type="Control" parent="."]
 layout_mode = 1
