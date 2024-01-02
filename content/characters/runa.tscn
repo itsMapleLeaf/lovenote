@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://1ov6ufdcy45q"]
 
-[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://engine/Character.tscn" id="1_dy2eo"]
+[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://engine/character.tscn" id="1_dy2eo"]
 [ext_resource type="Texture2D" uid="uid://b0a4kf5k75dvu" path="res://content/characters/runa.png" id="2_5ua6i"]
 
 [node name="Note" instance=ExtResource("1_dy2eo")]

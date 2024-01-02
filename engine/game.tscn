@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://8vkbx2qocw2x"]
+
+[ext_resource type="PackedScene" uid="uid://bwk6j5knk2e2v" path="res://engine/timeline_player.tscn" id="1_e6pon"]
+
+[node name="Game" type="Node"]
+
+[node name="TimelinePlayer" parent="." instance=ExtResource("1_e6pon")]
