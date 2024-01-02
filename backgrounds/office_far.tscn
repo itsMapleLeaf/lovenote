@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bc2ghxsqm2qbk"]
+
+[ext_resource type="PackedScene" uid="uid://dcmd51ljd1lig" path="res://engine/background.tscn" id="1_op3kr"]
+[ext_resource type="Texture2D" uid="uid://dug0rivkbsglr" path="res://backgrounds/office_far.png" id="2_lcdpj"]
+
+[node name="OfficeFar" instance=ExtResource("1_op3kr")]
+script = null
+
+[node name="Texture" parent="." index="0"]
+texture = ExtResource("2_lcdpj")

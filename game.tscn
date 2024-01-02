@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://ddbxyo8j1pg0d"]
+
+[ext_resource type="PackedScene" uid="uid://b2pm1q4r0t6pl" path="res://stages/the_first_day.tscn" id="1_f2d44"]
+
+[node name="Game" type="Node"]
+
+[node name="Stage" parent="." instance=ExtResource("1_f2d44")]

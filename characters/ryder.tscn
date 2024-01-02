@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://6sbrm2rfnba"]
+
+[ext_resource type="PackedScene" uid="uid://com2s4ayreinn" path="res://engine/character.tscn" id="1_d04rf"]
+
+[node name="Ryder" instance=ExtResource("1_d04rf")]
+
+[node name="BaseTransform" parent="." index="0"]
+offset_left = -245.0
+offset_top = -634.0
+offset_right = 208.0
+offset_bottom = 58.0

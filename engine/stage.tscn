@@ -1,26 +1,22 @@
 [gd_scene load_steps=3 format=3 uid="uid://dnt1wgo2wmd1d"]
 
-[ext_resource type="Script" path="res://engine/Stage.cs" id="1_v1llc"]
+[ext_resource type="Script" path="res://engine/stage.gd" id="1_vbogn"]
 [ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://engine/dialog.tscn" id="2_s8xuk"]
 
 [node name="Stage" type="Node"]
-script = ExtResource("1_v1llc")
-
-[node name="BackgroundLayer" type="Node" parent="."]
-unique_name_in_owner = true
-
-[node name="CharacterLayer" type="Node" parent="."]
-unique_name_in_owner = true
+script = ExtResource("1_vbogn")
 
 [node name="Dialog" parent="." instance=ExtResource("2_s8xuk")]
 unique_name_in_owner = true
-metadata/_edit_lock_ = true
 
 [node name="InputCover" type="Control" parent="."]
 unique_name_in_owner = true
+editor_description = "A control for detecting pointer input over the whole scene and anything else that shouldn't be interactive"
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[connection signal="gui_input" from="InputCover" to="." method="_unhandled_input"]

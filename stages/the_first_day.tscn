@@ -1,0 +1,18 @@
+[gd_scene load_steps=6 format=3 uid="uid://b2pm1q4r0t6pl"]
+
+[ext_resource type="PackedScene" uid="uid://dnt1wgo2wmd1d" path="res://engine/stage.tscn" id="1_cut11"]
+[ext_resource type="PackedScene" uid="uid://bc2ghxsqm2qbk" path="res://backgrounds/office_far.tscn" id="2_ejn03"]
+[ext_resource type="Script" path="res://stages/the_first_day.gd" id="2_geora"]
+[ext_resource type="Script" path="res://engine/Background.cs" id="3_stlno"]
+[ext_resource type="PackedScene" uid="uid://6sbrm2rfnba" path="res://characters/ryder.tscn" id="4_tllgs"]
+
+[node name="Stage" instance=ExtResource("1_cut11")]
+script = ExtResource("2_geora")
+
+[node name="OfficeFar" parent="." index="0" instance=ExtResource("2_ejn03")]
+unique_name_in_owner = true
+modulate = Color(0.694118, 0.694118, 0.694118, 1)
+script = ExtResource("3_stlno")
+
+[node name="Ryder" parent="." index="1" instance=ExtResource("4_tllgs")]
+unique_name_in_owner = true

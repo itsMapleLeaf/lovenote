@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://hod5ouvqdw5u"]
 
-[ext_resource type="Script" path="res://engine/Dialog.cs" id="1_60yat"]
+[ext_resource type="Script" path="res://engine/dialog.gd" id="1_s80jm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rpvfw"]
 content_margin_left = 24.0
@@ -69,7 +69,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 1
-script = ExtResource("1_60yat")
+script = ExtResource("1_s80jm")
 
 [node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 1
