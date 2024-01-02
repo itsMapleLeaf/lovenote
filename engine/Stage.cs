@@ -22,7 +22,7 @@ public partial class Stage : Node
 
 		var background = backgroundScene.Instantiate<Background>();
 		background.Name = name;
-		background.Texture = texture;
+		// background.Texture = texture;
 		backgrounds.Add(name, background);
 		BackgroundLayer.AddChild(background);
 	}

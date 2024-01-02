@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public partial class Background : TextureRect
+public partial class Background : Control
 {
 	Tween? tween;
 
