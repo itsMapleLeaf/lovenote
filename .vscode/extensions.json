@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"woberg.godot-dotnet-tools",
+		"alfish.godot-files",
+		"geequlim.godot-tools",
+		"ms-dotnettools.csharp"
+	]
+}
