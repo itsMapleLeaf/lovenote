@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://b2pm1q4r0t6pl"]
+[gd_scene load_steps=6 format=3 uid="uid://b2pm1q4r0t6pl"]
 
 [ext_resource type="PackedScene" uid="uid://dnt1wgo2wmd1d" path="res://engine/stage.tscn" id="1_cut11"]
 [ext_resource type="PackedScene" uid="uid://bc2ghxsqm2qbk" path="res://backgrounds/office_far.tscn" id="2_ejn03"]
 [ext_resource type="Script" path="res://stages/the_first_day.gd" id="2_geora"]
 [ext_resource type="PackedScene" uid="uid://6sbrm2rfnba" path="res://characters/ryder.tscn" id="4_tllgs"]
+[ext_resource type="PackedScene" uid="uid://hod5ouvqdw5u" path="res://engine/dialog.tscn" id="5_j8078"]
 
 [node name="Stage" instance=ExtResource("1_cut11")]
 script = ExtResource("2_geora")
@@ -13,4 +14,7 @@ unique_name_in_owner = true
 modulate = Color(0.694118, 0.694118, 0.694118, 1)
 
 [node name="Ryder" parent="." index="1" instance=ExtResource("4_tllgs")]
+unique_name_in_owner = true
+
+[node name="Dialog" parent="." index="2" instance=ExtResource("5_j8078")]
 unique_name_in_owner = true
