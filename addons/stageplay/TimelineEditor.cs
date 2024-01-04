@@ -41,6 +41,31 @@ public partial class TimelineEditor : Control
 		Reset();
 	}
 
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventKey keyEvent && keyEvent.IsPressed())
+		{
+			var node = GetTree().Root.GuiGetFocusOwner();
+			var nextNode = keyEvent.Keycode switch
+			{
+				Key.Down => node.FindNextValidFocus(),
+				Key.Up => node.FindPrevValidFocus(),
+				_ => null,
+			};
+
+			if (nextNode is not null)
+			{
+				GetViewport().SetInputAsHandled();
+
+				var mainScreen = EditorInterface.Singleton.GetEditorMainScreen();
+				if (mainScreen.IsAncestorOf(nextNode))
+				{
+					nextNode.CallDeferred(Control.MethodName.GrabFocus);
+				}
+			}
+		}
+	}
+
 	void Reset()
 	{
 		UnpackResource(

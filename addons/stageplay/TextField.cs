@@ -50,9 +50,4 @@ public partial class TextField : PanelContainer
 
 	Label? LabelNode => GetNodeOrNull<Label>("%Label");
 	LineEdit? InputNode => GetNodeOrNull<LineEdit>("%Input");
-
-	public override void _Ready()
-	{
-		InputNode!.GuiInput += InputNode.HandleKeyboardVerticalFocus;
-	}
 }
