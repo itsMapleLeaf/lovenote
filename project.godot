@@ -37,6 +37,10 @@ window/stretch/mode="canvas_items"
 
 project/assembly_name="A Love Note"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/stageplay/plugin.cfg")
+
 [file_customization]
 
 folder_colors={
@@ -45,6 +49,10 @@ folder_colors={
 "res://content/timelines/": "yellow",
 "res://engine/": "gray"
 }
+
+[gui]
+
+theme/custom="res://addons/stageplay/theme.tres"
 
 [input]
 

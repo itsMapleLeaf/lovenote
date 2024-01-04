@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public static class NodeExtensions
+public static partial class NodeExtensions
 {
 	public static void AfterReady(this Node node, Action callback)
 	{

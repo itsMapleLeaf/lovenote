@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5mlld4chwnjg"]
+
+[ext_resource type="Script" path="res://addons/stageplay/TextField.cs" id="1_ip64i"]
+
+[node name="TextField" type="PanelContainer"]
+offset_right = 123.0
+offset_bottom = 32.0
+script = ExtResource("1_ip64i")
+Label = "Label"
+Placeholder = "Placeholder"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Label"
+
+[node name="Input" type="LineEdit" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Placeholder"
+expand_to_text_length = true
+select_all_on_focus = true
