@@ -22,9 +22,10 @@ public partial class TimelineEditor : Control
 
 	public override void _Ready()
 	{
-		FileMenuOptions[0].Action();
-
-		// dynamically generate file menu options
+		foreach (var index in Enumerable.Range(0, FileMenu.ItemCount))
+		{
+			FileMenu.RemoveItem(0);
+		}
 		foreach (var (option, index) in FileMenuOptions.Select((option, index) => (option, index)))
 		{
 			FileMenu.AddItem(option.Text, index);
@@ -36,6 +37,8 @@ public partial class TimelineEditor : Control
 			// 	.Instantiate();
 			// LineList.AddChild(lineEditor);
 		};
+
+		Reset();
 	}
 
 	void Reset()
