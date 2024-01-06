@@ -3,50 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-[Tool]
-public partial class LineEditor : Control
+namespace StagePlay
 {
-	[Export]
-	public string Speaker
+	[Tool]
+	public partial class LineEditor : Control
 	{
-		get => SpeakerField?.Value ?? "";
-		set => SpeakerField.Perform(sf => sf.Value = value);
-	}
-
-	TextField SpeakerField => GetNode<TextField>("%SpeakerField");
-	BoxContainer DirectiveList => GetNode<BoxContainer>("%DirectiveList");
-	Button AddDirectiveButton => GetNode<Button>("%AddDirectiveButton");
-
-	internal static LineEditor FromData(TimelineData.Line line)
-	{
-		var editor = GD.Load<PackedScene>("res://addons/stageplay/LineEditor.tscn")
-			.Instantiate<LineEditor>();
-
-		editor.Speaker = line.Speaker;
-
-		foreach (var directive in line.Directives)
+		[Export]
+		public string Speaker
 		{
-			editor.AddDirectiveEditor(directive.CreateEditor());
+			get => SpeakerField?.Value ?? "";
+			set => SpeakerField.Perform(sf => sf.Value = value);
 		}
 
-		return editor;
-	}
+		TextField SpeakerField => GetNode<TextField>("%SpeakerField");
+		BoxContainer DirectiveList => GetNode<BoxContainer>("%DirectiveList");
+		Button AddDirectiveButton => GetNode<Button>("%AddDirectiveButton");
 
-	internal static LineEditor Empty()
-	{
-		var editor = GD.Load<PackedScene>("res://addons/stageplay/LineEditor.tscn")
-			.Instantiate<LineEditor>();
+		internal static LineEditor FromData(StageLine line)
+		{
+			var editor = GD.Load<PackedScene>("res://addons/stageplay/LineEditor.tscn")
+				.Instantiate<LineEditor>();
 
-		editor.Speaker = "Speaker";
+			editor.Speaker = line.Speaker;
 
-		return editor;
-	}
+			foreach (var directive in line.Directives)
+			{
+				editor.AddDirectiveEditor(directive.CreateEditor());
+			}
 
-	public IEnumerable<IDirectiveEditor> DirectiveEditors =>
-		DirectiveList.GetChildren().Cast<IDirectiveEditor>();
+			return editor;
+		}
 
-	public void AddDirectiveEditor(IDirectiveEditor editor)
-	{
-		DirectiveList.AddChild(editor.AsControl());
+		internal static LineEditor Empty()
+		{
+			var editor = GD.Load<PackedScene>("res://addons/stageplay/LineEditor.tscn")
+				.Instantiate<LineEditor>();
+
+			editor.Speaker = "Speaker";
+
+			return editor;
+		}
+
+		public IEnumerable<IDirectiveEditor> DirectiveEditors =>
+			DirectiveList.GetChildren().Cast<IDirectiveEditor>();
+
+		public void AddDirectiveEditor(IDirectiveEditor editor)
+		{
+			DirectiveList.AddChild(editor.AsControl());
+		}
 	}
 }

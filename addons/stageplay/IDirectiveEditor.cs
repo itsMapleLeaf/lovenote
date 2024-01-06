@@ -1,7 +1,10 @@
 using Godot;
 
-public interface IDirectiveEditor
+namespace StagePlay
 {
-	public Control AsControl();
-	public TimelineData.IDirective GetData();
+	public interface IDirectiveEditor
+	{
+		public Control AsControl();
+		public IDirective GetData();
+	}
 }

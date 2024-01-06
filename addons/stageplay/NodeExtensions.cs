@@ -1,12 +1,15 @@
 using Godot;
 
-public static partial class NodeExtensions
+namespace StagePlay
 {
-	public static void RemoveAllChildren(this Node node)
+	public static partial class NodeExtensions
 	{
-		foreach (var child in node.GetChildren())
+		public static void RemoveAllChildren(this Node node)
 		{
-			child.QueueFree();
+			foreach (var child in node.GetChildren())
+			{
+				child.QueueFree();
+			}
 		}
 	}
 }

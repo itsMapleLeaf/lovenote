@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://di071x1qypjfc"]
 
 [ext_resource type="Theme" uid="uid://d2jdydcys04rs" path="res://addons/stageplay/theme.tres" id="1_bwwjh"]
-[ext_resource type="Script" path="res://addons/stageplay/TimelineEditor.cs" id="2_0na1u"]
+[ext_resource type="Script" path="res://addons/stageplay/Editor.cs" id="2_0na1u"]
 
 [node name="TimelineEditor" type="PanelContainer"]
 anchors_preset = 15
