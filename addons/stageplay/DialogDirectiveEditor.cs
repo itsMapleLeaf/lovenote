@@ -5,11 +5,11 @@ using Godot;
 namespace StagePlay
 {
 	[Tool]
-	public partial class DialogDirectiveEditor : TextEdit, IDirectiveEditor
+	partial class DialogDirectiveEditor : TextEdit, IDirectiveEditor
 	{
 		private DialogDirectiveEditor() { }
 
-		public static DialogDirectiveEditor Create(string text = "")
+		internal static DialogDirectiveEditor Create(string text = "")
 		{
 			var instance = GD.Load<PackedScene>("res://addons/stageplay/DialogDirectiveEditor.tscn")
 				.Instantiate<DialogDirectiveEditor>();

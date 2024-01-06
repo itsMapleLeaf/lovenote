@@ -7,7 +7,7 @@ using Godot.Collections;
 namespace StagePlay
 {
 	[Tool]
-	public partial class Editor : Control
+	partial class Editor : Control
 	{
 		Control LineList => GetNode<Control>("%LineList");
 

@@ -10,10 +10,10 @@ namespace StagePlay
 	{
 		readonly JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };
 
-		public byte[] Serialize() =>
+		internal byte[] Serialize() =>
 			JsonSerializer.SerializeToUtf8Bytes(this, jsonSerializerOptions);
 
-		public static Timeline? FromSerialized(byte[] serialized)
+		internal static Timeline? FromSerialized(byte[] serialized)
 		{
 			try
 			{
@@ -26,7 +26,7 @@ namespace StagePlay
 			}
 		}
 
-		public void Save(string path)
+		internal void Save(string path)
 		{
 			var file = FileAccess.Open(path, FileAccess.ModeFlags.Write);
 			if (file is null)
@@ -45,7 +45,7 @@ namespace StagePlay
 			}
 		}
 
-		public static Timeline? FromFile(string path)
+		internal static Timeline? FromFile(string path)
 		{
 			var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
 			if (file is null)
@@ -65,7 +65,7 @@ namespace StagePlay
 			return FromSerialized(content);
 		}
 
-		public static Timeline Mock()
+		internal static Timeline Mock()
 		{
 			return new(
 				[
@@ -89,19 +89,19 @@ namespace StagePlay
 		public IEnumerable<IDirective> Directives { get; set; }
 
 		[JsonConstructor]
-		public StageLine(string speaker, IEnumerable<IDirective> directives)
+		internal StageLine(string speaker, IEnumerable<IDirective> directives)
 		{
 			Speaker = speaker;
 			Directives = directives;
 		}
 
-		public StageLine(string speaker, params IDirective[] directives)
+		internal StageLine(string speaker, params IDirective[] directives)
 			: this(speaker, directives.AsEnumerable()) { }
 
-		public StageLine(IEnumerable<IDirective> directives)
+		internal StageLine(IEnumerable<IDirective> directives)
 			: this("", directives) { }
 
-		public StageLine(params IDirective[] directives)
+		internal StageLine(params IDirective[] directives)
 			: this(directives.AsEnumerable()) { }
 	}
 
@@ -113,7 +113,7 @@ namespace StagePlay
 	]
 	public interface IDirective
 	{
-		internal IDirectiveEditor CreateEditor();
+		IDirectiveEditor CreateEditor();
 	}
 
 	public record DialogDirective(string Text) : IDirective
@@ -152,13 +152,13 @@ namespace StagePlay
 		}
 	}
 
-	public static class ModuleInitializer
+	static class ModuleInitializer
 	{
 		// workaround https://github.com/godotengine/godot/issues/78513#issuecomment-1625004361
 #pragma warning disable CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
 		[System.Runtime.CompilerServices.ModuleInitializer]
 #pragma warning restore CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
-		public static void Initialize()
+		internal static void Initialize()
 		{
 			System
 				.Runtime.Loader.AssemblyLoadContext.GetLoadContext(

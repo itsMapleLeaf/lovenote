@@ -4,31 +4,31 @@ using Godot;
 namespace StagePlay
 {
 	[Tool]
-	public partial class TextField : PanelContainer
+	partial class TextField : PanelContainer
 	{
 		[Export]
-		public string Label
+		internal string Label
 		{
 			get => LabelNode?.Text ?? "Label";
 			set { LabelNode.Perform(node => node.Text = value); }
 		}
 
 		[Export]
-		public string Placeholder
+		internal string Placeholder
 		{
 			get => InputNode?.PlaceholderText ?? "Placeholder";
 			set { InputNode.Perform(node => node.PlaceholderText = value); }
 		}
 
 		[Export]
-		public string Value
+		internal string Value
 		{
 			get => InputNode?.Text ?? "";
 			set { InputNode.Perform(node => node.Text = value); }
 		}
 
 		[Export]
-		public HorizontalAlignment InputAlignment
+		internal HorizontalAlignment InputAlignment
 		{
 			get => InputNode?.Alignment ?? HorizontalAlignment.Left;
 			set { InputNode.Perform(node => node.Alignment = value); }

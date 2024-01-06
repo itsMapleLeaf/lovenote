@@ -6,10 +6,10 @@ using Godot;
 namespace StagePlay
 {
 	[Tool]
-	public partial class LineEditor : Control
+	partial class LineEditor : Control
 	{
 		[Export]
-		public string Speaker
+		internal string Speaker
 		{
 			get => SpeakerField?.Value ?? "";
 			set => SpeakerField.Perform(sf => sf.Value = value);
@@ -44,10 +44,10 @@ namespace StagePlay
 			return editor;
 		}
 
-		public IEnumerable<IDirectiveEditor> DirectiveEditors =>
+		internal IEnumerable<IDirectiveEditor> DirectiveEditors =>
 			DirectiveList.GetChildren().Cast<IDirectiveEditor>();
 
-		public void AddDirectiveEditor(IDirectiveEditor editor)
+		internal void AddDirectiveEditor(IDirectiveEditor editor)
 		{
 			DirectiveList.AddChild(editor.AsControl());
 		}

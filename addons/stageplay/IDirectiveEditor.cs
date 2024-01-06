@@ -4,7 +4,7 @@ namespace StagePlay
 {
 	public interface IDirectiveEditor
 	{
-		public Control AsControl();
-		public IDirective GetData();
+		Control AsControl();
+		IDirective GetData();
 	}
 }

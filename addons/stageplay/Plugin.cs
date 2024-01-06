@@ -5,7 +5,7 @@ using Godot;
 namespace StagePlay
 {
 	[Tool]
-	public partial class Plugin : EditorPlugin
+	partial class Plugin : EditorPlugin
 	{
 		Control? mainPanelNode;
 
