@@ -17,22 +17,36 @@ public partial class LineEditor : Control
 	BoxContainer DirectiveList => GetNode<BoxContainer>("%DirectiveList");
 	Button AddDirectiveButton => GetNode<Button>("%AddDirectiveButton");
 
-	public void AddDirective(DialogDirectiveEditor directive)
+	internal static LineEditor FromData(TimelineData.Line line)
 	{
-		DirectiveList.AddChild(directive);
-	}
+		var editor = GD.Load<PackedScene>("res://addons/stageplay/LineEditor.tscn")
+			.Instantiate<LineEditor>();
 
-	public LineResource ToResource()
-	{
-		return new() { Speaker = Speaker, Directives = GetDirectiveResources().ToArray(), };
-	}
+		editor.Speaker = line.Speaker;
 
-	IEnumerable<DialogDirectiveResource> GetDirectiveResources()
-	{
-		foreach (var directive in DirectiveList.GetChildren())
+		foreach (var directive in line.Directives)
 		{
-			if (directive is DialogDirectiveEditor dialogDirective)
-				yield return dialogDirective.ToResource();
+			editor.AddDirectiveEditor(directive.CreateEditor());
 		}
+
+		return editor;
+	}
+
+	internal static LineEditor Empty()
+	{
+		var editor = GD.Load<PackedScene>("res://addons/stageplay/LineEditor.tscn")
+			.Instantiate<LineEditor>();
+
+		editor.Speaker = "Speaker";
+
+		return editor;
+	}
+
+	public IEnumerable<IDirectiveEditor> DirectiveEditors =>
+		DirectiveList.GetChildren().Cast<IDirectiveEditor>();
+
+	public void AddDirectiveEditor(IDirectiveEditor editor)
+	{
+		DirectiveList.AddChild(editor.AsControl());
 	}
 }
