@@ -9,16 +9,33 @@ namespace StagePlay
 	[Tool]
 	partial class Editor : Control
 	{
-		Control LineList => GetNode<Control>("%LineList");
+		Control Lines => GetNode<Control>("%LineList");
+
+		static EditorData PlaceholderData =>
+			new(
+				[
+					new("Ryder", [new() { Dialog = "Do you ever wonder what it's like to die?" },]),
+					new(
+						"Reina",
+						[
+							new() { DialogSpeed = 0.1 },
+							new() { Dialog = "..." },
+							new() { Wait = 1 },
+							new() { Dialog = "Ryder, what?" },
+						]
+					),
+					new("Ryder", [new() { Dialog = "I'm just curious." },]),
+				]
+			);
 
 		public override void _Ready()
 		{
-			GetNode<Button>("%MenuBar/NewButton").Pressed += () => Unpack(new Timeline([]));
-			GetNode<Button>("%MenuBar/OpenButton").Pressed += LoadWithDialog;
+			GetNode<Button>("%MenuBar/NewButton").Pressed += () => Unpack(new EditorData([]));
+			GetNode<Button>("%MenuBar/OpenButton").Pressed += ShowLoadDialog;
 			GetNode<Button>("%MenuBar/SaveButton").Pressed += () => { };
-			GetNode<Button>("%MenuBar/SaveAsButton").Pressed += SaveWithDialog;
-			GetNode<Button>("%AddLineButton").Pressed += AddLine;
-			Unpack(Timeline.Mock());
+			GetNode<Button>("%MenuBar/SaveAsButton").Pressed += ShowSaveDialog;
+			GetNode<Button>("%AddLineButton").Pressed += AddEmptyLine;
+			Unpack(PlaceholderData);
 		}
 
 		public override void _Input(InputEvent @event)
@@ -46,31 +63,26 @@ namespace StagePlay
 			}
 		}
 
-		void AddLine()
+		void AddEmptyLine()
 		{
-			LineList.AddChild(LineEditor.Empty());
+			Lines.AddChild(LineEditor.Create());
 		}
 
-		Timeline ToTimelineData() =>
-			new(
-				from lineEditor in LineList.GetChildren().Cast<LineEditor>()
-				select new StageLine(
-					lineEditor.Speaker,
-					from directiveEditor in lineEditor.DirectiveEditors
-					select directiveEditor.GetData()
-				)
-			);
-
-		void Unpack(Timeline data)
+		void Unpack(EditorData data)
 		{
-			LineList.RemoveAllChildren();
+			Lines.RemoveAllChildren();
 			foreach (var line in data.Lines)
 			{
-				LineList.AddChild(LineEditor.FromData(line));
+				Lines.AddChild(LineEditor.Unpack(line));
 			}
 		}
 
-		void SaveWithDialog()
+		EditorData Pack()
+		{
+			return new(Lines.GetChildren().Cast<LineEditor>().Select(line => line.Pack()));
+		}
+
+		void ShowSaveDialog()
 		{
 			var dialog = new FileDialog
 			{
@@ -78,15 +90,17 @@ namespace StagePlay
 				Filters = ["*.json"]
 			};
 			AddChild(dialog);
+			dialog.FileSelected += Save;
 			dialog.PopupCentered(new Vector2I(800, 800));
-
-			dialog.FileSelected += (path) =>
-			{
-				ToTimelineData().Save(path);
-			};
 		}
 
-		void LoadWithDialog()
+		void Save(string filePath)
+		{
+			using var file = FileAccess.Open(filePath, FileAccess.ModeFlags.Write);
+			file.StoreBuffer(JsonSerializer.SerializeToUtf8Bytes(Pack()));
+		}
+
+		void ShowLoadDialog()
 		{
 			var dialog = new FileDialog
 			{
@@ -94,18 +108,20 @@ namespace StagePlay
 				Filters = ["*.json"]
 			};
 			AddChild(dialog);
+			dialog.FileSelected += Load;
 			dialog.PopupCentered(new Vector2I(800, 800));
+		}
 
-			dialog.FileSelected += (path) =>
+		void Load(string path)
+		{
+			var bytes = FileAccess.GetFileAsBytes(path);
+			var data = JsonSerializer.Deserialize<EditorData>(bytes);
+			if (data is null)
 			{
-				var data = Timeline.FromFile(path);
-				if (data is null)
-				{
-					GD.PushError("File is empty");
-					return;
-				}
-				Unpack(data);
-			};
+				GD.PrintErr("Failed to deserialize data");
+				return;
+			}
+			Unpack(data);
 		}
 	}
 }

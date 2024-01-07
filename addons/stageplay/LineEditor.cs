@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -8,6 +7,10 @@ namespace StagePlay
 	[Tool]
 	partial class LineEditor : Control
 	{
+		TextField SpeakerField => GetNode<TextField>("%SpeakerField");
+		BoxContainer DirectiveList => GetNode<BoxContainer>("%DirectiveList");
+		Button AddDirectiveButton => GetNode<Button>("%AddDirectiveButton");
+
 		[Export]
 		internal string Speaker
 		{
@@ -15,37 +18,39 @@ namespace StagePlay
 			set => SpeakerField.Perform(sf => sf.Value = value);
 		}
 
-		TextField SpeakerField => GetNode<TextField>("%SpeakerField");
-		BoxContainer DirectiveList => GetNode<BoxContainer>("%DirectiveList");
-		Button AddDirectiveButton => GetNode<Button>("%AddDirectiveButton");
-
-		internal static LineEditor FromData(StageLine line)
+		internal static LineEditor Create()
 		{
-			var editor = GD.Load<PackedScene>("res://addons/stageplay/LineEditor.tscn")
+			return GD.Load<PackedScene>("res://addons/stageplay/LineEditor.tscn")
 				.Instantiate<LineEditor>();
+		}
 
-			editor.Speaker = line.Speaker;
-
-			foreach (var directive in line.Directives)
+		internal static LineEditor Unpack(EditorData.Line data)
+		{
+			var instance = Create();
+			instance.Speaker = data.Speaker;
+			foreach (var directive in data.Directives)
 			{
-				editor.AddDirectiveEditor(directive.CreateEditor());
+				if (directive.Dialog is not null)
+				{
+					instance.AddDirectiveEditor(DialogDirectiveEditor.Unpack(directive));
+				}
 			}
-
-			return editor;
+			return instance;
 		}
 
-		internal static LineEditor Empty()
+		internal EditorData.Line Pack()
 		{
-			var editor = GD.Load<PackedScene>("res://addons/stageplay/LineEditor.tscn")
-				.Instantiate<LineEditor>();
-
-			editor.Speaker = "Speaker";
-
-			return editor;
+			var directives =
+				from directive in DirectiveList.GetChildren().AsEnumerable()
+				where directive is IDirectiveEditor
+				select directive.Pack();
+			return new(Speaker, directives);
 		}
 
-		internal IEnumerable<IDirectiveEditor> DirectiveEditors =>
-			DirectiveList.GetChildren().Cast<IDirectiveEditor>();
+		public override void _Ready()
+		{
+			AddDirectiveButton.Pressed += () => AddDirectiveEditor(DialogDirectiveEditor.Create());
+		}
 
 		internal void AddDirectiveEditor(IDirectiveEditor editor)
 		{

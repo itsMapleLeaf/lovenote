@@ -4,11 +4,10 @@ namespace StagePlay
 {
 	static class Extensions
 	{
-		internal static void Perform<T>(this T? subject, Action<T> action)
-			where T : class
+		internal static Out? Perform<In, Out>(this In? subject, Func<In, Out> func)
+			where In : class
 		{
-			if (subject is not null)
-				action(subject);
+			return subject is not null ? func(subject) : default;
 		}
 	}
 }

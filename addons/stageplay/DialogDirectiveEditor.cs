@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Godot;
 
 namespace StagePlay
@@ -9,16 +7,27 @@ namespace StagePlay
 	{
 		private DialogDirectiveEditor() { }
 
-		internal static DialogDirectiveEditor Create(string text = "")
+		internal static DialogDirectiveEditor Create()
 		{
-			var instance = GD.Load<PackedScene>("res://addons/stageplay/DialogDirectiveEditor.tscn")
+			return GD.Load<PackedScene>("res://addons/stageplay/DialogDirectiveEditor.tscn")
 				.Instantiate<DialogDirectiveEditor>();
-			instance.Text = text;
+		}
+
+		public static IDirectiveEditor Unpack(EditorData.Directive data)
+		{
+			var instance = Create();
+			instance.Text = data.Dialog ?? "";
 			return instance;
 		}
 
-		public Control AsControl() => this;
+		EditorData.Directive IDirectiveEditor.Pack()
+		{
+			return new() { Dialog = Text };
+		}
 
-		public IDirective GetData() => new DialogDirective(Text);
+		Control IDirectiveEditor.AsControl()
+		{
+			return this;
+		}
 	}
 }
