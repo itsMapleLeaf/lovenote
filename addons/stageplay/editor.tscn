@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cluyq7u054iac" path="res://addons/stageplay/editor_panel.tscn" id="2_hyack"]
 [ext_resource type="Script" path="res://addons/stageplay/editor.gd" id="2_q145c"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2446"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2appj"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
@@ -28,7 +28,7 @@ HBoxContainer/constants/separation = 4
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_y6f1n")
 VBoxContainer/constants/separation = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qq6ue"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ckh6p"]
 content_margin_left = 6.0
 content_margin_top = 6.0
 content_margin_right = 6.0
@@ -61,7 +61,7 @@ script = ExtResource("2_q145c")
 
 [node name="EditorPanel" parent="." instance=ExtResource("2_hyack")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_m2446")
+theme_override_styles/panel = SubResource("StyleBoxFlat_2appj")
 
 [node name="MarginContainer" type="MarginContainer" parent="EditorPanel"]
 layout_mode = 2
@@ -120,7 +120,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource("Theme_6etjj")
 theme_type_variation = &"EditorPanel"
-theme_override_styles/panel = SubResource("StyleBoxFlat_qq6ue")
+theme_override_styles/panel = SubResource("StyleBoxFlat_ckh6p")
 
 [node name="Lines" type="VBoxContainer" parent="EditorPanel/MarginContainer/VBoxContainer/HSplitContainer/VBoxContainer/LinesContainer/EditorPanel"]
 unique_name_in_owner = true

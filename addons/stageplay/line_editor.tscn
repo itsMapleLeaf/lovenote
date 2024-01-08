@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c5mlld4chwnjg" path="res://addons/stageplay/text_field.tscn" id="1_wv5bo"]
 [ext_resource type="PackedScene" uid="uid://cluyq7u054iac" path="res://addons/stageplay/editor_panel.tscn" id="2_xuf3f"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7x4yr"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qbd5x"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
@@ -26,7 +26,7 @@ script = ExtResource("1_ncj50")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_7x4yr")
+theme_override_styles/panel = SubResource("StyleBoxFlat_qbd5x")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="EditorPanel"]
 layout_mode = 2
@@ -45,5 +45,8 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Add Directive"
+
+[connection signal="submitted" from="EditorPanel/VBoxContainer/SpeakerField" to="." method="_on_speaker_field_submitted"]
+[connection signal="pressed" from="EditorPanel/VBoxContainer/AddDirectiveButton" to="." method="_on_add_directive_button_pressed"]
 
 [editable path="EditorPanel"]

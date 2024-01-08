@@ -20,3 +20,5 @@ layout_mode = 2
 placeholder_text = "Placeholder"
 expand_to_text_length = true
 select_all_on_focus = true
+
+[connection signal="text_submitted" from="Input" to="." method="_on_input_text_submitted"]

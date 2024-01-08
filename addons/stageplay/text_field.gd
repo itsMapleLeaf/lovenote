@@ -4,6 +4,8 @@ extends Control
 
 const NodeHelpers = preload("res://addons/stageplay/node_helpers.gd")
 
+signal submitted
+
 @export var label: String:
 	set(value):
 		label = value
@@ -30,3 +32,7 @@ const NodeHelpers = preload("res://addons/stageplay/node_helpers.gd")
 
 @onready var label_node: Label = %Label
 @onready var input_node: LineEdit = %Input
+
+
+func _on_input_text_submitted(new_text: String) -> void:
+	submitted.emit()
