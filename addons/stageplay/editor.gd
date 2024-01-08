@@ -118,15 +118,7 @@ func _is_text_edit_at_bottom(node: TextEdit) -> bool:
 func _on_save_button_pressed() -> void:
 	var data := TimelineData.new([])
 	for line: LineEditor in lines.get_children():
-		var line_data := LineData.new(line.speaker, [])
-		data.lines.append(line_data)
-		for directive in line.directives.get_children():
-			var dialog_directive := directive as DialogDirectiveEditor
-			if dialog_directive:
-				line_data.directives.append(
-					DirectiveData.new().with_dialog(dialog_directive.text)
-				)
-
+		data.lines.append(line.pack())
 	ResourceSaver.save(data, "res://test_timeline.tres")
 
 

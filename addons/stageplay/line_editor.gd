@@ -22,8 +22,14 @@ static func create() -> LineEditor:
 func unpack(data: LineData) -> void:
 	speaker = data.speaker
 	for directive in data.directives:
-		if not directive.dialog.is_empty():
-			directives.add_child(_add_dialog_directive_editor(directive.dialog))
+		directives.add_child(_add_dialog_directive_editor(directive.dialog))
+
+
+func pack() -> LineData:
+	var data := LineData.new(speaker, [])
+	for directive: DialogDirectiveEditor in directives.get_children():
+		data.directives.append(directive.pack())
+	return data
 
 
 func _add_dialog_directive_editor(text := "") -> DialogDirectiveEditor:
