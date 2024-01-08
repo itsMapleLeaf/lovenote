@@ -1,6 +1,6 @@
 @tool
 class_name LineEditor
-extends Control
+extends Node
 
 const NodeHelpers = preload("res://addons/stageplay/node_helpers.gd")
 

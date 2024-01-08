@@ -1,23 +1,13 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://d2jdydcys04rs"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bpobich20b6iq"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_18crk"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.0102209, 0.0135175, 0.019391, 0.498039)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y6f1n"]
 draw_center = false
-border_color = Color(0.113725, 0.133333, 0.160784, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 3
-anti_aliasing = false
 
 [resource]
-MarginContainer/constants/margin_bottom = 4
-MarginContainer/constants/margin_left = 4
-MarginContainer/constants/margin_right = 4
-MarginContainer/constants/margin_top = 4
-PanelContainer/styles/panel = SubResource("StyleBoxFlat_18crk")
+BoxContainer/constants/separation = 4
+EditorPanel/base_type = &"PanelContainer"
+EditorPanel/constants/margin = 0
+EditorPanel/constants/shade = 0
+HBoxContainer/constants/separation = 4
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_y6f1n")
+VBoxContainer/constants/separation = 4

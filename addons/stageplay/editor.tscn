@@ -1,10 +1,54 @@
-[gd_scene load_steps=4 format=3 uid="uid://di071x1qypjfc"]
+[gd_scene load_steps=10 format=3 uid="uid://di071x1qypjfc"]
 
-[ext_resource type="Theme" uid="uid://d2jdydcys04rs" path="res://addons/stageplay/theme.tres" id="1_m72s3"]
+[ext_resource type="Theme" uid="uid://bpobich20b6iq" path="res://addons/stageplay/theme.tres" id="1_72u7s"]
 [ext_resource type="PackedScene" uid="uid://gxc7nte13otx" path="res://addons/stageplay/preview.tscn" id="2_gjr47"]
+[ext_resource type="PackedScene" uid="uid://cluyq7u054iac" path="res://addons/stageplay/editor_panel.tscn" id="2_hyack"]
 [ext_resource type="Script" path="res://addons/stageplay/editor.gd" id="2_q145c"]
 
-[node name="Editor" type="VBoxContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2446"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.21, 0.24, 0.29, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y6f1n"]
+draw_center = false
+
+[sub_resource type="Theme" id="Theme_6etjj"]
+BoxContainer/constants/separation = 4
+EditorPanel/base_type = &"PanelContainer"
+EditorPanel/constants/margin = 6
+EditorPanel/constants/shade = 2
+HBoxContainer/constants/separation = 4
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_y6f1n")
+VBoxContainer/constants/separation = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qq6ue"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.147, 0.168, 0.203, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="Theme" id="Theme_65d1y"]
+BoxContainer/constants/separation = 6
+EditorPanel/base_type = &"PanelContainer"
+EditorPanel/constants/margin = 6
+EditorPanel/constants/shade = 0
+HBoxContainer/constants/separation = 4
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_y6f1n")
+VBoxContainer/constants/separation = 6
+
+[node name="Editor" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,55 +56,85 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_m72s3")
+theme = ExtResource("1_72u7s")
 script = ExtResource("2_q145c")
 
-[node name="MenuBar" type="HBoxContainer" parent="."]
+[node name="EditorPanel" parent="." instance=ExtResource("2_hyack")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_m2446")
+
+[node name="MarginContainer" type="MarginContainer" parent="EditorPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EditorPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="NewMenu" type="MenuButton" parent="MenuBar"]
+[node name="MenuBar" type="HBoxContainer" parent="EditorPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="NewMenu" type="MenuButton" parent="EditorPanel/MarginContainer/VBoxContainer/MenuBar"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "New"
 item_count = 2
 popup/item_0/text = "Blank"
 popup/item_0/id = 0
-popup/item_1/text = "Template"
+popup/item_1/text = "From Template"
 popup/item_1/id = 1
 
-[node name="OpenButton" type="Button" parent="MenuBar"]
+[node name="OpenButton" type="Button" parent="EditorPanel/MarginContainer/VBoxContainer/MenuBar"]
 layout_mode = 2
 text = "Open"
 flat = true
 
-[node name="SaveButton" type="Button" parent="MenuBar"]
+[node name="SaveButton" type="Button" parent="EditorPanel/MarginContainer/VBoxContainer/MenuBar"]
 layout_mode = 2
 text = "Save"
 flat = true
 
-[node name="SaveAsButton" type="Button" parent="MenuBar"]
+[node name="SaveAsButton" type="Button" parent="EditorPanel/MarginContainer/VBoxContainer/MenuBar"]
 layout_mode = 2
 text = "Save As..."
 flat = true
 
-[node name="HSplitContainer" type="HSplitContainer" parent="."]
+[node name="HSplitContainer" type="HSplitContainer" parent="EditorPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+split_offset = 280
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EditorPanel/MarginContainer/VBoxContainer/HSplitContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LinesContainer" type="ScrollContainer" parent="EditorPanel/MarginContainer/VBoxContainer/HSplitContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer"]
-custom_minimum_size = Vector2(220, 0)
+[node name="EditorPanel" parent="EditorPanel/MarginContainer/VBoxContainer/HSplitContainer/VBoxContainer/LinesContainer" instance=ExtResource("2_hyack")]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_6etjj")
+theme_type_variation = &"EditorPanel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_qq6ue")
 
-[node name="Lines" type="VBoxContainer" parent="HSplitContainer/VBoxContainer"]
+[node name="Lines" type="VBoxContainer" parent="EditorPanel/MarginContainer/VBoxContainer/HSplitContainer/VBoxContainer/LinesContainer/EditorPanel"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_65d1y")
+theme_override_constants/separation = 6
 
-[node name="AddLineButton" type="Button" parent="HSplitContainer/VBoxContainer"]
+[node name="AddLineButton" type="Button" parent="EditorPanel/MarginContainer/VBoxContainer/HSplitContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Add Line"
 
-[node name="Preview" parent="HSplitContainer" instance=ExtResource("2_gjr47")]
+[node name="Preview" parent="EditorPanel/MarginContainer/VBoxContainer/HSplitContainer" instance=ExtResource("2_gjr47")]
 layout_mode = 2
 
-[connection signal="pressed" from="HSplitContainer/VBoxContainer/AddLineButton" to="." method="_on_add_line_button_pressed"]
+[connection signal="pressed" from="EditorPanel/MarginContainer/VBoxContainer/HSplitContainer/VBoxContainer/AddLineButton" to="." method="_on_add_line_button_pressed"]

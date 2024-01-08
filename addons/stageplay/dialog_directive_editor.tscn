@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://addons/stageplay/dialog_directive_editor.gd" id="1_1n2yn"]
 
 [node name="DialogDirectiveEditor" type="TextEdit"]
-custom_minimum_size = Vector2(220, 0)
 offset_right = 220.0
 offset_bottom = 36.0
 placeholder_text = "Add some lines of dialog."

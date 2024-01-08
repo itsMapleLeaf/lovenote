@@ -1,10 +1,11 @@
 @tool
 class_name StagePlayEditor
-extends Control
+extends Node
 
 const NodeHelpers := preload("res://addons/stageplay/node_helpers.gd")
 
 @onready var lines: Control = %Lines
+@onready var lines_container: ScrollContainer = %LinesContainer
 
 
 static func create() -> StagePlayEditor:

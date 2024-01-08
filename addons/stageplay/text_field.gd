@@ -1,6 +1,6 @@
 @tool
 class_name TextField
-extends PanelContainer
+extends Control
 
 const NodeHelpers = preload("res://addons/stageplay/node_helpers.gd")
 
