@@ -35,12 +35,64 @@ func _add_dialog_directive_editor(text := "") -> DialogDirectiveEditor:
 
 func _on_directive_editor_gui_input(event: InputEvent, editor: DialogDirectiveEditor) -> void:
 	if event is InputEventKey and event.is_pressed() and event.keycode in [KEY_ENTER, KEY_KP_ENTER]:
-		get_viewport().set_input_as_handled()
-		await get_tree().process_frame
+		await NodeHelpers.handle_input_deferred(self)
 
-		var sibling := _add_dialog_directive_editor()
-		editor.add_sibling(sibling)
+		var line := editor.get_caret_line()
+		var column := editor.get_caret_column()
+		var last_line := editor.get_line_count() - 1
+		var last_column := editor.get_line(last_line).length()
+
+		editor.begin_complex_operation()
+		editor.select(line, column, last_line, last_column)
+		var moved_text := editor.get_selected_text()
+		editor.delete_selection()
+		editor.end_complex_operation()
+
+		var index := editor.get_index()
+		var sibling: Node
+		if index < directives.get_child_count() - 1:
+			sibling = directives.get_child(index + 1)
+
+		if not (sibling is DialogDirectiveEditor and sibling.text == ""):
+			sibling = _add_dialog_directive_editor()
+			editor.add_sibling(sibling)
+
 		sibling.grab_focus()
+		sibling.insert_text_at_caret(moved_text)
+		sibling.set_caret_line(0)
+		sibling.set_caret_column(0)
+
+	if event is InputEventKey \
+	and event.is_pressed() \
+	and (event as InputEventKey).keycode == KEY_BACKSPACE \
+	and NodeHelpers.is_text_edit_at_start(editor):
+		await NodeHelpers.handle_input_deferred(self)
+
+		var previous := editor.find_prev_valid_focus() as DialogDirectiveEditor
+		if previous:
+			var last_line := previous.get_line_count() - 1
+			var last_column := previous.get_line(last_line).length()
+
+			previous.text += editor.text
+			previous.grab_focus()
+			previous.set_caret_column(last_column)
+			previous.set_caret_line(last_line)
+
+			editor.queue_free()
+
+	if event is InputEventKey \
+	and event.is_pressed() \
+	and (event as InputEventKey).keycode == KEY_DELETE \
+	and NodeHelpers.is_text_edit_at_end(editor):
+		var index := editor.get_index()
+		if index < directives.get_child_count() - 1:
+			var sibling := directives.get_child(index + 1) as DialogDirectiveEditor
+			if sibling:
+				NodeHelpers.handle_input_deferred(self)
+				var column := editor.get_caret_column()
+				editor.text += sibling.text
+				editor.set_caret_column(column)
+				sibling.queue_free()
 
 
 func _on_add_directive_button_pressed() -> void:
