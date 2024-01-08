@@ -1,6 +1,6 @@
 @tool
 class_name StagePlayEditor
-extends Node
+extends Control
 
 const NodeHelpers := preload("res://addons/stageplay/node_helpers.gd")
 
@@ -19,7 +19,7 @@ func unpack(unpacker: Unpacker) -> void:
 
 
 func _unpack_from_template() -> void:
-	unpack(Unpacker.from(load("res://addons/stageplay/template.gd").get_template_data()))
+	unpack(Unpacker.from(preload("res://addons/stageplay/template.gd").get_template_data()))
 
 
 func _add_line() -> LineEditor:
@@ -34,10 +34,10 @@ func _ready() -> void:
 
 
 func _setup_new_menu() -> void:
-	var items := [
+	var items: Array[Dictionary] = [
 		{
 			text = "Blank",
-			action = func(): unpack(Unpacker.from({ lines = [] })),
+			action = func() -> void: unpack(Unpacker.from({ lines = [] })),
 		},
 		{
 			text = "From Template",
@@ -45,17 +45,19 @@ func _setup_new_menu() -> void:
 		},
 	]
 
-	var popup: PopupMenu = %NewMenu.get_popup()
+	var menu: MenuButton = %NewMenu
+	var popup: PopupMenu = menu.get_popup()
 
 	for index in popup.get_item_count():
 		popup.remove_item(0)
 
 	for item in items:
-		popup.add_item(item["text"])
+		popup.add_item(item.get("text") as String)
 
 	popup.index_pressed.connect(
 		func (index: int) -> void:
-			items[index]["action"].call()
+			var fn := items[index].get("action") as Callable
+			if fn: fn.call()
 	)
 
 
@@ -71,7 +73,7 @@ func _input(event: InputEvent) -> void:
 
 	var focus_neighbor: Control
 
-	if event.keycode == KEY_UP and (not focus_owner is TextEdit or _is_text_edit_at_top(focus_owner)):
+	if (event as InputEventKey).keycode == KEY_UP and (not focus_owner is TextEdit or _is_text_edit_at_top(focus_owner as TextEdit)):
 		get_viewport().set_input_as_handled()
 		await get_tree().process_frame
 
@@ -79,7 +81,7 @@ func _input(event: InputEvent) -> void:
 		if lines.is_ancestor_of(target):
 			focus_neighbor = target
 
-	if event.keycode == KEY_DOWN and (not focus_owner is TextEdit or _is_text_edit_at_bottom(focus_owner)):
+	if (event as InputEventKey).keycode == KEY_DOWN and (not focus_owner is TextEdit or _is_text_edit_at_bottom(focus_owner as TextEdit)):
 		get_viewport().set_input_as_handled()
 		await get_tree().process_frame
 
@@ -87,7 +89,7 @@ func _input(event: InputEvent) -> void:
 		if lines.is_ancestor_of(target):
 			focus_neighbor = focus_owner.find_valid_focus_neighbor(SIDE_BOTTOM)
 
-	if event.keycode == KEY_TAB and focus_owner is TextEdit:
+	if (event as InputEventKey).keycode == KEY_TAB and focus_owner is TextEdit:
 		get_viewport().set_input_as_handled()
 		await get_tree().process_frame
 		if (event as InputEventKey).shift_pressed:

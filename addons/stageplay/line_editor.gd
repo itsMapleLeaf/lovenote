@@ -34,7 +34,7 @@ func _add_dialog_directive_editor(text := "") -> DialogDirectiveEditor:
 
 
 func _on_directive_editor_gui_input(event: InputEvent, editor: DialogDirectiveEditor) -> void:
-	if event is InputEventKey and event.is_pressed() and event.keycode in [KEY_ENTER, KEY_KP_ENTER]:
+	if event is InputEventKey and event.is_pressed() and (event as InputEventKey).keycode in [KEY_ENTER, KEY_KP_ENTER]:
 		await NodeHelpers.handle_input_deferred(self)
 
 		var line := editor.get_caret_line()
@@ -53,14 +53,15 @@ func _on_directive_editor_gui_input(event: InputEvent, editor: DialogDirectiveEd
 		if index < directives.get_child_count() - 1:
 			sibling = directives.get_child(index + 1)
 
-		if not (sibling is DialogDirectiveEditor and sibling.text == ""):
+		if not (sibling is DialogDirectiveEditor and (sibling as DialogDirectiveEditor).text == ""):
 			sibling = _add_dialog_directive_editor()
 			editor.add_sibling(sibling)
 
-		sibling.grab_focus()
-		sibling.insert_text_at_caret(moved_text)
-		sibling.set_caret_line(0)
-		sibling.set_caret_column(0)
+		var sibling_editor := sibling as DialogDirectiveEditor
+		sibling_editor.grab_focus()
+		sibling_editor.insert_text_at_caret(moved_text)
+		sibling_editor.set_caret_line(0)
+		sibling_editor.set_caret_column(0)
 
 	if event is InputEventKey \
 	and event.is_pressed() \

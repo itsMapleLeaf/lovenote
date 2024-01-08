@@ -1,6 +1,6 @@
 @tool
 
-static func get_template_data():
+static func get_template_data() -> Dictionary:
 	return {
 		lines = [
 			{
