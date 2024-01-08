@@ -29,6 +29,7 @@ func _add_line() -> LineEditor:
 
 func _ready() -> void:
 	_setup_new_menu()
+	_unpack_from_template()
 
 
 func _setup_new_menu() -> void:
