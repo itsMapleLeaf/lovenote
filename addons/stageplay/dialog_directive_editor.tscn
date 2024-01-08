@@ -8,4 +8,5 @@ offset_bottom = 36.0
 placeholder_text = "Add some lines of dialog."
 wrap_mode = 1
 scroll_fit_content_height = true
+caret_multiple = false
 script = ExtResource("1_1n2yn")
