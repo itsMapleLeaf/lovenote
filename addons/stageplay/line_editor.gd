@@ -2,6 +2,8 @@
 class_name LineEditor
 extends Control
 
+const NodeHelpers = preload("res://addons/stageplay/node_helpers.gd")
+
 @onready var speaker_field: TextField = %SpeakerField
 @onready var directives: Control = %Directives
 @onready var add_directive_button: Button = %AddDirectiveButton
@@ -9,7 +11,7 @@ extends Control
 @export var speaker: String:
 	set(value):
 		speaker = value
-		await _ensure_ready()
+		await NodeHelpers.ensure_ready(self)
 		speaker_field.value = value
 
 
@@ -30,9 +32,6 @@ func _add_dialog_directive_editor(text := "") -> DialogDirectiveEditor:
 	directives.add_child(editor)
 	return editor
 
-
-func _ensure_ready() -> void:
-	if not is_node_ready(): await ready
 
 
 func _on_add_directive_button_pressed() -> void:
