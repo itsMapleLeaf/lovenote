@@ -1,6 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://gxc7nte13otx"]
-
-[ext_resource type="Script" path="res://addons/stageplay/Preview.cs" id="1_d0ysw"]
+[gd_scene format=3 uid="uid://gxc7nte13otx"]
 
 [node name="Preview" type="Control"]
 layout_mode = 3
@@ -10,4 +8,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
-script = ExtResource("1_d0ysw")

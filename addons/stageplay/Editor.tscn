@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://di071x1qypjfc"]
 
-[ext_resource type="Theme" uid="uid://d2jdydcys04rs" path="res://addons/stageplay/theme.tres" id="1_bwwjh"]
-[ext_resource type="Script" path="res://addons/stageplay/Editor.cs" id="2_0na1u"]
-[ext_resource type="PackedScene" uid="uid://gxc7nte13otx" path="res://addons/stageplay/Preview.tscn" id="3_fkvlm"]
+[ext_resource type="Theme" uid="uid://d2jdydcys04rs" path="res://addons/stageplay/theme.tres" id="1_m72s3"]
+[ext_resource type="PackedScene" uid="uid://gxc7nte13otx" path="res://addons/stageplay/preview.tscn" id="2_gjr47"]
+[ext_resource type="Script" path="res://addons/stageplay/editor.gd" id="2_q145c"]
 
 [node name="Editor" type="VBoxContainer"]
 anchors_preset = 15
@@ -12,16 +12,20 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_bwwjh")
-script = ExtResource("2_0na1u")
+theme = ExtResource("1_m72s3")
+script = ExtResource("2_q145c")
 
 [node name="MenuBar" type="HBoxContainer" parent="."]
-unique_name_in_owner = true
 layout_mode = 2
 
 [node name="NewButton" type="Button" parent="MenuBar"]
 layout_mode = 2
 text = "New"
+flat = true
+
+[node name="NewFromTemplateButton" type="Button" parent="MenuBar"]
+layout_mode = 2
+text = "New From Template"
 flat = true
 
 [node name="VSeparator" type="VSeparator" parent="MenuBar"]
@@ -53,7 +57,7 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 
-[node name="LineList" type="VBoxContainer" parent="HSplitContainer/VBoxContainer"]
+[node name="Lines" type="VBoxContainer" parent="HSplitContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -62,5 +66,8 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Add Line"
 
-[node name="Preview" parent="HSplitContainer" instance=ExtResource("3_fkvlm")]
+[node name="Preview" parent="HSplitContainer" instance=ExtResource("2_gjr47")]
 layout_mode = 2
+
+[connection signal="pressed" from="MenuBar/NewFromTemplateButton" to="." method="_on_new_from_template_button_pressed"]
+[connection signal="pressed" from="HSplitContainer/VBoxContainer/AddLineButton" to="." method="_on_add_line_button_pressed"]

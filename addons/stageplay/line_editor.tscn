@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://wafgerxla3u8"]
 
-[ext_resource type="PackedScene" uid="uid://c5mlld4chwnjg" path="res://addons/stageplay/TextField.tscn" id="1_wv5bo"]
-[ext_resource type="Script" path="res://addons/stageplay/LineEditor.cs" id="1_xduvh"]
+[ext_resource type="Script" path="res://addons/stageplay/line_editor.gd" id="1_ncj50"]
+[ext_resource type="PackedScene" uid="uid://c5mlld4chwnjg" path="res://addons/stageplay/text_field.tscn" id="1_wv5bo"]
 
 [node name="LineEditor" type="PanelContainer"]
-script = ExtResource("1_xduvh")
+script = ExtResource("1_ncj50")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -12,10 +12,10 @@ layout_mode = 2
 [node name="SpeakerField" parent="VBoxContainer" instance=ExtResource("1_wv5bo")]
 unique_name_in_owner = true
 layout_mode = 2
-Label = "Speaker"
-Placeholder = "Ryder"
+label = "Speaker"
+placeholder = "N/A"
 
-[node name="DirectiveList" type="VBoxContainer" parent="VBoxContainer"]
+[node name="Directives" type="VBoxContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -23,3 +23,5 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Add Directive"
+
+[connection signal="pressed" from="VBoxContainer/AddDirectiveButton" to="." method="_on_add_directive_button_pressed"]
