@@ -6,7 +6,7 @@ const Template := preload("res://addons/stageplay/template.gd")
 var main_panel_node: StagePlayEditor
 
 func _get_plugin_name() -> String:
-	return "StagePlay"
+	return "Timeline"
 
 func _get_plugin_icon() -> Texture2D:
 	return EditorInterface.get_editor_theme().get_icon("AnimationMixer", "EditorIcons")
@@ -18,8 +18,7 @@ func _enter_tree() -> void:
 	main_panel_node = StagePlayEditor.create()
 	EditorInterface.get_editor_main_screen().add_child(main_panel_node)
 	_make_visible(false)
-
-	main_panel_node.unpack(Unpacker.from(Template.get_template_data()))
+	main_panel_node.unpack(Template.get_template_data())
 
 func _exit_tree() -> void:
 	if main_panel_node: main_panel_node.queue_free()

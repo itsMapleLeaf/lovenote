@@ -1,36 +1,40 @@
-[gd_resource type="Resource" script_class="TimelineResource" load_steps=10 format=3 uid="uid://gy52vsbq010w"]
+[gd_resource type="Resource" script_class="TimelineData" load_steps=11 format=3 uid="uid://gy52vsbq010w"]
 
-[ext_resource type="Script" path="res://addons/stageplay/DialogDirectiveResource.cs" id="1_ywyed"]
-[ext_resource type="Script" path="res://addons/stageplay/LineResource.cs" id="2_obbpm"]
-[ext_resource type="Script" path="res://addons/stageplay/TimelineResource.cs" id="3_8tg2w"]
+[ext_resource type="Script" path="res://addons/stageplay/directive_data.gd" id="1_4dbyl"]
+[ext_resource type="Script" path="res://addons/stageplay/timeline_data.gd" id="1_hwbd8"]
+[ext_resource type="Script" path="res://addons/stageplay/line_data.gd" id="1_s8qn7"]
 
-[sub_resource type="Resource" id="Resource_q36du"]
-script = ExtResource("1_ywyed")
-Text = "What's it like to die?"
+[sub_resource type="Resource" id="Resource_viwrv"]
+script = ExtResource("1_4dbyl")
+dialog = "I wonder what it's like to die."
 
-[sub_resource type="Resource" id="Resource_gkvyq"]
-script = ExtResource("2_obbpm")
-Speaker = "Ryder"
-Directives = [SubResource("Resource_q36du")]
+[sub_resource type="Resource" id="Resource_8rl7q"]
+script = ExtResource("1_s8qn7")
+speaker = "Ryder"
+directives = Array[ExtResource("1_4dbyl")]([SubResource("Resource_viwrv")])
 
-[sub_resource type="Resource" id="Resource_nu7jt"]
-script = ExtResource("1_ywyed")
-Text = "Ryder, what?"
+[sub_resource type="Resource" id="Resource_a3q8g"]
+script = ExtResource("1_4dbyl")
+dialog = "..."
 
-[sub_resource type="Resource" id="Resource_ns1ot"]
-script = ExtResource("2_obbpm")
-Speaker = "Reina"
-Directives = [SubResource("Resource_nu7jt")]
+[sub_resource type="Resource" id="Resource_aosa3"]
+script = ExtResource("1_4dbyl")
+dialog = "Ryder, what?"
 
-[sub_resource type="Resource" id="Resource_4vibt"]
-script = ExtResource("1_ywyed")
-Text = "I'm just curious."
+[sub_resource type="Resource" id="Resource_r7bgy"]
+script = ExtResource("1_s8qn7")
+speaker = "Reina"
+directives = Array[ExtResource("1_4dbyl")]([SubResource("Resource_a3q8g"), SubResource("Resource_aosa3")])
 
-[sub_resource type="Resource" id="Resource_i3laf"]
-script = ExtResource("2_obbpm")
-Speaker = "Ryder"
-Directives = [SubResource("Resource_4vibt")]
+[sub_resource type="Resource" id="Resource_xdciv"]
+script = ExtResource("1_4dbyl")
+dialog = "I'm just curious."
+
+[sub_resource type="Resource" id="Resource_afq20"]
+script = ExtResource("1_s8qn7")
+speaker = "Ryder"
+directives = Array[ExtResource("1_4dbyl")]([SubResource("Resource_xdciv")])
 
 [resource]
-script = ExtResource("3_8tg2w")
-Lines = [SubResource("Resource_gkvyq"), SubResource("Resource_ns1ot"), SubResource("Resource_i3laf")]
+script = ExtResource("1_hwbd8")
+lines = Array[ExtResource("1_s8qn7")]([SubResource("Resource_8rl7q"), SubResource("Resource_r7bgy"), SubResource("Resource_afq20")])

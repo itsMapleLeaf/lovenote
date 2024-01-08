@@ -12,14 +12,14 @@ static func create() -> StagePlayEditor:
 	return preload("res://addons/stageplay/editor.tscn").instantiate()
 
 
-func unpack(unpacker: Unpacker) -> void:
+func unpack(data: TimelineData) -> void:
 	NodeHelpers.remove_all_children(lines)
-	for item in unpacker.at("lines").array():
-		_add_line().unpack(item)
+	for line_data in data.lines:
+		_add_line().unpack(line_data)
 
 
 func _unpack_from_template() -> void:
-	unpack(Unpacker.from(preload("res://addons/stageplay/template.gd").get_template_data()))
+	unpack(preload("res://addons/stageplay/template.gd").get_template_data())
 
 
 func _add_line() -> LineEditor:
@@ -37,7 +37,7 @@ func _setup_new_menu() -> void:
 	var items: Array[Dictionary] = [
 		{
 			text = "Blank",
-			action = func() -> void: unpack(Unpacker.from({ lines = [] })),
+			action = func() -> void: unpack(TimelineData.new([])),
 		},
 		{
 			text = "From Template",
@@ -113,3 +113,23 @@ func _is_text_edit_at_bottom(node: TextEdit) -> bool:
 	var last_line_index := node.get_line_count() - 1
 	var last_wrap_index := node.get_line_wrap_count(last_line_index)
 	return caret_line == last_line_index and caret_wrap_index == last_wrap_index
+
+
+func _on_save_button_pressed() -> void:
+	var data := TimelineData.new([])
+	for line: LineEditor in lines.get_children():
+		var line_data := LineData.new(line.speaker, [])
+		data.lines.append(line_data)
+		for directive in line.directives.get_children():
+			var dialog_directive := directive as DialogDirectiveEditor
+			if dialog_directive:
+				line_data.directives.append(
+					DirectiveData.new().with_dialog(dialog_directive.text)
+				)
+
+	ResourceSaver.save(data, "res://test_timeline.tres")
+
+
+func _on_open_button_pressed() -> void:
+	var data: TimelineData = ResourceLoader.load("res://test_timeline.tres")
+	unpack(data)

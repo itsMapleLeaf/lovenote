@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cluyq7u054iac" path="res://addons/stageplay/editor_panel.tscn" id="2_hyack"]
 [ext_resource type="Script" path="res://addons/stageplay/editor.gd" id="2_q145c"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4in5o"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bst8s"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
@@ -28,7 +28,7 @@ HBoxContainer/constants/separation = 6
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_y6f1n")
 VBoxContainer/constants/separation = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l7juy"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8eakt"]
 content_margin_left = 6.0
 content_margin_top = 6.0
 content_margin_right = 6.0
@@ -64,7 +64,7 @@ script = ExtResource("2_q145c")
 
 [node name="EditorPanel" parent="." instance=ExtResource("2_hyack")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_4in5o")
+theme_override_styles/panel = SubResource("StyleBoxFlat_bst8s")
 
 [node name="MarginContainer" type="MarginContainer" parent="EditorPanel"]
 layout_mode = 2
@@ -107,7 +107,7 @@ flat = true
 layout_mode = 2
 size_flags_vertical = 3
 theme = SubResource("Theme_4bpx0")
-theme_override_styles/panel = SubResource("StyleBoxFlat_l7juy")
+theme_override_styles/panel = SubResource("StyleBoxFlat_8eakt")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="EditorPanel/MarginContainer/VBoxContainer/EditorPanel"]
 layout_mode = 2
@@ -138,4 +138,6 @@ text = "Add Line"
 [node name="Preview" parent="EditorPanel/MarginContainer/VBoxContainer/EditorPanel/HSplitContainer" instance=ExtResource("2_gjr47")]
 layout_mode = 2
 
+[connection signal="pressed" from="EditorPanel/MarginContainer/VBoxContainer/MenuBar/OpenButton" to="." method="_on_open_button_pressed"]
+[connection signal="pressed" from="EditorPanel/MarginContainer/VBoxContainer/MenuBar/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="EditorPanel/MarginContainer/VBoxContainer/EditorPanel/HSplitContainer/VBoxContainer/AddLineButton" to="." method="_on_add_line_button_pressed"]

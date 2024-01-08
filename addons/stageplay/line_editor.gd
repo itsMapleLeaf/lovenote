@@ -19,12 +19,11 @@ static func create() -> LineEditor:
 	return preload("res://addons/stageplay/line_editor.tscn").instantiate()
 
 
-func unpack(unpacker: Unpacker) -> void:
-	speaker = unpacker.at("speaker").string()
-	for directive in unpacker.at("directives").array():
-		var dialog_text := directive.at("dialog").string()
-		if dialog_text:
-			directives.add_child(_add_dialog_directive_editor(dialog_text))
+func unpack(data: LineData) -> void:
+	speaker = data.speaker
+	for directive in data.directives:
+		if not directive.dialog.is_empty():
+			directives.add_child(_add_dialog_directive_editor(directive.dialog))
 
 
 func _add_dialog_directive_editor(text := "") -> DialogDirectiveEditor:
