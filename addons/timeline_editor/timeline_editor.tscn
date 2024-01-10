@@ -1,11 +1,11 @@
 [gd_scene load_steps=11 format=3 uid="uid://di071x1qypjfc"]
 
-[ext_resource type="Theme" uid="uid://bpobich20b6iq" path="res://addons/timeline_editor/theme.tres" id="1_21qe1"]
-[ext_resource type="Script" path="res://addons/timeline_editor/editor.gd" id="2_dpcxr"]
-[ext_resource type="PackedScene" uid="uid://cluyq7u054iac" path="res://addons/timeline_editor/editor_panel.tscn" id="3_s7y3i"]
-[ext_resource type="PackedScene" uid="uid://gxc7nte13otx" path="res://addons/timeline_editor/preview.tscn" id="4_6mpyb"]
+[ext_resource type="Theme" uid="uid://bpobich20b6iq" path="res://addons/timeline_editor/theme.tres" id="1_5u301"]
+[ext_resource type="Script" path="res://addons/timeline_editor/timeline_editor.gd" id="2_qqrs1"]
+[ext_resource type="PackedScene" uid="uid://cluyq7u054iac" path="res://addons/timeline_editor/editor_panel.tscn" id="3_d7y50"]
+[ext_resource type="PackedScene" uid="uid://gxc7nte13otx" path="res://addons/timeline_editor/preview.tscn" id="4_6orf1"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftewe"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8w8or"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
@@ -28,7 +28,7 @@ HBoxContainer/constants/separation = 6
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_y6f1n")
 VBoxContainer/constants/separation = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cv40i"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61ijq"]
 content_margin_left = 6.0
 content_margin_top = 6.0
 content_margin_right = 6.0
@@ -59,12 +59,12 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_21qe1")
-script = ExtResource("2_dpcxr")
+theme = ExtResource("1_5u301")
+script = ExtResource("2_qqrs1")
 
-[node name="EditorPanel" parent="." instance=ExtResource("3_s7y3i")]
+[node name="EditorPanel" parent="." instance=ExtResource("3_d7y50")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ftewe")
+theme_override_styles/panel = SubResource("StyleBoxFlat_8w8or")
 
 [node name="MarginContainer" type="MarginContainer" parent="EditorPanel"]
 layout_mode = 2
@@ -103,11 +103,11 @@ layout_mode = 2
 text = "Save As..."
 flat = true
 
-[node name="EditorPanel" parent="EditorPanel/MarginContainer/VBoxContainer" instance=ExtResource("3_s7y3i")]
+[node name="EditorPanel" parent="EditorPanel/MarginContainer/VBoxContainer" instance=ExtResource("3_d7y50")]
 layout_mode = 2
 size_flags_vertical = 3
 theme = SubResource("Theme_4bpx0")
-theme_override_styles/panel = SubResource("StyleBoxFlat_cv40i")
+theme_override_styles/panel = SubResource("StyleBoxFlat_61ijq")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="EditorPanel/MarginContainer/VBoxContainer/EditorPanel"]
 layout_mode = 2
@@ -135,7 +135,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Add Line"
 
-[node name="Preview" parent="EditorPanel/MarginContainer/VBoxContainer/EditorPanel/HSplitContainer" instance=ExtResource("4_6mpyb")]
+[node name="Preview" parent="EditorPanel/MarginContainer/VBoxContainer/EditorPanel/HSplitContainer" instance=ExtResource("4_6orf1")]
 layout_mode = 2
 
 [connection signal="pressed" from="EditorPanel/MarginContainer/VBoxContainer/MenuBar/OpenButton" to="." method="_on_open_button_pressed"]

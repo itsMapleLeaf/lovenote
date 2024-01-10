@@ -1,5 +1,5 @@
 @tool
-class_name StagePlayEditor
+class_name TimelineEditor
 extends Control
 
 const NodeHelpers := preload("res://addons/timeline_editor/node_helpers.gd")
@@ -8,8 +8,8 @@ const NodeHelpers := preload("res://addons/timeline_editor/node_helpers.gd")
 @onready var lines_container: ScrollContainer = %LinesContainer
 
 
-static func create() -> StagePlayEditor:
-	return preload("res://addons/timeline_editor/editor.tscn").instantiate()
+static func create() -> TimelineEditor:
+	return preload("res://addons/timeline_editor/timeline_editor.tscn").instantiate()
 
 
 func unpack(data: TimelineData) -> void:
