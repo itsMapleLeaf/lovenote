@@ -2,14 +2,14 @@
 class_name StagePlayEditor
 extends Control
 
-const NodeHelpers := preload("res://addons/stageplay/node_helpers.gd")
+const NodeHelpers := preload("res://addons/timeline_editor/node_helpers.gd")
 
 @onready var lines: Control = %Lines
 @onready var lines_container: ScrollContainer = %LinesContainer
 
 
 static func create() -> StagePlayEditor:
-	return preload("res://addons/stageplay/editor.tscn").instantiate()
+	return preload("res://addons/timeline_editor/editor.tscn").instantiate()
 
 
 func unpack(data: TimelineData) -> void:
@@ -19,7 +19,7 @@ func unpack(data: TimelineData) -> void:
 
 
 func _unpack_from_template() -> void:
-	unpack(preload("res://addons/stageplay/template.gd").get_template_data())
+	unpack(preload("res://addons/timeline_editor/template.gd").get_template_data())
 
 
 func _add_line() -> LineEditor:

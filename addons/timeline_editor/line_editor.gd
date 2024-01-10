@@ -2,7 +2,7 @@
 class_name LineEditor
 extends Node
 
-const NodeHelpers = preload("res://addons/stageplay/node_helpers.gd")
+const NodeHelpers = preload("res://addons/timeline_editor/node_helpers.gd")
 
 @onready var speaker_field: TextField = %SpeakerField
 @onready var directives: Control = %Directives
@@ -16,7 +16,7 @@ const NodeHelpers = preload("res://addons/stageplay/node_helpers.gd")
 
 
 static func create() -> LineEditor:
-	return preload("res://addons/stageplay/line_editor.tscn").instantiate()
+	return preload("res://addons/timeline_editor/line_editor.tscn").instantiate()
 
 
 func unpack(data: LineData) -> void:

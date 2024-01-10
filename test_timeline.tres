@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="TimelineData" load_steps=11 format=3 uid="uid://gy52vsbq010w"]
 
-[ext_resource type="Script" path="res://addons/stageplay/directive_data.gd" id="1_4dbyl"]
-[ext_resource type="Script" path="res://addons/stageplay/timeline_data.gd" id="1_hwbd8"]
-[ext_resource type="Script" path="res://addons/stageplay/line_data.gd" id="1_s8qn7"]
+[ext_resource type="Script" path="res://addons/timeline_editor/directive_data.gd" id="1_4dbyl"]
+[ext_resource type="Script" path="res://addons/timeline_editor/timeline_data.gd" id="1_hwbd8"]
+[ext_resource type="Script" path="res://addons/timeline_editor/line_data.gd" id="1_s8qn7"]
 
 [sub_resource type="Resource" id="Resource_viwrv"]
 script = ExtResource("1_4dbyl")

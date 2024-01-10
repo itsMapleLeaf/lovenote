@@ -2,7 +2,7 @@
 class_name TextField
 extends Control
 
-const NodeHelpers = preload("res://addons/stageplay/node_helpers.gd")
+const NodeHelpers = preload("res://addons/timeline_editor/node_helpers.gd")
 
 signal submitted
 

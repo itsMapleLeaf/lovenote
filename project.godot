@@ -41,7 +41,7 @@ project/assembly_name="A Love Note"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/stageplay/plugin.cfg")
+enabled=PackedStringArray("res://addons/timeline_editor/plugin.cfg")
 
 [file_customization]
 
@@ -54,7 +54,7 @@ folder_colors={
 
 [gui]
 
-theme/custom="res://addons/stageplay/theme.tres"
+theme/custom="res://addons/timeline_editor/theme.tres"
 
 [input]
 

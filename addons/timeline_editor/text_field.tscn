@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c5mlld4chwnjg"]
 
-[ext_resource type="Script" path="res://addons/stageplay/text_field.gd" id="1_qgh7k"]
+[ext_resource type="Script" path="res://addons/timeline_editor/text_field.gd" id="1_qgh7k"]
 
 [node name="TextField" type="HBoxContainer"]
 offset_right = 155.0

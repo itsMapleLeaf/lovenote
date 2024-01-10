@@ -1,7 +1,7 @@
 @tool
 extends PanelContainer
 
-const NodeHelpers = preload("res://addons/stageplay/node_helpers.gd")
+const NodeHelpers = preload("res://addons/timeline_editor/node_helpers.gd")
 
 var shade := 0
 var margin := 0

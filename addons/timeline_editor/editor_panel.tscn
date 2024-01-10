@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cluyq7u054iac"]
 
-[ext_resource type="Script" path="res://addons/stageplay/editor_panel.gd" id="1_q4ddv"]
+[ext_resource type="Script" path="res://addons/timeline_editor/editor_panel.gd" id="1_q4ddv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ns2pp"]
 content_margin_left = 0.0

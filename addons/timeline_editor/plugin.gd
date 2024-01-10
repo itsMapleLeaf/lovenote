@@ -1,7 +1,7 @@
 @tool
 extends EditorPlugin
 
-const Template := preload("res://addons/stageplay/template.gd")
+const Template := preload("res://addons/timeline_editor/template.gd")
 
 var main_panel_node: StagePlayEditor
 
