@@ -131,7 +131,7 @@ Decision: **GDScript Plugin (?)**
 
 I'm not set on this, but it feels like the best direction so far.
 
-### Custom editor as GDScript plugin
+### Custom editor
 
 - ✔️ can tailor an editing experience that _could_ be nicer than in a text editor, with live preview and such
 - ✔️ cannot have invalid data
@@ -146,9 +146,9 @@ I'm not set on this, but it feels like the best direction so far.
 #### ...as a web app
 
 - ✔️ I know web development really well and vibe with it
-- ❌ requires a decent amount of work to make it look and feel nice, even if just for myself (but less than with a GDScript plugin)
 - ❌ mismatch between web and Godot UIs can lead to bugs
 - ❌ lack of code reuse and type safety
+- ❌ saving files is kind of annoying
 
 ### GDScript
 
