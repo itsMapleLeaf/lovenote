@@ -4,37 +4,37 @@
 [ext_resource type="Script" path="res://addons/timeline_editor/timeline_data.gd" id="1_hwbd8"]
 [ext_resource type="Script" path="res://addons/timeline_editor/line_data.gd" id="1_s8qn7"]
 
-[sub_resource type="Resource" id="Resource_viwrv"]
+[sub_resource type="Resource" id="Resource_r04lx"]
 script = ExtResource("1_4dbyl")
-dialog = "I wonder what it's like to die."
+dialog = "Have you ever wondered what it's like to die?"
 
-[sub_resource type="Resource" id="Resource_8rl7q"]
+[sub_resource type="Resource" id="Resource_srd4h"]
 script = ExtResource("1_s8qn7")
 speaker = "Ryder"
-directives = Array[ExtResource("1_4dbyl")]([SubResource("Resource_viwrv")])
+directives = Array[ExtResource("1_4dbyl")]([SubResource("Resource_r04lx")])
 
-[sub_resource type="Resource" id="Resource_a3q8g"]
+[sub_resource type="Resource" id="Resource_yamfm"]
 script = ExtResource("1_4dbyl")
 dialog = "..."
 
-[sub_resource type="Resource" id="Resource_aosa3"]
+[sub_resource type="Resource" id="Resource_ba553"]
 script = ExtResource("1_4dbyl")
 dialog = "Ryder, what?"
 
-[sub_resource type="Resource" id="Resource_r7bgy"]
+[sub_resource type="Resource" id="Resource_uwryv"]
 script = ExtResource("1_s8qn7")
 speaker = "Reina"
-directives = Array[ExtResource("1_4dbyl")]([SubResource("Resource_a3q8g"), SubResource("Resource_aosa3")])
+directives = Array[ExtResource("1_4dbyl")]([SubResource("Resource_yamfm"), SubResource("Resource_ba553")])
 
-[sub_resource type="Resource" id="Resource_xdciv"]
+[sub_resource type="Resource" id="Resource_va1it"]
 script = ExtResource("1_4dbyl")
 dialog = "I'm just curious."
 
-[sub_resource type="Resource" id="Resource_afq20"]
+[sub_resource type="Resource" id="Resource_eeokp"]
 script = ExtResource("1_s8qn7")
 speaker = "Ryder"
-directives = Array[ExtResource("1_4dbyl")]([SubResource("Resource_xdciv")])
+directives = Array[ExtResource("1_4dbyl")]([SubResource("Resource_va1it")])
 
 [resource]
 script = ExtResource("1_hwbd8")
-lines = Array[ExtResource("1_s8qn7")]([SubResource("Resource_8rl7q"), SubResource("Resource_r7bgy"), SubResource("Resource_afq20")])
+lines = Array[ExtResource("1_s8qn7")]([SubResource("Resource_srd4h"), SubResource("Resource_uwryv"), SubResource("Resource_eeokp")])

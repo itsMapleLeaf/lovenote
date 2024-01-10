@@ -4,6 +4,7 @@ extends Control
 
 const NodeHelpers := preload("res://addons/timeline_editor/node_helpers.gd")
 
+@onready var file_menu: BetterPopupMenu = %MenuBar/File
 @onready var lines: Control = %Lines
 @onready var lines_container: ScrollContainer = %LinesContainer
 
@@ -21,6 +22,15 @@ func unpack(data: TimelineData) -> void:
 func _unpack_from_template() -> void:
 	unpack(preload("res://addons/timeline_editor/template.gd").get_template_data())
 
+func _save_test_timeline() -> void:
+	var data := TimelineData.new([])
+	for line: LineEditor in lines.get_children():
+		data.lines.append(line.pack())
+	var _error := ResourceSaver.save(data, "res://test_timeline.tres")
+
+func _open_test_timeline() -> void:
+	var data: TimelineData = ResourceLoader.load("res://test_timeline.tres")
+	unpack(data)
 
 func _add_line() -> LineEditor:
 	var line := LineEditor.create()
@@ -29,7 +39,16 @@ func _add_line() -> LineEditor:
 
 
 func _ready() -> void:
-	_setup_new_menu()
+	file_menu.reset()
+
+	var new_menu := file_menu.add_submenu("New")
+	new_menu.add("Empty", func() -> void: unpack(TimelineData.new([])))
+	new_menu.add("From Template", _unpack_from_template)
+
+	file_menu.add("Open", _open_test_timeline)
+	file_menu.add("Save", _save_test_timeline)
+	file_menu.add("Save As...", func() -> void: pass)
+
 	_unpack_from_template()
 
 
@@ -113,15 +132,3 @@ func _is_text_edit_at_bottom(node: TextEdit) -> bool:
 	var last_line_index := node.get_line_count() - 1
 	var last_wrap_index := node.get_line_wrap_count(last_line_index)
 	return caret_line == last_line_index and caret_wrap_index == last_wrap_index
-
-
-func _on_save_button_pressed() -> void:
-	var data := TimelineData.new([])
-	for line: LineEditor in lines.get_children():
-		data.lines.append(line.pack())
-	var _error := ResourceSaver.save(data, "res://test_timeline.tres")
-
-
-func _on_open_button_pressed() -> void:
-	var data: TimelineData = ResourceLoader.load("res://test_timeline.tres")
-	unpack(data)

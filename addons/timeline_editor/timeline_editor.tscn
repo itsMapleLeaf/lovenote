@@ -1,11 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://di071x1qypjfc"]
+[gd_scene load_steps=12 format=3 uid="uid://di071x1qypjfc"]
 
 [ext_resource type="Theme" uid="uid://bpobich20b6iq" path="res://addons/timeline_editor/theme.tres" id="1_5u301"]
 [ext_resource type="Script" path="res://addons/timeline_editor/timeline_editor.gd" id="2_qqrs1"]
 [ext_resource type="PackedScene" uid="uid://cluyq7u054iac" path="res://addons/timeline_editor/editor_panel.tscn" id="3_d7y50"]
 [ext_resource type="PackedScene" uid="uid://gxc7nte13otx" path="res://addons/timeline_editor/preview.tscn" id="4_6orf1"]
+[ext_resource type="Script" path="res://addons/timeline_editor/better_popup_menu.gd" id="4_dmfxa"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8w8or"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qkl3x"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
@@ -28,7 +29,7 @@ HBoxContainer/constants/separation = 6
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_y6f1n")
 VBoxContainer/constants/separation = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61ijq"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vnk65"]
 content_margin_left = 6.0
 content_margin_top = 6.0
 content_margin_right = 6.0
@@ -64,50 +65,44 @@ script = ExtResource("2_qqrs1")
 
 [node name="EditorPanel" parent="." instance=ExtResource("3_d7y50")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_8w8or")
+theme_override_styles/panel = SubResource("StyleBoxFlat_qkl3x")
 
 [node name="MarginContainer" type="MarginContainer" parent="EditorPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="EditorPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="MenuBar" type="HBoxContainer" parent="EditorPanel/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="EditorPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="NewMenu" type="MenuButton" parent="EditorPanel/MarginContainer/VBoxContainer/MenuBar"]
+[node name="MenuBar" type="MenuBar" parent="EditorPanel/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "New"
-item_count = 2
-popup/item_0/text = "Blank"
-popup/item_0/id = 0
-popup/item_1/text = "From Template"
-popup/item_1/id = 1
-
-[node name="OpenButton" type="Button" parent="EditorPanel/MarginContainer/VBoxContainer/MenuBar"]
-layout_mode = 2
-text = "Open"
 flat = true
 
-[node name="SaveButton" type="Button" parent="EditorPanel/MarginContainer/VBoxContainer/MenuBar"]
-layout_mode = 2
-text = "Save"
-flat = true
-
-[node name="SaveAsButton" type="Button" parent="EditorPanel/MarginContainer/VBoxContainer/MenuBar"]
-layout_mode = 2
-text = "Save As..."
-flat = true
+[node name="File" type="PopupMenu" parent="EditorPanel/MarginContainer/VBoxContainer/HBoxContainer/MenuBar"]
+title = "File"
+item_count = 4
+item_0/text = "New"
+item_0/id = 0
+item_1/text = "Open"
+item_1/id = 0
+item_2/text = "Save"
+item_2/id = 1
+item_3/text = "Save As..."
+item_3/id = 2
+script = ExtResource("4_dmfxa")
 
 [node name="EditorPanel" parent="EditorPanel/MarginContainer/VBoxContainer" instance=ExtResource("3_d7y50")]
 layout_mode = 2
 size_flags_vertical = 3
 theme = SubResource("Theme_4bpx0")
-theme_override_styles/panel = SubResource("StyleBoxFlat_61ijq")
+theme_override_styles/panel = SubResource("StyleBoxFlat_vnk65")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="EditorPanel/MarginContainer/VBoxContainer/EditorPanel"]
 layout_mode = 2
@@ -138,6 +133,4 @@ text = "Add Line"
 [node name="Preview" parent="EditorPanel/MarginContainer/VBoxContainer/EditorPanel/HSplitContainer" instance=ExtResource("4_6orf1")]
 layout_mode = 2
 
-[connection signal="pressed" from="EditorPanel/MarginContainer/VBoxContainer/MenuBar/OpenButton" to="." method="_on_open_button_pressed"]
-[connection signal="pressed" from="EditorPanel/MarginContainer/VBoxContainer/MenuBar/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="EditorPanel/MarginContainer/VBoxContainer/EditorPanel/HSplitContainer/VBoxContainer/AddLineButton" to="." method="_on_add_line_button_pressed"]
