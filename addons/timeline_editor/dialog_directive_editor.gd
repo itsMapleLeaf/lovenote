@@ -2,9 +2,12 @@
 class_name DialogDirectiveEditor
 extends TextEdit
 
-static func create(text := "") -> DialogDirectiveEditor:
-	var instance: DialogDirectiveEditor = preload("res://addons/timeline_editor/dialog_directive_editor.tscn").instantiate()
-	instance.text = text
+
+static func create(instance_text := "") -> DialogDirectiveEditor:
+	var instance: DialogDirectiveEditor = (
+		preload("res://addons/timeline_editor/dialog_directive_editor.tscn").instantiate()
+	)
+	instance.text = instance_text
 	return instance
 
 
@@ -28,6 +31,8 @@ func is_at_end() -> bool:
 	var last_line_index := get_line_count() - 1
 	var last_wrap_index := get_line_wrap_count(last_line_index)
 	var last_column := get_line(last_line_index).length()
-	return caret_line == last_line_index \
-		and caret_wrap_index == last_wrap_index \
+	return (
+		caret_line == last_line_index
+		and caret_wrap_index == last_wrap_index
 		and caret_column == last_column
+	)

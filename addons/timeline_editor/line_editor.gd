@@ -34,12 +34,16 @@ func pack() -> LineData:
 
 func _add_dialog_directive_editor(text := "") -> DialogDirectiveEditor:
 	var editor := DialogDirectiveEditor.create(text)
-	editor.gui_input.connect(_on_directive_editor_gui_input.bind(editor))
+	var _error := editor.gui_input.connect(_on_directive_editor_gui_input.bind(editor))
 	return editor
 
 
 func _on_directive_editor_gui_input(event: InputEvent, editor: DialogDirectiveEditor) -> void:
-	if event is InputEventKey and event.is_pressed() and (event as InputEventKey).keycode in [KEY_ENTER, KEY_KP_ENTER]:
+	if (
+		event is InputEventKey
+		and event.is_pressed()
+		and (event as InputEventKey).keycode in [KEY_ENTER, KEY_KP_ENTER]
+	):
 		await NodeHelpers.handle_input_deferred(self)
 
 		var line := editor.get_caret_line()
@@ -68,10 +72,12 @@ func _on_directive_editor_gui_input(event: InputEvent, editor: DialogDirectiveEd
 		sibling_editor.set_caret_line(0)
 		sibling_editor.set_caret_column(0)
 
-	if event is InputEventKey \
-	and event.is_pressed() \
-	and (event as InputEventKey).keycode == KEY_BACKSPACE \
-	and NodeHelpers.is_text_edit_at_start(editor):
+	if (
+		event is InputEventKey
+		and event.is_pressed()
+		and (event as InputEventKey).keycode == KEY_BACKSPACE
+		and NodeHelpers.is_text_edit_at_start(editor)
+	):
 		await NodeHelpers.handle_input_deferred(self)
 
 		var previous := editor.find_prev_valid_focus() as DialogDirectiveEditor
@@ -86,10 +92,12 @@ func _on_directive_editor_gui_input(event: InputEvent, editor: DialogDirectiveEd
 
 			editor.queue_free()
 
-	if event is InputEventKey \
-	and event.is_pressed() \
-	and (event as InputEventKey).keycode == KEY_DELETE \
-	and NodeHelpers.is_text_edit_at_end(editor):
+	if (
+		event is InputEventKey
+		and event.is_pressed()
+		and (event as InputEventKey).keycode == KEY_DELETE
+		and NodeHelpers.is_text_edit_at_end(editor)
+	):
 		var index := editor.get_index()
 		if index < directives.get_child_count() - 1:
 			var sibling := directives.get_child(index + 1) as DialogDirectiveEditor

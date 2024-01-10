@@ -54,7 +54,7 @@ func _setup_new_menu() -> void:
 	for item in items:
 		popup.add_item(item.get("text") as String)
 
-	popup.index_pressed.connect(
+	var _error := popup.index_pressed.connect(
 		func (index: int) -> void:
 			var fn := items[index].get("action") as Callable
 			if fn: fn.call()
@@ -119,7 +119,7 @@ func _on_save_button_pressed() -> void:
 	var data := TimelineData.new([])
 	for line: LineEditor in lines.get_children():
 		data.lines.append(line.pack())
-	ResourceSaver.save(data, "res://test_timeline.tres")
+	var _error := ResourceSaver.save(data, "res://test_timeline.tres")
 
 
 func _on_open_button_pressed() -> void:

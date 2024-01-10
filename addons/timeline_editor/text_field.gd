@@ -34,5 +34,5 @@ signal submitted
 @onready var input_node: LineEdit = %Input
 
 
-func _on_input_text_submitted(new_text: String) -> void:
+func _on_input_text_submitted(_new_text: String) -> void:
 	submitted.emit()
