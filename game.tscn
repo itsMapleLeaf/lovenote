@@ -1,7 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c6d7dlyb41i8c"]
+[gd_scene load_steps=9 format=3 uid="uid://c6d7dlyb41i8c"]
 
 [ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://backgrounds/office_outdoors.png" id="1_qnmcx"]
 [ext_resource type="Texture2D" uid="uid://bh6f1yadl6fli" path="res://backgrounds/office_interior.png" id="2_lbbtq"]
+[ext_resource type="Texture2D" uid="uid://c4dnak4cv8mxt" path="res://characters/ryder.png" id="3_c8qxb"]
+[ext_resource type="Texture2D" uid="uid://bdolgawbtxs2v" path="res://characters/note.png" id="4_1simu"]
+[ext_resource type="Texture2D" uid="uid://cqtlg0lyfmav7" path="res://characters/reina.png" id="5_10das"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d7o7b"]
 content_margin_left = 16.0
@@ -39,6 +42,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="OfficeInterior" type="TextureRect" parent="."]
+modulate = Color(0.607843, 0.607843, 0.607843, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,6 +52,36 @@ grow_vertical = 2
 texture = ExtResource("2_lbbtq")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="Ryder" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -24.0
+offset_top = 15.0
+offset_right = 445.0
+offset_bottom = 763.0
+texture = ExtResource("3_c8qxb")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Note" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 696.0
+offset_top = -2.0
+offset_right = 1162.0
+offset_bottom = 742.0
+texture = ExtResource("4_1simu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Reina" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 350.0
+offset_top = 15.0
+offset_right = 805.0
+offset_bottom = 671.0
+texture = ExtResource("5_10das")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
