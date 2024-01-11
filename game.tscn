@@ -1,10 +1,26 @@
-[gd_scene load_steps=9 format=3 uid="uid://c6d7dlyb41i8c"]
+[gd_scene load_steps=19 format=3 uid="uid://c6d7dlyb41i8c"]
 
+[ext_resource type="Script" path="res://game.gd" id="1_qkr04"]
 [ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://backgrounds/office_outdoors.png" id="1_qnmcx"]
+[ext_resource type="PackedScene" uid="uid://bxsd41jur4pll" path="res://dialogue_player.tscn" id="2_bu5uy"]
 [ext_resource type="Texture2D" uid="uid://bh6f1yadl6fli" path="res://backgrounds/office_interior.png" id="2_lbbtq"]
+[ext_resource type="Script" path="res://dialogue_line.gd" id="3_bg110"]
 [ext_resource type="Texture2D" uid="uid://c4dnak4cv8mxt" path="res://characters/ryder.png" id="3_c8qxb"]
 [ext_resource type="Texture2D" uid="uid://bdolgawbtxs2v" path="res://characters/note.png" id="4_1simu"]
 [ext_resource type="Texture2D" uid="uid://cqtlg0lyfmav7" path="res://characters/reina.png" id="5_10das"]
+[ext_resource type="Script" path="res://dialogue_controller.gd" id="9_u175t"]
+
+[sub_resource type="Resource" id="Resource_a7m47"]
+script = ExtResource("3_bg110")
+text = "Well, here I am."
+
+[sub_resource type="Resource" id="Resource_xym0a"]
+script = ExtResource("3_bg110")
+text = "This is it."
+
+[sub_resource type="Resource" id="Resource_ct2ff"]
+script = ExtResource("3_bg110")
+text = "I'm not really nervous. When it comes to stuff like this, as long as there's a set time and place, I just go and deal with it."
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d7o7b"]
 content_margin_left = 16.0
@@ -18,19 +34,62 @@ corner_radius_bottom_left = 20
 [sub_resource type="SystemFont" id="SystemFont_2qsea"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_cn1qc"]
-line_spacing = -7.0
+line_spacing = -2.0
 font = SubResource("SystemFont_2qsea")
 font_size = 24
 
-[node name="Control" type="Control"]
+[sub_resource type="Animation" id="Animation_1etvu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Polygon2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jdp4n"]
+resource_name = "advance_indicator"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Polygon2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.406126, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-2, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_n8ggk"]
+_data = {
+"RESET": SubResource("Animation_1etvu"),
+"advance_indicator": SubResource("Animation_jdp4n")
+}
+
+[node name="Game" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_qkr04")
+
+[node name="DialoguePlayer" parent="." instance=ExtResource("2_bu5uy")]
+unique_name_in_owner = true
+lines = Array[ExtResource("3_bg110")]([SubResource("Resource_a7m47"), SubResource("Resource_xym0a"), SubResource("Resource_ct2ff")])
 
 [node name="OfficeOutdoors" type="TextureRect" parent="."]
+modulate = Color(0.854902, 0.854902, 0.854902, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,6 +101,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="OfficeInterior" type="TextureRect" parent="."]
+visible = false
 modulate = Color(0.607843, 0.607843, 0.607843, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -54,6 +114,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Ryder" type="TextureRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = -24.0
 offset_top = 15.0
@@ -64,6 +125,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Note" type="TextureRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 696.0
 offset_top = -2.0
@@ -74,6 +136,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Reina" type="TextureRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 350.0
 offset_top = 15.0
@@ -83,7 +146,7 @@ texture = ExtResource("5_10das")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -98,10 +161,62 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_d7o7b")
 
-[node name="Label" type="Label" parent="PanelContainer"]
-layout_mode = 2
-text = "hello world lol
-line
-ine"
+[node name="DialogueLabel" type="Label" parent="Panel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 105.0
+offset_right = -105.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Dialogue goes
+here."
 label_settings = SubResource("LabelSettings_cn1qc")
 horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+visible_characters_behavior = 1
+
+[node name="AdvanceIndicator" type="Control" parent="Panel"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.556863)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -25.0
+offset_top = -20.0
+offset_right = -25.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(2, 2)
+metadata/_edit_group_ = true
+
+[node name="Polygon2D" type="Polygon2D" parent="Panel/AdvanceIndicator"]
+polygon = PackedVector2Array(-3, -4, 4, 0, -3, 4)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Panel/AdvanceIndicator"]
+libraries = {
+"": SubResource("AnimationLibrary_n8ggk")
+}
+autoplay = "advance_indicator"
+speed_scale = 2.1
+
+[node name="DialogueController" type="Control" parent="." node_paths=PackedStringArray("player")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("9_u175t")
+player = NodePath("../DialoguePlayer")
+
+[connection signal="text_changed" from="DialoguePlayer" to="." method="_on_dialogue_player_text_changed"]
+[connection signal="visible_character_count_changed" from="DialoguePlayer" to="." method="_on_dialogue_player_visible_character_count_changed"]

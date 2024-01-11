@@ -39,7 +39,7 @@ project/assembly_name="A Love Note"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/explore-editor-theme/plugin.cfg")
 
 [file_customization]
 

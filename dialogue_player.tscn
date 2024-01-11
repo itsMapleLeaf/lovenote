@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxsd41jur4pll"]
+
+[ext_resource type="Script" path="res://dialogue_player.gd" id="1_i4d6a"]
+
+[node name="DialoguePlayer" type="Node"]
+script = ExtResource("1_i4d6a")
+
+[node name="MinWaitTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
