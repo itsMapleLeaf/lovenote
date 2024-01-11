@@ -15,10 +15,6 @@ run/main_scene="res://engine/game.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
-[autoload]
-
-Global="res://engine/Global.cs"
-
 [debug]
 
 gdscript/warnings/shadowed_variable=0
