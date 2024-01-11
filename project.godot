@@ -21,7 +21,6 @@ Global="res://engine/Global.cs"
 
 [debug]
 
-gdscript/warnings/exclude_addons=false
 gdscript/warnings/shadowed_variable=0
 gdscript/warnings/untyped_declaration=2
 gdscript/warnings/unsafe_property_access=2
@@ -40,20 +39,15 @@ project/assembly_name="A Love Note"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/timeline_editor/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 
 folder_colors={
-"res://content/backgrounds/": "red",
-"res://content/characters/": "orange",
-"res://content/timelines/": "yellow",
-"res://engine/": "gray"
+"res://backgrounds/": "red",
+"res://characters/": "orange",
+"res://scripts/": "yellow"
 }
-
-[gui]
-
-theme/custom="res://addons/timeline_editor/theme.tres"
 
 [input]
 

@@ -1,7 +1,0 @@
-[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://du7bdn6qp7enf"]
-
-[ext_resource type="Texture2D" uid="uid://tpbcxn8hs64o" path="res://content/backgrounds/office_front_door.png" id="1_8fhlp"]
-
-[resource]
-atlas = ExtResource("1_8fhlp")
-region = Rect2(0, 42.5982, 1456, 773.402)
