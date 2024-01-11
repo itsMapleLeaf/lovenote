@@ -1,4 +1,23 @@
-[gd_scene format=3 uid="uid://c6d7dlyb41i8c"]
+[gd_scene load_steps=6 format=3 uid="uid://c6d7dlyb41i8c"]
+
+[ext_resource type="Texture2D" uid="uid://bgdwx6ogvftk" path="res://backgrounds/office_outdoors.png" id="1_qnmcx"]
+[ext_resource type="Texture2D" uid="uid://bh6f1yadl6fli" path="res://backgrounds/office_interior.png" id="2_lbbtq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d7o7b"]
+content_margin_left = 16.0
+content_margin_right = 16.0
+bg_color = Color(0, 0, 0, 0.737255)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="SystemFont" id="SystemFont_2qsea"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_cn1qc"]
+line_spacing = -7.0
+font = SubResource("SystemFont_2qsea")
+font_size = 24
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -7,3 +26,48 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="OfficeOutdoors" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qnmcx")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="OfficeInterior" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_lbbtq")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -381.0
+offset_top = -142.0
+offset_right = 381.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_d7o7b")
+
+[node name="Label" type="Label" parent="PanelContainer"]
+layout_mode = 2
+text = "hello world lol
+line
+ine"
+label_settings = SubResource("LabelSettings_cn1qc")
+horizontal_alignment = 1

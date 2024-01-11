@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="A Love Note"
-run/main_scene="res://engine/game.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
+run/main_scene="res://game.tscn"
 config/icon="res://icon.svg"
 
 [debug]
